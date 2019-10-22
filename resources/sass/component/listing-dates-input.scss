@@ -1,0 +1,52 @@
+.form-group {
+  flex-wrap: wrap;
+}
+
+.listing-dates__date-wrap,
+.listing-dates__add-date {
+  flex: 0 0 calc(50% - 40px);
+  margin: 20px;
+}
+
+.listing-dates__add-date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f3f3;
+}
+
+.listing-dates__date {
+  display: flex;
+  align-items: center;
+
+
+  .listing-dates__start,
+  .listing-dates__end {
+    flex: 0 0 calc(45% - 10px);
+    margin: 0 5px;
+  }
+
+  .remove-day {
+    margin-top: 34px;
+    opacity: 0;
+    color: #6b6b6b;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    pointer-events: none;
+    transition: 300ms ease-in-out;
+
+    &:hover {
+      background: #6b6b6b;
+      color: white;
+    }
+  }
+
+  &:hover {
+    .remove-day {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+}
