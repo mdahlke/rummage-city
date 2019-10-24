@@ -10665,6 +10665,10 @@ a.text-dark:focus {
   overflow: hidden;
 }
 
+.listings-index .listings__section .here-map {
+  width: 100%;
+}
+
 .listings-index .listings__wrap {
   padding: 20px;
   overflow: auto;

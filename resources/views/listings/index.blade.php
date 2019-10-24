@@ -12,8 +12,8 @@
                     @foreach($listings as $listing)
                         @include('listings.partials.listing', ['listing' => $listing])
                     @endforeach
+                    {{$listings->links()}}
                 </aside>
-                {{$listings->links()}}
             </div>
             <div class="col-12 col-lg">
                 <section class="listings__section listings__map">

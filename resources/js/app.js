@@ -7,6 +7,7 @@
 require('./bootstrap');
 
 import Vue from 'vue';
+import VueRouter from 'vue-router'
 
 window.Vue = Vue;
 
@@ -32,6 +33,23 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('listing-dates-input', require('./components/ListingDatesInput.vue').default);
 Vue.component('map-listings', require('./components/Map/Listings.vue').default);
 Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
+Vue.component('listings', require('./views/Listings.vue').default);
+
+Vue.use(VueRouter)
+
+import App from './views/App'
+import Listings from './views/Listings'
+
+const router = new VueRouter({
+	mode: 'history',
+	routes: [
+		{
+			path: '/listings',
+			name: 'listings',
+			component: Listings
+		},
+	],
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -40,7 +58,9 @@ Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
  */
 
 const app = new Vue({
-	el: '#app'
+	el: '#app',
+	components: { App },
+	router,
 });
 
 

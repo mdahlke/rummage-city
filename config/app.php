@@ -177,6 +177,7 @@ return [
 		// App\Providers\BroadcastServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
+		Rebing\GraphQL\GraphQLServiceProvider::class,
 
 	],
 
@@ -227,7 +228,7 @@ return [
 		'Uuid' => WebPatser\Uuid\Uuid::class,
 		'Validator' => Illuminate\Support\Facades\Validator::class,
 		'View' => Illuminate\Support\Facades\View::class,
-
+		'GraphQL' => Rebing\GraphQL\Support\Facades\GraphQL::class,
 	],
 
 ];

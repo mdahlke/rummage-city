@@ -1,13 +1,11 @@
 <template>
-	<!--	<section id="mapContainer"></section>-->
 	<div class="here-map">
-		<div ref="map" v-bind:style="{ width: width, height: height }"></div>
-		<span class="btn btn-info" type="button" v-on:click="(...args) => add_marker(null, ...args)">Add marker</span>
+		<div ref="map"></div>
 	</div>
 </template>
 
 <script>
-	import helpers from '../../helpers';
+	require('../../helpers');
 	
 	let map;
 	export default {
@@ -110,6 +108,18 @@
 			// Add the layer to the map:
 			this.map.addLayer(layer);
 			
+			this.map.addEventListener('dragend', (evt) => {
+				console.log(this);
+				let data = this.map.getViewModel().getLookAtData().bounds.getBoundingBox();
+				const nw = data.getTopLeft();
+				const se = data.getBottomRight();
+				console.log({evt, data, nw, se});
+				get_listings_in_bounds(nw, se).then(function (results) {
+				
+				});
+			});
+			
+			
 		},
 		methods: {
 			add_marker(coords = null) {
@@ -124,6 +134,14 @@
 				this.map.setCenter(coords);
 				
 				return marker;
+			},
+			get_listings_in_bounds(nw, se) {
+				console.log({coords});
+				axios.get('api/listings', {
+					params: {
+						nw, se
+					}
+				});
 			}
 		}
 		// var platform = new H.service.Platform({
@@ -132,7 +150,3 @@
 	};
 
 </script>
-
-<style scoped>
-
-</style>
