@@ -32,7 +32,6 @@ Route::middleware(['auth', 'web'])->group(function () {
 Route::middleware('web')->group(function () {
 	Route::get('/', function () {
 		$schemas = config('graphql.schemas');
-		dd($schemas);
 		return view('home.welcome');
 	})->name('home');
 
