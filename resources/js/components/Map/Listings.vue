@@ -114,8 +114,8 @@
 				const nw = data.getTopLeft();
 				const se = data.getBottomRight();
 				console.log({evt, data, nw, se});
-				get_listings_in_bounds(nw, se).then(function (results) {
-				
+				this.get_listings_in_bounds(nw, se).then(function (results) {
+					console.log({results});
 				});
 			});
 			
@@ -136,10 +136,35 @@
 				return marker;
 			},
 			get_listings_in_bounds(nw, se) {
-				console.log({coords});
-				axios.get('api/listings', {
+				return axios({
+					url: '/graphql',
+					type: 'get',
 					params: {
-						nw, se
+						query: `
+							query FetchListings {
+							  listings {
+							    data {
+							      id
+							      title
+							      address
+							      latitude
+							      longitude
+							      user {
+							        name
+							        savedListing{
+							          listing {
+							            title
+							          }
+							        }
+							      }
+							      date {
+							        start
+							        end
+							      }
+							    }
+							  }
+							}
+					`
 					}
 				});
 			}

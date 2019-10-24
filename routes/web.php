@@ -45,8 +45,3 @@ Route::middleware('web')->group(function () {
 
 Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 
-//Route::get('/listings/{coords?}/{zoom?}', function($coords = '', $zoom = 8){
-//	return View::make('listings', ['coords' => $coords, 'zoom' => $zoom]);
-//})->where(['zoom' => '[0-9]{2}'])->name('listings.browse');
-
-

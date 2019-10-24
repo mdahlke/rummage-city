@@ -2366,7 +2366,12 @@ var map;
         nw: nw,
         se: se
       });
-      get_listings_in_bounds(nw, se).then(function (results) {});
+
+      _this.get_listings_in_bounds(nw, se).then(function (results) {
+        console.log({
+          results: results
+        });
+      });
     });
   },
   methods: {
@@ -2387,13 +2392,11 @@ var map;
       return marker;
     },
     get_listings_in_bounds: function get_listings_in_bounds(nw, se) {
-      console.log({
-        coords: coords
-      });
-      axios.get('api/listings', {
+      return axios({
+        url: '/graphql',
+        type: 'get',
         params: {
-          nw: nw,
-          se: se
+          query: "\n\t\t\t\t\t\tquery FetchListings {\n\t\t\t\t\t\t  listings {\n\t\t\t\t\t\t    data {\n\t\t\t\t\t\t      id\n\t\t\t\t\t\t      title\n\t\t\t\t\t\t      address\n\t\t\t\t\t\t      latitude\n\t\t\t\t\t\t      longitude\n\t\t\t\t\t\t      user {\n\t\t\t\t\t\t        name\n\t\t\t\t\t\t        savedListing{\n\t\t\t\t\t\t          listing {\n\t\t\t\t\t\t            title\n\t\t\t\t\t\t          }\n\t\t\t\t\t\t        }\n\t\t\t\t\t\t      }\n\t\t\t\t\t\t      date {\n\t\t\t\t\t\t        start\n\t\t\t\t\t\t        end\n\t\t\t\t\t\t      }\n\t\t\t\t\t\t    }\n\t\t\t\t\t\t  }\n\t\t\t\t\t\t}\n\t\t\t\t"
         }
       });
     }
