@@ -54,7 +54,7 @@
 			},
 			height: {
 				type: String,
-				default: 'calc(100vh - 50px)'
+				default: 'calc(100vw * .333333)'
 			},
 			svg: {
 				type: String,

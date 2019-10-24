@@ -45,6 +45,11 @@ class ListingsType extends GraphQLType {
 				'description' => 'A list of dates for the listing',
 				'always' => ['start', 'end'],
 			],
+			'image' => [
+				'type' => Type::listOf(GraphQL::type('listingImages')),
+				'description' => 'A list of images for the listing',
+				'always' => ['name', 'path'],
+			],
 			'user' => [
 				'name' => 'user',
 				'type' => GraphQL::type('user'),

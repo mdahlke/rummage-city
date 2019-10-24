@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 use App\GraphQL\Query\ListingDatesQuery;
+use App\GraphQL\Query\ListingImagesQuery;
 use App\GraphQL\Query\ListingsQuery;
 use App\GraphQL\Query\SavedListingsQuery;
 use App\GraphQL\Query\UsersQuery;
 use App\GraphQL\Types\ListingDatesType;
+use App\GraphQL\Types\ListingImagesType;
 use App\GraphQL\Types\ListingsType;
 use App\GraphQL\Types\SavedListingsType;
 use App\GraphQL\Types\UsersType;
@@ -109,6 +111,7 @@ return [
 				'listings' => ListingsQuery::class,
 				'savedListings' => SavedListingsQuery::class,
 				'listingDates' => ListingDatesQuery::class,
+				'listingImages' => ListingImagesQuery::class,
 				'users' => UsersQuery::class,
 			],
 			'mutation' => [
@@ -144,6 +147,7 @@ return [
 		'listings' => ListingsType::class,
 		'savedListings' => SavedListingsType::class,
 		'listingDates' => ListingDatesType::class,
+		'listingImages' => ListingImagesType::class,
 		// 'example'           => ExampleType::class,
 		// 'relation_example'  => ExampleRelationType::class,
 		// \Rebing\GraphQL\Support\UploadType::class,

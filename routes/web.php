@@ -38,10 +38,9 @@ Route::middleware('web')->group(function () {
 	Route::prefix('listings')->group(function () {
 		Route::name('listings.')->group(function () {
 			Route::get('/', 'ListingController@index')->name('browse');
+			Route::get('/geo', 'ListingController@geo')->name('geo');
 			Route::get('{listing}/view', 'ListingController@view')->name('view');
 		});
 	});
 });
-
-Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 

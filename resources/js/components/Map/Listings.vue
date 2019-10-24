@@ -16,7 +16,8 @@
 				platform: {},
 				mapEvents: {},
 				data_points: [],
-				icon: null
+				icon: null,
+				listing_ids: []
 			};
 		},
 		props: {
@@ -84,6 +85,7 @@
 					l = this.listings[i];
 					
 					if (l) {
+						this.listing_ids.push(l.id);
 						this.data_points.push(new H.clustering.DataPoint(l.latitude, l.longitude));
 						// this.add_marker({
 						// 	lat: l.latitude,
@@ -109,13 +111,27 @@
 			this.map.addLayer(layer);
 			
 			this.map.addEventListener('dragend', (evt) => {
-				console.log(this);
 				let data = this.map.getViewModel().getLookAtData().bounds.getBoundingBox();
 				const nw = data.getTopLeft();
 				const se = data.getBottomRight();
-				console.log({evt, data, nw, se});
-				this.get_listings_in_bounds(nw, se).then(function (results) {
-					console.log({results});
+				
+				this.get_listings_in_bounds(nw, se).then((results) => {
+					const listings = results.data.data.listings.data;
+					console.log({results, listings}, this.listing_ids);
+					let r;
+					for (var i in listings) {
+						if (results.hasOwnProperty(i)) {
+							r = results[i];
+							console.log(r);
+							if (!this.listing_ids[r.id]) {
+								this.listing_ids.push(r.id);
+								this.add_marker({
+									lat: r.latitude,
+									lng: r.longitude
+								});
+							}
+						}
+					}
 				});
 			});
 			
@@ -131,32 +147,27 @@
 				
 				// Add the marker to the map and center the map at the location of the marker:
 				this.map.addObject(marker, 'rc');
-				this.map.setCenter(coords);
+				// this.map.setCenter(coords);
 				
 				return marker;
 			},
 			get_listings_in_bounds(nw, se) {
+				const bounds = {
+					nw, se
+				};
+				const query = JSON.stringify(JSON.stringify(bounds));
+				
 				return axios({
 					url: '/graphql',
 					type: 'get',
 					params: {
 						query: `
-							query FetchListings {
-							  listings {
+							query FetchListingsInBounds {
+							  listings(bounds: ` + query + `) {
 							    data {
-							      id
 							      title
-							      address
 							      latitude
 							      longitude
-							      user {
-							        name
-							        savedListing{
-							          listing {
-							            title
-							          }
-							        }
-							      }
 							      date {
 							        start
 							        end
@@ -169,9 +180,6 @@
 				});
 			}
 		}
-		// var platform = new H.service.Platform({
-		// 	'apikey': '7W5ZSgnP_hvci-01R4EbN1_T17e_5x1zVr54MheJxTk\t}'
-		// });
 	};
 
 </script>

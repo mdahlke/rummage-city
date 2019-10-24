@@ -13,15 +13,19 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\Cors;
 use App\Listing;
 use App\ListingDate;
+use App\ListingImage;
 use App\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ListingController extends Controller {
@@ -45,6 +49,30 @@ class ListingController extends Controller {
 		return view('listings.index', $data);
 	}
 
+	public function geo() {
+		$nw = [
+			'lat' => 44.24770009175438,
+			'lng' => -88.94442805641779,
+		];
+		$se = [
+			'lat' => 43.247745933091565,
+			'lng' => -87.95291194335938,
+		];
+
+		dd(json_encode(['nw' => $nw, 'se' => $se]));
+		/** @var Builder $listings */
+		DB::enableQueryLog();
+		$listings = Listing::query()
+		                   ->where('latitude', '>', $se['latitude'])
+		                   ->where('latitude', '<', $nw['latitude'])
+		                   ->where('longitude', '<', $se['longitude'])
+		                   ->where('longitude', '>', $nw['longitude'])
+			//			->toSql();
+			               ->get();
+
+		dd(DB::getQueryLog(), $listings);
+	}
+
 	public function view(Request $request, Listing $listing) {
 		$data = [];
 
@@ -65,7 +93,7 @@ class ListingController extends Controller {
 		$user = Auth::user();
 
 		if ($listing->exists) {
-			$route = route('listings.edit', ['id' => $listing->id]);
+			$route = route('listings.edit', ['listing' => $listing->id]);
 		}
 		else {
 			$route = route('listings.new');
@@ -113,6 +141,22 @@ class ListingController extends Controller {
 				}
 
 				$listing->date()->saveMany($listingDates);
+
+				if ($request->hasFile('file')) {
+					$images = $request->file('file');
+					$listingImages = [];
+
+					/** @var UploadedFile $image */
+					foreach ($images as $image) {
+						$path = $image->store(ListingImage::STORAGE_PATH);
+
+						$listingImages[] = new ListingImage([
+							'path' => $path,
+							'name' => $image->getClientOriginalName(),
+						]);
+					}
+					$listing->image()->saveMany($listingImages);
+				}
 			}
 
 			return redirect(route('dashboard'));

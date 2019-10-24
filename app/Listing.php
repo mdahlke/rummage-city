@@ -41,6 +41,10 @@ class Listing extends Model {
 		return $this->hasMany(ListingDate::class);
 	}
 
+	public function image() {
+		return $this->hasMany(ListingImage::class);
+	}
+
 	public function hasActiveDate() {
 		$hasActive = false;
 		$now = new Carbon();

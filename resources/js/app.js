@@ -67,3 +67,4 @@ const app = new Vue({
 require('./ajax');
 require('./listings-map');
 require('./saved-listings');
+require('./listing-edit');
