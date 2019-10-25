@@ -58,24 +58,26 @@ class ListingsQuery extends Query {
 			}
 			if (isset($args['bounds'])) {
 				$bounds = json_decode($args['bounds']);
-				$se = $bounds->se;
-				$nw = $bounds->nw;
+				$sw = $bounds->sw;
+				$ne = $bounds->ne;
 
-//				$query->where(function ($q) use () {
-//					$q->whereBetween('latitude', [$se->lat, $nw->lat])
-//					  ->whereBetween('longitude', [$se->lng, $nw->lng]);
-//				})
+				//				$query->where(function ($q) use () {
+				//					$q->whereBetween('latitude', [$se->lat, $nw->lat])
+				//					  ->whereBetween('longitude', [$se->lng, $nw->lng]);
+				//				})
 
-								$query->where('latitude', '>', $se->lat)
-								      ->where('latitude', '<', $nw->lat)
-								      ->where('longitude', '<', $se->lng)
-								      ->where('longitude', '>', $nw->lng);
+				$query->where('latitude', '>', $sw->lat)
+				      ->where('latitude', '<', $ne->lat)
+				      ->where('longitude', '>', $sw->lng)
+				      ->where('longitude', '<', $ne->lng);
 			}
 		};
-		$user = Listing::with(array_keys($fields()->getRelations()))
-		               ->where($where)
-		               ->select($fields()->getSelect())
-		               ->paginate();
-		return $user;
+
+		$listings = Listing::query()
+		                   ->with(array_keys($fields()->getRelations()))
+		                   ->where($where)
+		                   ->select($fields()->getSelect())
+		                   ->paginate(10000);
+		return $listings;
 	}
 }

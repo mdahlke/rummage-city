@@ -1,13 +1,36 @@
 <template>
-	<div class="here-map">
-		<div ref="map"></div>
+	<div class="listings">
+		<aside id="listings__sidebar">
+			
+			<section v-for="(listing, index) in visible_listings" class="listing">
+				<h4>{{ listing.title }}</h4>
+				<p>{{ listing.address }}</p>
+				
+				<h4>Dates:</h4>
+				<ul>
+					<li v-for="(date, index) in listing.date">{{ date.start }} - {{ date.end }}</li>
+				</ul>
+				<div class="listing__actions">
+					<ul class="list-inline">
+						<li class="list-inline-item">
+							<span @click="save(listing)"><i class="far fa-heart"></i> Save</span>
+						</li>
+					</ul>
+				</div>
+			</section>
+		</aside>
+		
+		<div id="listings__map"></div>
 	</div>
 </template>
 
 <script>
 	require('../../helpers');
+	import '../../../sass/component/listings-map.scss';
+	import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 	
-	let map;
+	const mapboxgl = require('mapbox-gl');
+	
 	export default {
 		name: 'ListingsMap',
 		data() {
@@ -17,7 +40,8 @@
 				mapEvents: {},
 				data_points: [],
 				icon: null,
-				listing_ids: []
+				listing_ids: [],
+				visible_listings: []
 			};
 		},
 		props: {
@@ -37,6 +61,10 @@
 			lng: {
 				type: String,
 				default: '-88.44867'
+			},
+			zoom: {
+				type: Number,
+				default: 10
 			},
 			width: {
 				type: String,
@@ -62,68 +90,41 @@
 			
 		},
 		mounted() {
-			this.map = new H.Map(
-				this.$refs.map,
-				this.platform.createDefaultLayers().vector.normal.map,
-				{
-					zoom: 10,
-					center: {lng: this.lng, lat: this.lat}
-				});
-			this.mapEvents = new H.mapevents.MapEvents(this.map);
 			
-			// Instantiate the default behavior, providing the mapEvents object:
-			this.behavior = new H.mapevents.Behavior(this.mapEvents);
-			
-			// Get the default map types from the Platform object:
-			var defaultLayers = this.platform.createDefaultLayers();
-			// Create the default UI:
-			var ui = H.ui.UI.createDefault(this.map, defaultLayers);
-			
-			let l;
-			for (let i in this.listings) {
-				if (this.listings.hasOwnProperty(i)) {
-					l = this.listings[i];
-					
-					if (l) {
-						this.listing_ids.push(l.id);
-						this.data_points.push(new H.clustering.DataPoint(l.latitude, l.longitude));
-						// this.add_marker({
-						// 	lat: l.latitude,
-						// 	lng: l.longitude
-						// });
-					}
-				}
+			if (this.listings) {
+				this.visible_listings = this.listings;
 			}
 			
-			var clusteredDataProvider = new H.clustering.Provider(this.data_points, {
-				min: 2,
-				// max: 10,
-				clusteringOptions: {
-					eps: 32,
-					minWeight: 3
-				}
+			mapboxgl.accessToken = 'pk.eyJ1IjoibWRhaGxrZSIsImEiOiJjazI2bGgzNjUwZzlsM2dxaDd2OXgxZW9yIn0.kKYT-PvLDgQeFZWc2MMOAw';
+			this.map = new mapboxgl.Map({
+				container: 'listings__map',
+				style: 'mapbox://styles/mapbox/streets-v11',
+				center: {lng: this.lng, lat: this.lat},
+				zoom: this.zoom
 			});
 			
-			// Create a layer that includes the data provider and its data points:
-			var layer = new H.map.layer.ObjectLayer(clusteredDataProvider);
 			
-			// Add the layer to the map:
-			this.map.addLayer(layer);
+			// Add zoom and rotation controls to the map.
+			this.map.addControl(new mapboxgl.NavigationControl());
 			
-			this.map.addEventListener('dragend', (evt) => {
-				let data = this.map.getViewModel().getLookAtData().bounds.getBoundingBox();
-				const nw = data.getTopLeft();
-				const se = data.getBottomRight();
+			this.map.on('dragend', () => {
+				let bounds = this.map.getBounds();
+				console.log({bounds});
+				// let data = this.map.getViewModel().getLookAtData().bounds.getBoundingBox();
+				// const nw = data.getTopLeft();
+				// const se = data.getBottomRight();
 				
-				this.get_listings_in_bounds(nw, se).then((results) => {
+				this.get_listings_in_bounds(bounds).then((results) => {
 					const listings = results.data.data.listings.data;
 					console.log({results, listings}, this.listing_ids);
+					this.visible_listings = listings;
+					
 					let r;
-					for (var i in listings) {
-						if (results.hasOwnProperty(i)) {
-							r = results[i];
-							console.log(r);
-							if (!this.listing_ids[r.id]) {
+					for (let i in listings) {
+						if (listings.hasOwnProperty(i)) {
+							r = listings[i];
+							console.log({r});
+							if (!this.listing_ids.includes(r.id)) {
 								this.listing_ids.push(r.id);
 								this.add_marker({
 									lat: r.latitude,
@@ -135,27 +136,35 @@
 				});
 			});
 			
-			
+			let l;
+			for (let i in this.listings) {
+				if (this.listings.hasOwnProperty(i)) {
+					l = this.listings[i];
+					
+					if (l.id) {
+						this.listing_ids.push(l.id);
+						this.add_marker({lat: l.latitude, lon: l.longitude});
+					}
+				}
+			}
 		},
 		methods: {
 			add_marker(coords = null) {
-				console.log(coords);
 				if (!coords.lat || !coords.lng) {
 					return false;
 				}
-				const marker = new H.map.Marker(coords, {icon: this.icon});
 				
-				// Add the marker to the map and center the map at the location of the marker:
-				this.map.addObject(marker, 'rc');
-				// this.map.setCenter(coords);
+				let marker = new mapboxgl.Marker()
+					.setLngLat({lon: coords.lng, lat: coords.lat})
+					.addTo(this.map);
 				
 				return marker;
 			},
-			get_listings_in_bounds(nw, se) {
-				const bounds = {
-					nw, se
-				};
-				const query = JSON.stringify(JSON.stringify(bounds));
+			get_listings_in_bounds(bounds) {
+				const query = JSON.stringify(JSON.stringify({
+					sw: bounds._sw,
+					ne: bounds._ne
+				}));
 				
 				return axios({
 					url: '/graphql',
@@ -165,7 +174,9 @@
 							query FetchListingsInBounds {
 							  listings(bounds: ` + query + `) {
 							    data {
+							      id
 							      title
+							      address
 							      latitude
 							      longitude
 							      date {
@@ -178,6 +189,9 @@
 					`
 					}
 				});
+			},
+			save(listing) {
+				console.log('save', listing.id);
 			}
 		}
 	};

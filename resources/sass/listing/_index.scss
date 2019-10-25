@@ -1,18 +1,2 @@
-$navbar_height: 58px;
-
 .listings-index {
-
-  .listings__section {
-    height: calc(100vh - #{$navbar_height});
-    overflow: hidden;
-
-    .here-map {
-      width: 100%;
-    }
-  }
-
-  .listings__wrap {
-    padding: 20px;
-    overflow: auto;
-  }
 }

@@ -1,0 +1,21 @@
+$navbar_height: 58px;
+$sidebar_width: 33%;
+
+.listings {
+  display: flex;
+  height: calc(100vh - #{$navbar_height});
+
+  #listings__sidebar {
+    flex: 0 0 $sidebar_width;
+    padding: 20px;
+    overflow: auto;
+  }
+
+  #listings__map {
+    flex: 0 0 calc(100vw - #{$sidebar_width});
+  }
+}
+
+.mapboxgl-canvas {
+  height: 100%;
+}

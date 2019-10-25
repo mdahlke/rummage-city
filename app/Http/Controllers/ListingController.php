@@ -38,10 +38,7 @@ class ListingController extends Controller {
 
 		/** @var Builder $listings */
 		$listings = Listing::query()
-		                   ->whereHas('date', function ($query) {
-			                   /** @var Builder $query */
-			                   $query->whereDate('end', '>=', Carbon::today());
-		                   })
+		                   ->whereHas('activeDate')
 			//			->get();
 			               ->paginate(10);
 		$data['listings'] = $listings;

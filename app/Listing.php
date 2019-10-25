@@ -42,6 +42,12 @@ class Listing extends Model {
 		return $this->hasMany(ListingDate::class);
 	}
 
+	public function activeDate() {
+		return $this->hasMany(ListingDate::class)
+		            ->whereDate('end', '>=', Carbon::today())
+		            ->orderBy('start', 'desc');
+	}
+
 	public function image() {
 		return $this->hasMany(ListingImage::class);
 	}
