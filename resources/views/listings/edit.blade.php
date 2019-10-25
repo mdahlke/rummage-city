@@ -19,29 +19,19 @@
             <textarea id="description" class="form-control" name="description">{{ $listing->description }}</textarea>
         </div>
 
-        <div class="form-group">
-            <label for="address">Address</label>
-            <map-geocode address="{{ $listing->address }}"
-                         latitude="{{ $listing->latitude }}"
-                         longitude="{{ $listing->longitude }}" />
-        </div>
+        {{--        <div class="form-group">--}}
+        {{--            <label for="address">Address</label>--}}
+        {{--            <map-geocode address="{{ $listing->address }}"--}}
+        {{--                         latitude="{{ $listing->latitude }}"--}}
+        {{--                         longitude="{{ $listing->longitude }}" />--}}
+        {{--        </div>--}}
 
         <listing-dates-input :dates="{{ $listing->date }}"></listing-dates-input>
 
-        <div class="row align-items-center justify-content-between">
-            @foreach($listing->image as $image)
-                <div class="col-2">
-                    <img class="img-fluid ml-2 mb-2" src="{{ asset('storage/'. $image->path) }}" />
-                </div>
-            @endforeach
+        <listing-image-input :images="{{ $listing->image }}" :max_file_size="10"></listing-image-input>
 
-        </div>
-        <div id="dropzone-previews">
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Post</button>
-        </div>
     </form>
+    <button type="button" id="submit-listing" class="btn btn-primary btn-xs">Post</button>
+
 @endsection
 

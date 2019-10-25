@@ -13,3 +13,5 @@ export const confirmDialog = function ($initiator) {
 		resolve();
 	});
 };
+
+export default {getTargetFromInitiator, confirmDialog};

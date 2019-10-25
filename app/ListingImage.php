@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Carbon\Traits\Date;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class ListingImage
@@ -12,18 +14,30 @@ use Illuminate\Database\Eloquent\Model;
  * @property string listing_id
  * @property string path
  * @property string name
- * @property string updated_at
- * @property string created_at
+ * @property Date updated_at
+ * @property Date created_at
  */
 class ListingImage extends Model {
 	use Uuids;
-	protected $keyType = 'string';
-	public $incrementing = false;
+	use Notifiable;
+
 	const STORAGE_PATH = 'uploads/listings';
 
+	protected $keyType = 'string';
+	protected $dates = ['created_at', 'updated_at'];
+
+	public $incrementing = false;
+	protected $appends = [
+		'url',
+	];
 	public $fillable = ['path', 'name'];
+	public $url = '';
 
 	public function listing() {
 		return $this->belongsTo(Listing::class);
+	}
+
+	public function getUrlAttribute() {
+		return $this->url;
 	}
 }

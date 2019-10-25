@@ -31,6 +31,7 @@ Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('listing-dates-input', require('./components/ListingDatesInput.vue').default);
+Vue.component('listing-image-input', require('./components/ListingImageInput.vue').default);
 Vue.component('map-listings', require('./components/Map/Listings.vue').default);
 Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
 Vue.component('listings', require('./views/Listings.vue').default);

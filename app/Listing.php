@@ -25,6 +25,7 @@ class Listing extends Model {
 	use Uuids;
 
 	protected $keyType = 'string';
+	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 	public $incrementing = false;
 
 	public $fillable = ['title', 'description', 'address', 'latitude', 'longitude', 'ip_address'];

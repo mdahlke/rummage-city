@@ -20,6 +20,7 @@ use Webpatser\Uuid\Uuid;
 class ListingDate extends Model {
 	use Uuids;
 
+	protected $dates = ['created_at', 'updated_at', 'start', 'end'];
 	public $fillable = ['start', 'end'];
 
 	public function listing() {

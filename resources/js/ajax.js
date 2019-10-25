@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-require('./helpers');
-require('./ajax-helpers');
+import {empty} from './helpers';
+import {getTargetFromInitiator, confirmDialog} from './ajax-helpers';
 
 export const axios = require('axios');
 
@@ -26,13 +26,12 @@ const rc = {
 	}
 };
 
-export function ajaxAction($initiator, $target, data) {
-	if (!$target) $target = getTargetFromInitiator($initiator);
+export const ajaxAction = function ($target, data) {
 	if (!data) data = [];
 	
-	let $form = $initiator;
-	if ($initiator.data('form')) {
-		$form = $($initiator.data('form'));
+	let $form = $target;
+	if ($target.data('form')) {
+		$form = $($target.data('form'));
 	} else if (!$form.is('.ajax-form,form,.ajax-link')) {
 		$form = $form.closest('.ajax-form');
 	}
@@ -41,7 +40,7 @@ export function ajaxAction($initiator, $target, data) {
 	$.each($form.find(':input:not([type=file])').serializeArray(), function () {
 		formData.append(this.name, this.value);
 	});
-	$.each($initiator.data(), function (key, val) {
+	$.each($target.data(), function (key, val) {
 		formData.append(key, val);
 	});
 	$.each(data, function (key, val) {
@@ -49,24 +48,24 @@ export function ajaxAction($initiator, $target, data) {
 	});
 	
 	let that = this;
-	confirmDialog($initiator).then(function () {
+	confirmDialog($target).then(function () {
 			let method = null;
-			let url = ($initiator.attr('data-href') ? $initiator.attr('data-href') : '');
+			let url = ($target.attr('data-href') ? $target.attr('data-href') : '');
 			if ($form.is('form,.ajax-form')) {
 				if (empty(method)) method = $form.find('input[name="_method"]').val() ? $form.find('input[name="_method"]').val() : 'POST';
 				if (empty(url)) url = $form.attr('action');
 			} else {
-				if (empty(method)) method = $initiator.attr('data-method') ? $initiator.attr('data-method') : 'GET';
-				if (empty(url)) url = $initiator.attr('href');
+				if (empty(method)) method = $target.attr('data-method') ? $target.attr('data-method') : 'GET';
+				if (empty(url)) url = $target.attr('href');
 			}
-			$initiator.addClass('ajax-in-progress');
+			$target.addClass('ajax-in-progress');
 		},
 		function () {
 			throw 'Request not sent';
 		});
 	
 	
-}
+};
 
 /**
  * Parse an AJAX response
@@ -303,7 +302,7 @@ export const storage = function (db) {
 /**
  * Form auto-submit
  */
-$('body')
+$(document)
 	.on('submit', 'form.ajax-form', function (e) {
 		e.preventDefault();
 		
@@ -366,9 +365,13 @@ $('body')
 		}
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
-		const url = ($self.attr('href') && $self.attr('href') !== '#' ? $self.attr('href') : wajax.url);
+		const url = ($self.attr('href') && $self.attr('href') !== '#' ? $self.attr('href') : false);
 		const method = ($self.attr('data-method') ? $self.attr('data-method') : 'GET').toLowerCase();
 		const params = data;
+		
+		if(!url){
+			console.error('Missing required parameter: URL. Specify a url using the "href" attribute"');
+		}
 		triggerLinkAction(('before/' + params.action), data, params, $self, source);
 		
 		rc.setProp('ajaxTarget', $self.data('target'));
@@ -517,11 +520,11 @@ export function setPage(url, title) {
 	window.history.pushState({'pageTitle': title}, '', url);
 }
 
-$(document)
-	.on('submit', '.ajax-form', function () {
-	
-	})
-	.on('click', '.ajax-link', function (e) {
-		e.preventDefault();
-		ajaxAction($(this));
-	});
+// $(document)
+// 	.on('submit', '.ajax-form', function () {
+//
+// 	})
+// 	.on('click', '.ajax-link', function (e) {
+// 		e.preventDefault();
+// 		ajaxAction($(this));
+// 	});

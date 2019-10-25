@@ -2074,6 +2074,155 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _sass_component_listing_image_input_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../sass/component/listing-image-input.scss */ "./resources/sass/component/listing-image-input.scss");
+/* harmony import */ var _sass_component_listing_image_input_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_sass_component_listing_image_input_scss__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var Dropzone = __webpack_require__(/*! dropzone */ "./node_modules/dropzone/dist/dropzone.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      listing_images: [],
+      remove_images: []
+    };
+  },
+  props: {
+    images: Array,
+    remove_route: String,
+    max_file_size: {
+      type: Number,
+      "default": 10
+    }
+  },
+  mounted: function mounted() {
+    if (this.images) {
+      this.listing_images = this.images;
+    }
+
+    Dropzone.options.listingEditDropzone = {
+      // The camelized version of the ID of the form element
+      // The configuration we've talked about above
+      autoProcessQueue: false,
+      uploadMultiple: true,
+      createImageThumbnails: true,
+      addRemoveLinks: true,
+      parallelUploads: 100,
+      maxFiles: 100,
+      previewsContainer: '#dropzone-previews',
+      clickable: '#old-school-upload-trigger',
+      // The setting up of the dropzone
+      init: function init() {
+        var myDropzone = this;
+        $('#submit-listing').click(function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          myDropzone.processQueue();
+          $('#listing-edit-dropzone').submit();
+        }); // First change the button to actually tell Dropzone to process the queue.
+        // this.element.querySelector('button[type=submit]').addEventListener('click', function (e) {
+        // 	// Make sure that the form isn't actually being sent.
+        // 	e.preventDefault();
+        // 	e.stopPropagation();
+        // 	myDropzone.processQueue();
+        // });
+        // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+        // of the sending event because uploadMultiple is set to true.
+
+        this.on('sendingmultiple', function () {// Gets triggered when the form is actually being sent.
+          // Hide the success button or the complete form.
+        });
+        this.on('successmultiple', function (files, response) {// Gets triggered when the files have successfully been sent.
+          // Redirect user or notify of success.
+        });
+        this.on('errormultiple', function (files, response) {// Gets triggered when there was an error sending the files.
+          // Maybe show form again, and notify user of error
+        });
+      }
+    };
+  },
+  computed: {
+    removing: function removing() {
+      return JSON.stringify(this.remove_images);
+    }
+  },
+  methods: {
+    remove: function remove(image) {
+      console.log({
+        image: image
+      }, this.remove_images[image.id]);
+
+      if (!this.remove_images.includes(image.id)) {
+        this.remove_images.push(image.id);
+      }
+    },
+    remove_undo: function remove_undo(image) {
+      this.remove_images = _.without(this.remove_images, image.id);
+    },
+    is_removing: function is_removing(image) {
+      return this.remove_images.includes(image.id);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map/Geocode.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Map/Geocode.vue?vue&type=script&lang=js& ***!
@@ -6932,6 +7081,25 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 // module
 exports.push([module.i, ".form-group {\n  flex-wrap: wrap;\n}\n\n.listing-dates__date-wrap,\n.listing-dates__add-date {\n  flex: 0 0 calc(50% - 40px);\n  margin: 20px;\n}\n\n.listing-dates__add-date {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background-color: #f3f3f3;\n}\n\n.listing-dates__date {\n  display: flex;\n  align-items: center;\n}\n.listing-dates__date .listing-dates__start,\n.listing-dates__date .listing-dates__end {\n  flex: 0 0 calc(45% - 10px);\n  margin: 0 5px;\n}\n.listing-dates__date .remove-day {\n  margin-top: 34px;\n  opacity: 0;\n  color: #6b6b6b;\n  border-radius: 50%;\n  height: 40px;\n  width: 40px;\n  pointer-events: none;\n  transition: 300ms ease-in-out;\n}\n.listing-dates__date .remove-day:hover {\n  background: #6b6b6b;\n  color: white;\n}\n.listing-dates__date:hover .remove-day {\n  opacity: 1;\n  pointer-events: all;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./resources/sass/component/listing-image-input.scss":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src??ref--7-2!./node_modules/sass-loader/dist/cjs.js??ref--7-3!./resources/sass/component/listing-image-input.scss ***!
+  \**********************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "@charset \"UTF-8\";\n.dropzone {\n  border: none;\n}\n\n.listing__images {\n  display: flex;\n  flex-wrap: wrap;\n  margin-bottom: 30px;\n}\n.listing__images > * {\n  flex: 0 0 calc(16.66666667% - 16px);\n}\n\n.image__wrap {\n  position: relative;\n  margin: 8px;\n  border-radius: 20px;\n  height: 150px;\n  overflow: hidden;\n  transition: 300ms ease-in-out background;\n}\n.image__wrap img {\n  -o-object-position: center;\n     object-position: center;\n  -o-object-fit: cover;\n     object-fit: cover;\n  height: 100%;\n  width: 100%;\n}\n.image__wrap::before {\n  display: none;\n  content: \"\";\n  position: absolute;\n  top: 0;\n  left: 0;\n  height: 100%;\n  width: 100%;\n  background: rgba(107, 107, 107, 0.9);\n  transition: 300ms ease-in-out all;\n}\n.image__wrap:hover img {\n  -webkit-filter: blur(8px);\n          filter: blur(8px);\n  transform: scale(1.05, 1.05);\n}\n.image__wrap:hover::before {\n  display: block;\n}\n.image__wrap:hover .remove-item {\n  display: block;\n}\n.image__wrap .remove-item,\n.image__wrap .remove-item__undo {\n  display: none;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  cursor: pointer;\n  z-index: 9;\n}\n.image__wrap[data-remove=yes] {\n  background: #e3342f;\n}\n.image__wrap[data-remove=yes]::before {\n  display: none;\n}\n.image__wrap[data-remove=yes] img {\n  opacity: 0.3;\n  -webkit-filter: blur(2px);\n          filter: blur(2px);\n  transform: scale(1.05, 1.05);\n}\n.image__wrap[data-remove=yes]:hover img {\n  opacity: 0.2;\n}\n.image__wrap[data-remove=yes] .remove-item__undo {\n  display: block;\n}\n.image__wrap .remove-item__undo {\n  background-color: #e3342f;\n}\n.image__wrap .remove-item__undo:hover i::before {\n  content: \"\\F895\";\n  cursor: pointer;\n}\n\n.dz-default {\n  display: none;\n}", ""]);
 
 // exports
 
@@ -84584,6 +84752,133 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("section", { staticClass: "listing__uploaded-images" }, [
+    _c("div", { staticClass: "listing__add-image" }, [
+      _c("div", { staticClass: "image-upload__dropzone" }, [
+        _c("div", { staticClass: "image-upload__helper" }, [
+          _c("div", { staticClass: "dz-dropzone-helper" }, [
+            _c("div", { staticClass: "media-hints-wrap" }, [
+              _c("p", [
+                _c("strong", [_vm._v("Accepted File Types:")]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(
+                  "Image (PNG, JPG, JPEG, GIF) - " +
+                    _vm._s(_vm.max_file_size) +
+                    " MB\n\t\t\t\t\t\t\t"
+                ),
+                _c("br"),
+                _vm._v("Video (MP4) - MB\n\t\t\t\t\t\t")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "d-none",
+            attrs: { id: "old-school-upload", type: "file", name: "file" }
+          }),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { attrs: { id: "dropzone-previews" } }),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "listing__images" },
+      _vm._l(_vm.listing_images, function(image, index) {
+        return _c(
+          "div",
+          {
+            staticClass: "image__wrap",
+            attrs: { "data-remove": _vm.is_removing(image) ? "yes" : "no" }
+          },
+          [
+            _c(
+              "span",
+              {
+                staticClass: "remove-item circle-icon circle-icon__hover",
+                on: {
+                  click: function($event) {
+                    return _vm.remove(image)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-times fa-circle fa-action" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "remove-item__undo circle-icon circle-icon__hover",
+                on: {
+                  click: function($event) {
+                    return _vm.remove_undo(image)
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-trash fa-circle fa-action" })]
+            ),
+            _vm._v(" "),
+            _c("img", { attrs: { src: image.url } })
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "d-none",
+      attrs: { type: "hidden", name: "remove_images" },
+      domProps: { value: _vm.removing }
+    })
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mediaBox" }, [
+      _c("i", {
+        staticClass: "fa fa-cloud-download mediaBox__icon",
+        attrs: { "aria-hidden": "true" }
+      }),
+      _vm._v(" "),
+      _c("p", { staticClass: "mediaBox__text" }, [
+        _c(
+          "span",
+          { attrs: { id: "old-school-upload-trigger", type: "button" } },
+          [_vm._v("Choose a file")]
+        ),
+        _vm._v(" or drag it here.")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Map/Geocode.vue?vue&type=template&id=47581850&scoped=true&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Map/Geocode.vue?vue&type=template&id=47581850&scoped=true& ***!
@@ -99754,7 +100049,7 @@ module.exports = function(module) {
 /*!**************************************!*\
   !*** ./resources/js/ajax-helpers.js ***!
   \**************************************/
-/*! exports provided: getTargetFromInitiator, confirmDialog */
+/*! exports provided: getTargetFromInitiator, confirmDialog, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99774,6 +100069,10 @@ var confirmDialog = function confirmDialog($initiator) {
     resolve();
   });
 };
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getTargetFromInitiator: getTargetFromInitiator,
+  confirmDialog: confirmDialog
+});
 
 /***/ }),
 
@@ -99798,13 +100097,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setPage", function() { return setPage; });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
+/* harmony import */ var _ajax_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ajax-helpers */ "./resources/js/ajax-helpers.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
-__webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
-
-__webpack_require__(/*! ./ajax-helpers */ "./resources/js/ajax-helpers.js");
 
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 var rc = {
@@ -99830,13 +100128,12 @@ var rc = {
     return def;
   }
 };
-function ajaxAction($initiator, $target, data) {
-  if (!$target) $target = getTargetFromInitiator($initiator);
+var ajaxAction = function ajaxAction($target, data) {
   if (!data) data = [];
-  var $form = $initiator;
+  var $form = $target;
 
-  if ($initiator.data('form')) {
-    $form = jquery__WEBPACK_IMPORTED_MODULE_0___default()($initiator.data('form'));
+  if ($target.data('form')) {
+    $form = jquery__WEBPACK_IMPORTED_MODULE_0___default()($target.data('form'));
   } else if (!$form.is('.ajax-form,form,.ajax-link')) {
     $form = $form.closest('.ajax-form');
   }
@@ -99845,30 +100142,30 @@ function ajaxAction($initiator, $target, data) {
   jquery__WEBPACK_IMPORTED_MODULE_0___default.a.each($form.find(':input:not([type=file])').serializeArray(), function () {
     formData.append(this.name, this.value);
   });
-  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.each($initiator.data(), function (key, val) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.each($target.data(), function (key, val) {
     formData.append(key, val);
   });
   jquery__WEBPACK_IMPORTED_MODULE_0___default.a.each(data, function (key, val) {
     formData.append(key, val);
   });
   var that = this;
-  confirmDialog($initiator).then(function () {
+  Object(_ajax_helpers__WEBPACK_IMPORTED_MODULE_2__["confirmDialog"])($target).then(function () {
     var method = null;
-    var url = $initiator.attr('data-href') ? $initiator.attr('data-href') : '';
+    var url = $target.attr('data-href') ? $target.attr('data-href') : '';
 
     if ($form.is('form,.ajax-form')) {
-      if (empty(method)) method = $form.find('input[name="_method"]').val() ? $form.find('input[name="_method"]').val() : 'POST';
-      if (empty(url)) url = $form.attr('action');
+      if (Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(method)) method = $form.find('input[name="_method"]').val() ? $form.find('input[name="_method"]').val() : 'POST';
+      if (Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(url)) url = $form.attr('action');
     } else {
-      if (empty(method)) method = $initiator.attr('data-method') ? $initiator.attr('data-method') : 'GET';
-      if (empty(url)) url = $initiator.attr('href');
+      if (Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(method)) method = $target.attr('data-method') ? $target.attr('data-method') : 'GET';
+      if (Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(url)) url = $target.attr('href');
     }
 
-    $initiator.addClass('ajax-in-progress');
+    $target.addClass('ajax-in-progress');
   }, function () {
     throw 'Request not sent';
   });
-}
+};
 /**
  * Parse an AJAX response
  *
@@ -99885,13 +100182,13 @@ var parseAjaxResponse = function parseAjaxResponse(response) {
     return;
   }
 
-  if (!empty(response.triggers)) {
+  if (!Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(response.triggers)) {
     jquery__WEBPACK_IMPORTED_MODULE_0___default.a.each(response.triggers, function (i, e) {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').trigger(e.event, e.args);
     });
   }
 
-  if (!empty(response.flash)) {
+  if (!Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(response.flash)) {
     if (response.flash.constructor !== Array) {
       response.flash = [response.flash];
     }
@@ -99903,13 +100200,13 @@ var parseAjaxResponse = function parseAjaxResponse(response) {
     });
   }
 
-  if (!empty(response.redirect)) {
+  if (!Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(response.redirect)) {
     if (response.redirect === 'reload') {
       window.location.reload();
     } else {
       window.location = response.redirect;
     }
-  } else if (!empty(response.html)) {
+  } else if (!Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["empty"])(response.html)) {
     if (_typeof(response.html) === 'object') {
       for (var r in response.html) {
         var target = response.html[r].target || false;
@@ -100130,7 +100427,7 @@ var storage = function storage(db) {
  * Form auto-submit
  */
 
-jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').on('submit', 'form.ajax-form', function (e) {
+jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('submit', 'form.ajax-form', function (e) {
   e.preventDefault();
   var $self = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
   var formData = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).serialize();
@@ -100188,9 +100485,14 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').on('submit', 'form.ajax-fo
 
   var CancelToken = axios.CancelToken;
   var source = CancelToken.source();
-  var url = $self.attr('href') && $self.attr('href') !== '#' ? $self.attr('href') : wajax.url;
+  var url = $self.attr('href') && $self.attr('href') !== '#' ? $self.attr('href') : false;
   var method = ($self.attr('data-method') ? $self.attr('data-method') : 'GET').toLowerCase();
   var params = data;
+
+  if (!url) {
+    console.error('Missing required parameter: URL. Specify a url using the "href" attribute"');
+  }
+
   triggerLinkAction('before/' + params.action, data, params, $self, source);
   rc.setProp('ajaxTarget', $self.data('target'));
   rc.setProp('ajaxPlacement', $self.data('placement'));
@@ -100342,11 +100644,14 @@ function setPage(url, title) {
   window.history.pushState({
     'pageTitle': title
   }, '', url);
-}
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('submit', '.ajax-form', function () {}).on('click', '.ajax-link', function (e) {
-  e.preventDefault();
-  ajaxAction(jquery__WEBPACK_IMPORTED_MODULE_0___default()(this));
-});
+} // $(document)
+// 	.on('submit', '.ajax-form', function () {
+//
+// 	})
+// 	.on('click', '.ajax-link', function (e) {
+// 		e.preventDefault();
+// 		ajaxAction($(this));
+// 	});
 
 /***/ }),
 
@@ -100393,6 +100698,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('VueCtkDateTimePicker', vue
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-dates-input', __webpack_require__(/*! ./components/ListingDatesInput.vue */ "./resources/js/components/ListingDatesInput.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-image-input', __webpack_require__(/*! ./components/ListingImageInput.vue */ "./resources/js/components/ListingImageInput.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-listings', __webpack_require__(/*! ./components/Map/Listings.vue */ "./resources/js/components/Map/Listings.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-geocode', __webpack_require__(/*! ./components/Map/Geocode.vue */ "./resources/js/components/Map/Geocode.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listings', __webpack_require__(/*! ./views/Listings.vue */ "./resources/js/views/Listings.vue")["default"]);
@@ -100683,6 +100989,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ListingImageInput.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/ListingImageInput.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ListingImageInput.vue?vue&type=template&id=498e6710& */ "./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710&");
+/* harmony import */ var _ListingImageInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListingImageInput.vue?vue&type=script&lang=js& */ "./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ListingImageInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ListingImageInput.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListingImageInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ListingImageInput.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ListingImageInput.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListingImageInput_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ListingImageInput.vue?vue&type=template&id=498e6710& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ListingImageInput.vue?vue&type=template&id=498e6710&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ListingImageInput_vue_vue_type_template_id_498e6710___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Map/Geocode.vue":
 /*!*************************************************!*\
   !*** ./resources/js/components/Map/Geocode.vue ***!
@@ -100921,43 +101296,9 @@ var empty = function empty(subject) {
   !*** ./resources/js/listing-edit.js ***!
   \**************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var Dropzone = __webpack_require__(/*! dropzone */ "./node_modules/dropzone/dist/dropzone.js");
 
-Dropzone.options.listingEditDropzone = {
-  // The camelized version of the ID of the form element
-  // The configuration we've talked about above
-  autoProcessQueue: false,
-  uploadMultiple: true,
-  createImageThumbnails: true,
-  parallelUploads: 100,
-  maxFiles: 100,
-  previewsContainer: '#dropzone-previews',
-  // The setting up of the dropzone
-  init: function init() {
-    var myDropzone = this;
-    console.log('hi'); // First change the button to actually tell Dropzone to process the queue.
-
-    this.element.querySelector('button[type=submit]').addEventListener('click', function (e) {
-      // Make sure that the form isn't actually being sent.
-      e.preventDefault();
-      e.stopPropagation();
-      myDropzone.processQueue();
-    }); // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
-    // of the sending event because uploadMultiple is set to true.
-
-    this.on('sendingmultiple', function () {// Gets triggered when the form is actually being sent.
-      // Hide the success button or the complete form.
-    });
-    this.on('successmultiple', function (files, response) {// Gets triggered when the files have successfully been sent.
-      // Redirect user or notify of success.
-    });
-    this.on('errormultiple', function (files, response) {// Gets triggered when there was an error sending the files.
-      // Maybe show form again, and notify user of error
-    });
-  }
-};
 
 /***/ }),
 
@@ -101156,6 +101497,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!./listing-dates-input.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./resources/sass/component/listing-dates-input.scss");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./resources/sass/component/listing-image-input.scss":
+/*!***********************************************************!*\
+  !*** ./resources/sass/component/listing-image-input.scss ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!../../../node_modules/postcss-loader/src??ref--7-2!../../../node_modules/sass-loader/dist/cjs.js??ref--7-3!./listing-image-input.scss */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js?!./node_modules/sass-loader/dist/cjs.js?!./resources/sass/component/listing-image-input.scss");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 

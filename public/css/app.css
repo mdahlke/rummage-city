@@ -11022,6 +11022,132 @@ a.text-dark:focus {
   border-bottom: 6px solid #be2626;
 }
 
+.image-upload__dropzone {
+  display: flex;
+  position: relative;
+  margin: 0 0 20px;
+  padding: 30px;
+  border: 3px dashed #dcdcdc;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload__dropzone #old-school-upload-trigger {
+  cursor: pointer;
+}
+
+.image-upload__dropzone .mediaBox {
+  text-align: center;
+}
+
+.image-upload__dropzone .mediaBox .mediaBox__icon {
+  font-size: 104px;
+  color: #ccc;
+}
+
+.image-upload__dropzone .mediaBox__text {
+  font-size: 24px;
+}
+
+.image-upload__dropzone .mediaBox__text span {
+  color: #f47f45;
+  font-weight: bold;
+}
+
+.dz-dropzone-helper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -9;
+  opacity: 0;
+  transition: 300ms opacity ease-in-out;
+}
+
+.dz-dropzone-helper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  width: 100%;
+}
+
+.dz-dropzone-helper::after {
+  font-family: "Font Awesome 5 Pro";
+  content: "\F093";
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  padding: 13px 0 0 1px;
+  font-size: 30px;
+  text-align: center;
+  color: #fff;
+  border: 3px solid white;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  line-height: 10px;
+  transform: translate(-50%, -50%);
+}
+
+.dz-dropzone-helper.visible {
+  opacity: 1;
+  z-index: 9999;
+}
+
+.dz-dropzone-helper.dropped::after {
+  color: green;
+}
+
+.circle-icon {
+  text-align: center;
+  height: 40px;
+  width: 40px;
+  transform: translate(50%, -50%);
+  border-radius: 50%;
+  background-color: #6b6b6b;
+}
+
+.circle-icon.circle-icon__hover {
+  transition: 200ms linear all;
+}
+
+.circle-icon.circle-icon__hover:hover {
+  background: #3490dc;
+}
+
+.circle-icon > .fa,
+.circle-icon .far,
+.circle-icon .fas {
+  position: relative;
+}
+
+.circle-icon > .fa,
+.circle-icon > .far,
+.circle-icon > .fas,
+.circle-icon > .fad {
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+}
+
+.circle-icon > > .fad::before {
+  color: white;
+}
+
+.circle-icon > > .fad::after {
+  color: white;
+}
+
+.fa-action,
+.fa-action::before,
+.fa-action::after {
+  cursor: pointer !important;
+}
+
 .listings-index .listings__section {
   height: calc(100vh - 58px);
   overflow: hidden;

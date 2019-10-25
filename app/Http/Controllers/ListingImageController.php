@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\ListingImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class ListingImageController extends Controller {
 
@@ -29,6 +33,18 @@ class ListingImageController extends Controller {
 
 		$check = Image::insert($insert);
 
-		return Redirect::to("image")->withSuccess('Great! Image has been successfully uploaded.');
+		return;
+	}
+
+	public function remove(Request $request, ListingImage $image) {
+		$user = Auth::user();
+
+		if ($image->listing->user->id !== $user->id) {
+			abort(403, 'Unauthorized action.');
+		}
+
+		$image->delete();
+
+		return View::make('', ['status' => 'success']);
 	}
 }

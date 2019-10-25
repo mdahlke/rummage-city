@@ -1,1 +1,83 @@
 @import '../../../node_modules/dropzone/dist/dropzone';
+
+
+.image-upload__dropzone {
+  display: flex;
+  position: relative;
+  margin: 0 0 20px;
+  padding: 30px;
+  border: 3px dashed #dcdcdc;
+  align-items: center;
+  justify-content: center;
+
+  #old-school-upload-trigger {
+    cursor: pointer;
+  }
+  .mediaBox{
+    text-align: center;
+    .mediaBox__icon{
+      font-size: 104px;
+      color: #ccc;
+    }
+
+  }
+
+  .mediaBox__text{
+    font-size: 24px;
+    span{
+      color: #f47f45;
+      font-weight: bold;
+    }
+  }
+}
+
+.dz-dropzone-helper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -9;
+  opacity: 0;
+  transition: 300ms opacity ease-in-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    height: 100%;
+    width: 100%;
+  }
+
+  &::after {
+    font-family: "Font Awesome 5 Pro";
+    content: "\f093";
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    padding: 13px 0 0 1px;
+    font-size: 30px;
+    text-align: center;
+    color: #fff;
+    border: 3px solid white;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    line-height: 10px;
+    transform: translate(-50%, -50%);
+  }
+
+  &.visible {
+    opacity: 1;
+    z-index: 9999;
+
+  }
+
+  &.dropped {
+    &::after {
+      color: green;
+    }
+  }
+}

@@ -105,7 +105,6 @@ class ListingController extends Controller {
 
 		if ($request->isMethod('post')) {
 			$listing->fill($request->only($listing->fillable));
-
 			$listing->ip_address = $_SERVER['REMOTE_ADDR'];
 
 			$saved = $user->listing()->save($listing);
@@ -114,6 +113,7 @@ class ListingController extends Controller {
 				$starts = $request->input('start');
 				$ends = $request->input('end');
 
+				// prepare the listing dates
 				$dates = [];
 				foreach ($starts as $i => $start) {
 					if ($start) {
@@ -129,8 +129,8 @@ class ListingController extends Controller {
 					}
 				}
 
+				// remove all existing dates
 				ListingDate::where('listing_id', '=', $listing->id)->delete();
-
 				$listingDates = [];
 
 				foreach ($dates as $date) {
@@ -140,15 +140,17 @@ class ListingController extends Controller {
 					]);
 				}
 
+				// save all of the dates from the request
 				$listing->date()->saveMany($listingDates);
 
+				// upload new images
 				if ($request->hasFile('file')) {
 					$images = $request->file('file');
 					$listingImages = [];
 
 					/** @var UploadedFile $image */
 					foreach ($images as $image) {
-						$path = $image->store(ListingImage::STORAGE_PATH);
+						$path = $image->store(User::storagePath());
 
 						$listingImages[] = new ListingImage([
 							'path' => $path,
@@ -156,6 +158,18 @@ class ListingController extends Controller {
 						]);
 					}
 					$listing->image()->saveMany($listingImages);
+				}
+
+				// remove any images that were selected for removal
+				$removeImages = $request->input('remove_images');
+								$removeImages = json_decode($request->input('remove_images'));
+//				dd($removeImages);
+				foreach ($removeImages as $remove) {
+					$image = ListingImage::query()->where('id', $remove)->first();
+
+					if ($image->exists) {
+						$image->delete();
+					}
 				}
 			}
 

@@ -1,0 +1,112 @@
+@import "../colors";
+
+.dropzone {
+  border: none;
+}
+
+.listing__images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+
+  > * {
+    flex: 0 0 calc(16.66666667% - 16px);
+  }
+}
+
+.image__wrap {
+  position: relative;
+  margin: 8px;
+  border-radius: 20px;
+  height: 150px;
+  overflow: hidden;
+  transition: 300ms ease-in-out background;
+
+  img {
+    object-position: center;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  &::before {
+    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba($gray, .9);
+    transition: 300ms ease-in-out all;
+  }
+
+  &:hover {
+    img {
+      filter: blur(8px);
+      transform: scale(1.05, 1.05);
+    }
+
+    &::before {
+      display: block;
+    }
+
+    .remove-item {
+      display: block;
+    }
+  }
+
+  .remove-item,
+  .remove-item__undo {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 9;
+  }
+
+  &[data-remove=yes] {
+    background: $red;
+
+    &::before {
+      display: none;
+    }
+
+    img {
+      opacity: .3;
+      filter: blur(2px);
+      transform: scale(1.05, 1.05);
+    }
+
+    &:hover {
+      img {
+        opacity: .2;
+      }
+    }
+
+    .remove-item__undo {
+      display: block;
+    }
+  }
+
+
+  .remove-item__undo {
+    background-color: $red;
+
+    &:hover {
+      i {
+        &::before {
+          content: "\f895";
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+.dz-default {
+  display: none;
+}

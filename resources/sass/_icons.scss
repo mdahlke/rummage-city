@@ -1,0 +1,53 @@
+.circle-icon {
+  text-align: center;
+  height: 40px;
+  width: 40px;
+  transform: translate(50%, -50%);
+  border-radius: 50%;
+  background-color: $gray;
+
+
+  &.circle-icon__hover {
+    transition: 200ms linear all;
+
+    &:hover {
+      background: $blue;
+    }
+  }
+
+  >
+  .fa,
+  .far,
+  .fas {
+    position: relative;
+  }
+
+  > {
+    .fa,
+    .far,
+    .fas,
+    .fad {
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+    }
+
+    > .fad {
+      &::before {
+        color: white;
+      }
+
+      &::after {
+        color: white;
+      }
+    }
+  }
+}
+
+.fa-action {
+  &,
+  &::before,
+  &::after {
+    cursor: pointer !important;
+  }
+}
