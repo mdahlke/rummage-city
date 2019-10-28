@@ -6,6 +6,6 @@
 
 @section('main')
     <section class="listings-index">
-        <map-listings :listings="{{ @json_encode($listings->all()) }}" />
+        <map-listings :listings="{{ @json_encode($listings->all()) }}" :search="{{ $searchState }}"/>
     </section>
 @endsection

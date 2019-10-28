@@ -22,54 +22,115 @@ use Illuminate\Support\Carbon;
  * @property string deleted_at
  */
 class Listing extends Model {
-	use Uuids;
+    use Uuids;
 
-	protected $keyType = 'string';
-	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-	public $incrementing = false;
+    protected $keyType = 'string';
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $appends = ['saveUrl', 'removeSavedUrl', 'isSaved'];
+    public $incrementing = false;
+    public $fillable = ['title', 'description', 'address', 'latitude', 'longitude', 'ip_address'];
+    public $saveUrl = '';
+    public $removeSavedUrl = '';
+    public $isSaved = false;
 
-	public $fillable = ['title', 'description', 'address', 'latitude', 'longitude', 'ip_address'];
+    public function addressEncoded() {
+        return urlencode($this->address);
+    }
 
-	public function addressEncoded() {
-		return urlencode($this->address);
-	}
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
-	public function user() {
-		return $this->belongsTo(User::class);
-	}
+    public function date() {
+        return $this->hasMany(ListingDate::class);
+    }
 
-	public function date() {
-		return $this->hasMany(ListingDate::class);
-	}
+    public function activeDate() {
+        return $this->hasMany(ListingDate::class)->whereHas('activeDate')
+            ->orderByDesc('start');
+    }
 
-	public function activeDate() {
-		return $this->hasMany(ListingDate::class)
-		            ->whereDate('end', '>=', Carbon::today())
-		            ->orderBy('start', 'desc');
-	}
+    public function image() {
+        return $this->hasMany(ListingImage::class);
+    }
 
-	public function image() {
-		return $this->hasMany(ListingImage::class);
-	}
+    public function getSaveUrlAttribute() {
+        return $this->saveUrl;
+    }
 
-	public function hasActiveDate() {
-		$hasActive = false;
-		$now = new Carbon();
+    public function getRemoveSavedUrlAttribute() {
+        return $this->removeSavedUrl;
+    }
 
-		foreach ($this->date as $date) {
-			try {
-				$d = new Carbon($date->end);
+    public function getIsSavedAttribute() {
+        return $this->isSaved();
+    }
 
-				if ($d->gt($now)) {
-					$hasActive = true;
-					break;
-				}
-			}
-			catch (\Exception $e) {
-				//
-			}
-		}
+    /**
+     * @return string
+     */
+    public function getSaveUrl(): string {
+        return $this->saveUrl;
+    }
 
-		return $hasActive;
-	}
+    /**
+     * @param string $saveUrl
+     * @return Listing
+     */
+    public function setSaveUrl(string $saveUrl): Listing {
+        $this->saveUrl = $saveUrl;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoveSavedUrl(): string {
+        return $this->removeSavedUrl;
+    }
+
+    /**
+     * @param string $removeSavedUrl
+     * @return Listing
+     */
+    public function setRemoveSavedUrl(string $removeSavedUrl): Listing {
+        $this->removeSavedUrl = $removeSavedUrl;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSaved(): bool {
+        return $this->isSaved;
+    }
+
+    /**
+     * @param bool $isSaved
+     * @return Listing
+     */
+    public function setIsSaved(bool $isSaved): Listing {
+        $this->isSaved = $isSaved;
+        return $this;
+    }
+
+    public function hasActiveDate() {
+        $hasActive = false;
+        $now = new Carbon();
+
+        foreach ($this->date as $date) {
+            try {
+                $d = new Carbon($date->end);
+
+                if ($d->gt($now)) {
+                    $hasActive = true;
+                    break;
+                }
+            } catch (\Exception $e) {
+                //
+            }
+        }
+
+        return $hasActive;
+    }
 }

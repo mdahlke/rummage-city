@@ -5,11 +5,17 @@
  */
 
 require('./bootstrap');
-
 import Vue from 'vue';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
+import axios from 'axios';
 
 window.Vue = Vue;
+window.axios = require('axios');
+
+// window.axios.defaults.headers.common = {
+// 	'X-Requested-With': 'XMLHttpRequest',
+// 	'X-CSRF-TOKEN': window.csrf_token
+// };
 
 // import Datetime from 'vue-datetime';
 //
@@ -32,14 +38,15 @@ Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('listing-dates-input', require('./components/ListingDatesInput.vue').default);
 Vue.component('listing-image-input', require('./components/ListingImageInput.vue').default);
-Vue.component('map-listings', require('./components/Map/Listings.vue').default);
 Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
-Vue.component('listings', require('./views/Listings.vue').default);
+Vue.component('map-listings', require('./views/Listings.vue').default);
+Vue.component('listings-map', require('./components/Map/ListingsMap.vue').default);
+Vue.component('listings-list', require('./components/Map/ListingsList.vue').default);
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-import App from './views/App'
-import Listings from './views/Listings'
+import App from './views/App';
+import Listings from './views/Listings';
 
 const router = new VueRouter({
 	mode: 'history',
@@ -48,8 +55,8 @@ const router = new VueRouter({
 			path: '/listings',
 			name: 'listings',
 			component: Listings
-		},
-	],
+		}
+	]
 });
 
 /**
@@ -60,8 +67,8 @@ const router = new VueRouter({
 
 const app = new Vue({
 	el: '#app',
-	components: { App },
-	router,
+	components: {App},
+	router
 });
 
 

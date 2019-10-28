@@ -10,19 +10,25 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
 class UserController {
 
-	public function __construct() {
-		// parent::__construct();
-	}
+    public function __construct() {
+        // parent::__construct();
+    }
 
-	public function saveListing(Request $request, \App\User $user, \App\Listing $listing) {
+    public function saveListing(Request $request, \App\User $user, \App\Listing $listing) {
+        $user->savedListing()->create([
+            'listing_id' => $listing->id,
+        ]);
+    }
 
-		$user->savedListing()->create([
-			'listing_id' => $listing->id,
-		]);
-	}
+    public function removeSavedListing(Request $request, \App\User $user, \App\Listing $listing) {
+        $user->savedListing()->delete([
+            'listing_id' => $listing->id,
+        ]);
+    }
 
 }

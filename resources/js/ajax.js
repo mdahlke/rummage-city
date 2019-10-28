@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import {empty} from './helpers';
+import {empty, setPage} from './helpers';
 import {getTargetFromInitiator, confirmDialog} from './ajax-helpers';
 
 export const axios = require('axios');
@@ -21,21 +21,21 @@ const rc = {
 		if (this._property.hasOwnProperty(key)) {
 			return this._property[key];
 		}
-		
+
 		return def;
 	}
 };
 
 export const ajaxAction = function ($target, data) {
 	if (!data) data = [];
-	
+
 	let $form = $target;
 	if ($target.data('form')) {
 		$form = $($target.data('form'));
 	} else if (!$form.is('.ajax-form,form,.ajax-link')) {
 		$form = $form.closest('.ajax-form');
 	}
-	
+
 	let formData = new FormData();
 	$.each($form.find(':input:not([type=file])').serializeArray(), function () {
 		formData.append(this.name, this.value);
@@ -46,7 +46,7 @@ export const ajaxAction = function ($target, data) {
 	$.each(data, function (key, val) {
 		formData.append(key, val);
 	});
-	
+
 	let that = this;
 	confirmDialog($target).then(function () {
 			let method = null;
@@ -63,8 +63,8 @@ export const ajaxAction = function ($target, data) {
 		function () {
 			throw 'Request not sent';
 		});
-	
-	
+
+
 };
 
 /**
@@ -76,20 +76,20 @@ export const ajaxAction = function ($target, data) {
  */
 const parseAjaxResponse = function (response) {
 	'use strict';
-	
+
 	if (typeof response !== 'object') {
 		// if the response isn't a JSON object we can't do anything with it
 		return;
 	}
-	
+
 	if (!empty(response.triggers)) {
 		$.each(response.triggers, function (i, e) {
 			$('body').trigger(e.event, e.args);
 		});
 	}
-	
+
 	if (!empty(response.flash)) {
-		
+
 		if (response.flash.constructor !== Array) {
 			response.flash = [response.flash];
 		}
@@ -99,7 +99,7 @@ const parseAjaxResponse = function (response) {
 			}
 		});
 	}
-	
+
 	if (!empty(response.redirect)) {
 		if (response.redirect === 'reload') {
 			window.location.reload();
@@ -112,7 +112,7 @@ const parseAjaxResponse = function (response) {
 				let target = response.html[r].target || false;
 				let placement = response.html[r].placement || false;
 				let html = response.html[r].html || false;
-				
+
 				if (!target || !placement || !html) {
 					console.warn('Missing required arguments for AJAX HTML DOM manipulation.', {
 						target,
@@ -120,9 +120,9 @@ const parseAjaxResponse = function (response) {
 						html
 					});
 				}
-				
+
 				console.log({html, target, placement});
-				
+
 				viewMutation(html, target, placement);
 			}
 		} else {
@@ -149,7 +149,7 @@ const viewMutation = function (html = '', target = 'body', placement = 'prepend'
 		} else {
 			$('body').append($html);
 		}
-		
+
 		$('#' + $html.attr('id')).modal('show').on('hidden.bs.modal', function (e) {
 			if (modalAction) {
 				let _this = this;
@@ -253,7 +253,7 @@ export const updateUrlParameter = function (url, param, value) {
  */
 export const triggerFormAction = function (action, response, params, $form) {
 	const data = [response, params, $form];
-	
+
 	$('body').trigger('ajax_form_action/' + action, data);
 };
 
@@ -265,7 +265,7 @@ export const triggerLinkAction = function (action, response, params, form) {
 // local storage
 export const storage = function (db) {
 	this.store = rc.getProp('localforage_' + db);
-	
+
 	// add a record
 	this.store.set = (key, value) => {
 		return this.store.setItem(key, value);
@@ -278,7 +278,7 @@ export const storage = function (db) {
 	this.store.all = () => {
 		const store = this.store;
 		let records = [];
-		
+
 		return new Promise(function (resolve, reject) {
 			store.keys().then(function () {
 				store.iterate(function (value, key) {
@@ -293,9 +293,9 @@ export const storage = function (db) {
 			});
 		});
 	};
-	
+
 	return this.store;
-	
+
 };
 
 
@@ -305,21 +305,21 @@ export const storage = function (db) {
 $(document)
 	.on('submit', 'form.ajax-form', function (e) {
 		e.preventDefault();
-		
+
 		const $self = $(this);
 		let formData = $(this).serialize();
-		
+
 		if (!$self.find('input[name="action"]').length) {
 			formData += '&action=' + $self.attr('data-action');
 		}
 		const CancelToken = axios.CancelToken;
 		const source = CancelToken.source();
-		
+
 		// this is the element that we want the loading overlay to be attached to
 		const $wrapTarget = ($self.closest('#me-popup').length ? [$self.closest('#me-popup')] : [false]);
 		// trigger the form disable and pass the wrap target
 		$self.trigger('form/disable', $wrapTarget);
-		
+
 		axios.get({
 			type: ($self.attr('method') ? $self.attr('method') : 'GET'),
 			data: formData
@@ -327,7 +327,7 @@ $(document)
 			cancelToken: source.token
 		}).then(function (data) {
 			rc.triggerFormAction(data.params.action, data.response, data.params, $self);
-			
+
 			// re-enable the form after the ajax request is finished.
 			$self.trigger('form/enable', $wrapTarget);
 		}).catch((err, message) => {
@@ -339,16 +339,16 @@ $(document)
 	.on('click', 'a.ajax-link', function (e) {
 		e.preventDefault();
 		const $self = $(this);
-		
+
 		let data = {
 			action: $self.attr('data-action'),
 			id: $self.attr('data-id')
 		};
-		
+
 		// this is the element that we want the loading overlay to be attached to
 		const $wrapTarget = ($self.data('show-load') ? ($self.data('target') ? [$($self.data('target'))] : [$self]) : [false]);
 		$self.trigger('ajax_link/disable', $wrapTarget);
-		
+
 		/**
 		 * Allow extra data to be sent in the AJAX request
 		 *
@@ -358,7 +358,7 @@ $(document)
 		if ($self.attr('data-send')) {
 			data = $.extend({}, data, $.parseJSON($self.attr('data-send')));
 		}
-		
+
 		const nonce = $self.data('nonce');
 		if (nonce) {
 			data['_nonce'] = nonce;
@@ -368,41 +368,41 @@ $(document)
 		const url = ($self.attr('href') && $self.attr('href') !== '#' ? $self.attr('href') : false);
 		const method = ($self.attr('data-method') ? $self.attr('data-method') : 'GET').toLowerCase();
 		const params = data;
-		
+
 		if(!url){
 			console.error('Missing required parameter: URL. Specify a url using the "href" attribute"');
 		}
 		triggerLinkAction(('before/' + params.action), data, params, $self, source);
-		
+
 		rc.setProp('ajaxTarget', $self.data('target'));
 		rc.setProp('ajaxPlacement', $self.data('placement'));
-		
+
 		axios[method](url, {params}, {
 			cancelToken: source.token
 		}).then(function (response) {
 			const data = response.data.data;
 			triggerLinkAction(params.action, data, params, $self);
-			
+
 			if (data.html === false) {
 				triggerLinkAction(('after/' + params.action), data, params, $self);
 				return false;
 			}
-			
+
 			parseAjaxResponse(data);
-			
+
 			if ($self.data('show-load')) {
 				if ($('#me-popup').length) {
 					$('#me-popup').popup('hide');
 				}
 			}
-			
+
 			$self.trigger('ajax_link/enable', $wrapTarget);
 			triggerLinkAction(('after/' + params.action), data, params, $self);
-			
+
 		}).catch(function () {
 			$self.trigger('ajax_link/enable', $wrapTarget);
 		});
-		
+
 		return false;
 	})
 	/**
@@ -445,7 +445,7 @@ $(document)
 		if (wrapTarget === false) {
 			wrapTarget = $(e.target);
 		}
-		
+
 		const btn = $(e.currentTarget);
 		let targetDisabledClass = $(e.target).data('target-disabled-class');
 		targetDisabledClass = typeof targetDisabledClass === 'undefined' ? '' : targetDisabledClass;
@@ -485,7 +485,7 @@ export function updateQueryString(key, value, url) {
 	if (!url) url = window.location.href;
 	var re = new RegExp('([?&])' + key + '=.*?(&|#|$)(.*)', 'gi'),
 		hash;
-	
+
 	if (re.test(url)) {
 		if (typeof value !== 'undefined' && value !== null) {
 			return url.replace(re, '$1' + key + '=' + value + '$2$3');
@@ -502,7 +502,7 @@ export function updateQueryString(key, value, url) {
 			var separator = url.indexOf('?') !== -1 ? '&' : '?';
 			hash = url.split('#');
 			url = hash[0] + separator + key + '=' + value;
-			
+
 			if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
 				url += '#' + hash[1];
 				return url;
@@ -513,11 +513,6 @@ export function updateQueryString(key, value, url) {
 			return url;
 		}
 	}
-}
-
-export function setPage(url, title) {
-	console.log(url);
-	window.history.pushState({'pageTitle': title}, '', url);
 }
 
 // $(document)

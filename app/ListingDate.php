@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
 use Webpatser\Uuid\Uuid;
 
@@ -18,12 +19,18 @@ use Webpatser\Uuid\Uuid;
  * @property string updated_at
  */
 class ListingDate extends Model {
-	use Uuids;
+    use Uuids;
 
-	protected $dates = ['created_at', 'updated_at', 'start', 'end'];
-	public $fillable = ['start', 'end'];
+    protected $dates = ['created_at', 'updated_at', 'start', 'end'];
+    public $fillable = ['start', 'end'];
 
-	public function listing() {
-		return $this->belongsTo(Listing::class);
-	}
+    public function listing() {
+        return $this->belongsTo(Listing::class)
+            ->where('end', '>=', Carbon::today())
+            ->orderByAsc('start');
+    }
+
+    public function activeDate() {
+        return $this->belongsTo(Listing::class, 'listing_id', 'id')->where('end', '>=', Carbon::today());
+    }
 }

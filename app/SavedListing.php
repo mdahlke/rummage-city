@@ -16,16 +16,18 @@ use Webpatser\Uuid\Uuid;
  * @property string updated_at
  */
 class SavedListing extends Model {
-	use Uuids;
+    use Uuids;
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-	public $fillable = ['id', 'listing_id'];
+    public $fillable = ['user_id', 'listing_id'];
 
-	public function listing() {
-		return $this->hasOne(Listing::class, 'id', 'listing_id');
-	}
+    public function listing() {
+        return $this->hasOne(Listing::class, 'id', 'listing_id');
+    }
 
-	public function user() {
-		return $this->hasOne(User::class, 'id', 'user_id');
-	}
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 
 }

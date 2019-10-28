@@ -14,9 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+	//	Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
+//	Route::get('graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
+
+	Route::get('/user', function (Request $request) {
+		return $request->user();
+	});
+
+    Route::match(['get', 'post'], 'search/{schema}', '\Rebing\GraphQL\GraphQLController@query');
+
 });
-
-
-Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');

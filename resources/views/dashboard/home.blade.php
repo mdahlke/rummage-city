@@ -33,7 +33,7 @@
 
         <div class="card-body">
             @foreach(Auth::user()->savedListing as $saved)
-                <a href="{{ route('listings.view', ['id' => $saved->listing->id]) }}">
+                <a href="{{ route('listings.view', ['listing' => $saved->listing->id]) }}">
                     <h3>
                         <i class="fad fa-{{ $saved->listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $saved->listing->title }}
                     </h3>
