@@ -28,7 +28,9 @@ class AddTableIndexesListingDates extends Migration
     public function down()
     {
         Schema::table('listing_dates', function (Blueprint $table) {
-            //
+            $table->dropIndex('listing_id');
+            $table->dropIndex('start');
+            $table->dropIndex('end');
         });
     }
 }

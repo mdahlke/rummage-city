@@ -26,7 +26,7 @@ class AddTableIndexesListingImages extends Migration
     public function down()
     {
         Schema::table('listing_images', function (Blueprint $table) {
-            //
+            $table->dropIndex('listing_id');
         });
     }
 }

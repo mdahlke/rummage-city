@@ -31,7 +31,12 @@ class AddTableIndexesListings extends Migration
     public function down()
     {
         Schema::table('listings', function (Blueprint $table) {
-            //
+            $table->dropIndex('user_id');
+            $table->dropIndex('city');
+            $table->dropIndex('state');
+            $table->dropIndex('postcode');
+            $table->dropIndex('latitude');
+            $table->dropIndex('longitude');
         });
     }
 }
