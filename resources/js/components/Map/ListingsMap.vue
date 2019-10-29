@@ -5,10 +5,13 @@
 <script>
     import MapboxPopup from './MapboxPopup.vue';
     import {mapbox_latlng, setPage} from '../../helpers';
+    import mapbox_config from './mapbox.config.js';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
     const mapboxgl = require('mapbox-gl');
+
+    console.log(mapbox_config);
 
     export default {
         name: 'ListingsMap',
@@ -20,32 +23,19 @@
                 data_points: [],
                 icon: null,
                 listing_ids: [],
-                visible_listings: []
+                visible_listings: [],
+                markers: [],
             };
         },
         props: {
             listings: Array,
-            appId: {
-                type: String,
-                default: 'lQPofquBtIF1aAOEarx7'
-            },
-            appCode: {
-                type: String,
-                default: '28icBNVvG484yi09NA2c1g'
-            },
+            mapMarkers: {},
             svg: {
                 type: String,
                 default: null
             }
         },
         created() {
-            this.platform = new H.service.Platform({
-                'app_id': this.appId,
-                'apikey': '7W5ZSgnP_hvci-01R4EbN1_T17e_5x1zVr54MheJxTk'
-            });
-            if (this.svg) {
-                this.icon = new H.map.Icon(this.svg);
-            }
 
         },
         mounted() {
@@ -53,29 +43,23 @@
                 this.visible_listings = this.listings;
             }
 
-            console.log('parent longitued', this.$parent.lng);
-
-            mapboxgl.accessToken = 'pk.eyJ1IjoibWRhaGxrZSIsImEiOiJjazI2bGgzNjUwZzlsM2dxaDd2OXgxZW9yIn0.kKYT-PvLDgQeFZWc2MMOAw';
-            this.map = new mapboxgl.Map({
+            mapboxgl.accessToken = mapbox_config.accessToken;
+            let config = {
                 container: 'listings__map',
-                style: 'mapbox://styles/mapbox/streets-v11',
+                style: mapbox_config.style,
                 center: {lng: this.$parent.lng, lat: this.$parent.lat},
                 zoom: this.$parent.zoom,
                 pitch: this.$parent.pitch,
                 bearing: this.$parent.bearing,
                 // hash: true,
                 keyboard: false,
-            });
+            };
+            console.log({config});
+            this.map = new mapboxgl.Map(config);
 
             // Add zoom and rotation controls to the map.
             this.map.addControl(new mapboxgl.NavigationControl());
 
-            /**
-             * When the user stops dragging the map we need to get the coordinates
-             * to retrieve any new listings that should be visible on the screen
-             *
-             * @TODO break out the inner logic to allow for zoom in/out
-             */
             this.map.on('dragend', this.update_map_listings);
             this.map.on('zoomend', this.update_map_listings);
 
@@ -90,6 +74,19 @@
                         this.listing_ids.push(l.id);
                         popup = this.create_popup(l);
                         this.add_marker(mapbox_latlng(l), popup);
+                    }
+                }
+            }
+            let m;
+            for (let i in this.mapMarkers) {
+                popup = null;
+                if (this.mapMarkers.hasOwnProperty(i)) {
+                    m = this.mapMarkers[i];
+
+                    if (m.id) {
+                        this.listing_ids.push(m.id);
+                        popup = this.create_popup(m);
+                        this.add_marker(mapbox_latlng(m), popup);
                     }
                 }
             }

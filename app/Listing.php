@@ -14,6 +14,12 @@ use Illuminate\Support\Carbon;
  * @property string title
  * @property string description
  * @property string address
+ * @property string house_number
+ * @property string street_name
+ * @property string city
+ * @property string state
+ * @property string postcode
+ * @property string country_code
  * @property float latitude
  * @property float longitude
  * @property string ip_address
@@ -28,7 +34,20 @@ class Listing extends Model {
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $appends = ['saveUrl', 'removeSavedUrl', 'isSaved'];
     public $incrementing = false;
-    public $fillable = ['title', 'description', 'address', 'latitude', 'longitude', 'ip_address'];
+    public $fillable = [
+        'title',
+        'description',
+        'address',
+        'house_number',
+        'street_name',
+        'city',
+        'state',
+        'postcode',
+        'country_code',
+        'latitude',
+        'longitude',
+        'ip_address'
+    ];
     public $saveUrl = '';
     public $removeSavedUrl = '';
     public $isSaved = false;

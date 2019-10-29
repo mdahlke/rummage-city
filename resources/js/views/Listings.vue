@@ -33,6 +33,8 @@
                 lat: 43.75171,
                 lng: -88.44867,
                 zoom: 10,
+                bearing: 0,
+                pitch: 0,
                 searchState: {},
             };
         },
@@ -86,7 +88,7 @@
             }
 
             if (this.search) {
-                if (this.search.bounds.lat && this.search.bounds.lng) {
+                if (this.search.bounds && this.search.bounds.lat && this.search.bounds.lng) {
                     this.lat = this.search.bounds.lat;
                     this.lng = this.search.bounds.lng;
                 }

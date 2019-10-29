@@ -19,12 +19,18 @@
             <textarea id="description" class="form-control" name="description">{{ $listing->description }}</textarea>
         </div>
 
-        {{--        <div class="form-group">--}}
-        {{--            <label for="address">Address</label>--}}
-        {{--            <map-geocode address="{{ $listing->address }}"--}}
-        {{--                         latitude="{{ $listing->latitude }}"--}}
-        {{--                         longitude="{{ $listing->longitude }}" />--}}
-        {{--        </div>--}}
+        <div class="form-group">
+            <label for="address">Address</label>
+            <map-geocode address="{{ $listing->address }}"
+                         house="{{ $listing->house_number }}"
+                         street="{{ $listing->street_name }}"
+                         city="{{ $listing->city }}"
+                         state="{{ $listing->state }}"
+                         postcode="{{ $listing->postcode }}"
+                         country="{{ $listing->country_code }}"
+                         latitude="{{ $listing->latitude }}"
+                         longitude="{{ $listing->longitude }}"/>
+        </div>
 
         <listing-dates-input :dates="{{ $listing->date }}"></listing-dates-input>
 

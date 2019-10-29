@@ -16,24 +16,29 @@ use Webpatser\Uuid\Uuid;
 */
 
 $factory->define(App\Listing::class, function (Faker $faker, $data = []) {
-	$users = $data['users'] ?? [];
+    $users = $data['users'] ?? [];
 
-	if (!$users) {
-		$users = User::all()->pluck('id')->toArray();
-	}
+    if (!$users) {
+        $users = User::all()->pluck('id')->toArray();
+    }
 
-	$user = $faker->randomElement($users);
+    $user = $faker->randomElement($users);
 
-	return [
-		'id' => Uuid::generate()->string,
-		'user_id' => $user,
-		'title' => $faker->text(50),
-		'description' => $faker->text(1000),
-		'address' => $faker->address,
-		'latitude' => $faker->latitude,
-		'longitude' => $faker->longitude,
-		'ip_address' => $faker->ipv4,
-		'created_at' => $faker->unixTime,
-		'updated_at' => $faker->unixTime,
-	];
+    return [
+        'id' => Uuid::generate()->string,
+        'user_id' => $user,
+        'title' => $faker->text(50),
+        'description' => $faker->text(1000),
+        'street' => $faker->buildingNumber,
+        'street_name' => $faker->street_name,
+        'city' => $faker->city,
+        'state' => $faker->state_abbr(),
+        'country' => $faker->countryCode(),
+        'postcode' => $faker->postcode,
+        'latitude' => $faker->latitude,
+        'longitude' => $faker->longitude,
+        'ip_address' => $faker->ipv4,
+        'created_at' => $faker->unixTime,
+        'updated_at' => $faker->unixTime,
+    ];
 });

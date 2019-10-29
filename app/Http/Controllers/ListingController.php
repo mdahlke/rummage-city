@@ -42,7 +42,7 @@ class ListingController extends Controller {
             //			->get();
             ->paginate(10);
         $data['listings'] = $listings;
-        $data['searchState'] = $request->query('searchState', (object)[]);
+        $data['searchState'] = $request->query('searchState', "{}");
 
         return view('listings.index', $data);
     }
