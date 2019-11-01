@@ -11,8 +11,6 @@
 
     const mapboxgl = require('mapbox-gl');
 
-    console.log(mapbox_config);
-
     export default {
         name: 'ListingsMap',
         data() {
@@ -25,6 +23,8 @@
                 listing_ids: [],
                 visible_listings: [],
                 markers: [],
+                popups: [],
+                active_listing_id: null, // only storing id to avoid confusion with parent data
             };
         },
         props: {
@@ -53,7 +53,7 @@
                 // hash: true,
                 keyboard: false,
             };
-            console.log({config});
+
             this.map = new mapboxgl.Map(config);
 
             // Add zoom and rotation controls to the map.
@@ -85,7 +85,9 @@
                     if (m.id) {
                         this.listing_ids.push(m.id);
                         popup = this.create_popup(m);
-                        this.add_marker(mapbox_latlng(m), popup);
+                        marker = create_marker(mapbox_latlng(m), popup);
+
+                        this.add_marker(marker, popup);
                     }
                 }
             }
@@ -95,7 +97,6 @@
                 let bounds = this.map.getBounds();
 
                 this.get_listings_in_bounds(bounds).then((results) => {
-                    console.log({results});
                     const listings = results.data.data.listings.data;
                     this.visible_listings = listings;
 
@@ -109,8 +110,10 @@
 
                     let r;
                     let popup;
+                    let marker;
                     for (let i in listings) {
                         popup = null;
+                        marker = null;
                         if (listings.hasOwnProperty(i)) {
                             r = listings[i];
                             // laravel is sending this value back as a string
@@ -121,25 +124,36 @@
                                 this.listing_ids.push(r.id);
 
                                 popup = this.create_popup(r);
-                                this.add_marker(mapbox_latlng(r), popup);
+                                marker = this.create_marker(mapbox_latlng(r), popup);
+
+                                this.add_marker(r, marker, popup);
                             }
                         }
                     }
                 });
                 return this;
             },
-            add_marker(coords = null, popup = null) {
+            add_marker(listing, marker, popup) {
+
+                if (popup) {
+                    marker.setPopup(popup);
+                }
+
+                marker.addTo(this.map);
+
+                this.markers.push({
+                    id: listing.id,
+                    marker
+                });
+            },
+            create_marker(coords = null, popup = null) {
                 if (!coords.lat || !coords.lng) {
                     return false;
                 }
 
                 let marker = new mapboxgl.Marker()
-                    .setLngLat({lon: coords.lng, lat: coords.lat})
-                    .addTo(this.map);
+                    .setLngLat({lon: coords.lng, lat: coords.lat});
 
-                if (popup) {
-                    marker.setPopup(popup);
-                }
 
                 return marker;
             },
@@ -154,15 +168,31 @@
             create_popup(listing) {
                 let images = _.template(require('./popup_images.html'));
                 const imagesHtml = images({listing});
-                console.log(imagesHtml);
-                console.log(listing);
-
-                return new mapboxgl.Popup({className: 'listing__popup'})
+                const popup = new mapboxgl.Popup({className: 'listing__popup'})
                     .setHTML(`
                         <h1>` + listing.title + `</h1>
                         ` + imagesHtml + `
                     `)
                     .setMaxWidth("300px");
+
+                popup.on('open', (e, d) => {
+                    this.$emit('set_active_listing', listing);
+                    this.active_listing_id = listing.id;
+                });
+                popup.on('close', (e, d) => {
+                    // we only send the update event if the listing id matches the active_listing_id
+                    // this allows other markers to be clicked without this event firing
+                    if (listing.id === this.active_listing_id) {
+                        this.$emit('set_active_listing', {});
+                    }
+                });
+
+                this.popups.push({
+                    id: listing.id,
+                    popup
+                });
+
+                return popup;
             },
             get_listings_in_bounds(bounds) {
                 const query = JSON.stringify(JSON.stringify({
@@ -203,13 +233,30 @@
             },
             update_map() {
                 const latlng = {lon: this.$parent.lng, lat: this.$parent.lat};
-                console.log('update_map', {latlng}, this.$parent.zoom);
                 this.map.setZoom(this.$parent.zoom);
                 this.map.setCenter(latlng);
                 this.map.setPitch(this.$parent.pitch);
                 this.map.setBearing(this.$parent.bearing);
                 return this;
+            },
+            highlight_listing(listing) {
+                let popup;
+
+                for (let i in this.popups) {
+                    if (this.popups.hasOwnProperty(i)) {
+                        popup = this.popups[i];
+                        popup.popup.remove();
+
+                        if (popup.id === listing.id) {
+                            popup.popup.addTo(this.map);
+                            this.map.flyTo({
+                                center: popup.popup._lngLat
+                            });
+                        }
+                    }
+                }
             }
+
         }
     };
 

@@ -1,8 +1,12 @@
 <template>
     <div class="listings-list">
         <template v-if="$parent.visible_listings.length">
+
             <section v-for="(listing, index) in $parent.visible_listings"
-                     class="listing">
+                     :id="'listing-'+ listing.id"
+                     class="listing"
+                     :class="{ 'active': (listing.id === $parent.active_listing.id) }">
+                <!--                     v-on:mouseenter="$emit('set_active_listing', listing)"-->
                 <div class="listing-wrap">
 
                     <div class="listing__main-info"
@@ -79,6 +83,10 @@
                                     <span class="cursor-pointer" v-else @click="save(listing)">
                                             <i class="far fa-heart"> Save</i></span>
                                 </li>
+                                <li class="list-inline-item listing__action">
+                                        <span class="cursor-pointer" @click="$parent.highlight_on_map(listing)">
+                                            <i class="fas fa-map"></i> Show on Map</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -107,7 +115,6 @@
         },
         methods: {
             save(listing) {
-                console.log('save', listing.isSaved);
                 if (!listing.isSaved) {
                     axios.post(listing.saveUrl).then(function (e) {
                         listing.isSaved = true;
@@ -118,30 +125,32 @@
                 if (listing.isSaved) {
                     axios.post(listing.removeSavedUrl).then((e) => {
                         listing.isSaved = false;
-                        console.log(listing);
                     });
                 }
             },
             listing_dates(dates) {
-                console.log(dates);
-
                 let date;
                 let the_dates = [];
                 let current;
+                let start_date;
+                let end_date;
+                let start;
+                let end;
+
                 for (let i = 0; i < dates.length; i++) {
                     current = {};
                     date = dates[i];
 
-                    const start_date = moment(date.start);
-                    const end_date = moment(date.end);
-                    const start = {
+                    start_date = moment(date.start);
+                    end_date = moment(date.end);
+                    start = {
                         day: start_date.format('DD'),
                         month: start_date.format('MMM'),
                         year: start_date.format('YYYY'),
                         time: start_date.format('h:mm a'),
                     };
 
-                    const end = {
+                    end = {
                         day: end_date.format('DD'),
                         month: end_date.format('MMM'),
                         year: end_date.format('YYYY'),
@@ -159,13 +168,10 @@
                     }
 
                     current = {start, end};
-
                     current.time = '';
 
                     the_dates.push(current);
                 }
-
-                console.log(the_dates);
 
                 return the_dates;
 

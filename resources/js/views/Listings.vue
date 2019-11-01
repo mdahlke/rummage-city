@@ -1,18 +1,28 @@
 <template>
     <div class="listings">
-        <aside id="listings__sidebar">
-            <listings-list @update_url></listings-list>
-        </aside>
 
-        <listings-map ref="listingsMap" @update_visible="update_visible" @update_url="update_url"></listings-map>
+        <listings-map ref="listingsMap"
+                      @update_visible="update_visible"
+                      @update_url="update_url"
+                      @set_active_listing="set_active_listing"></listings-map>
+
+        <aside id="listings__sidebar">
+            <listings-list @update_url
+                           @set_active_listing="set_active_listing">
+            </listings-list>
+        </aside>
     </div>
 </template>
 
 <script>
     import ListingsMap from '../components/Map/ListingsMap.vue';
+
+
     import ListingsList from '../components/Map/ListingsList.vue';
     import {setPage, updateQueryStringParameter} from '../helpers';
     import '../../sass/component/listings-map.scss';
+
+    const VueScrollTo = require('vue-scrollto');
 
     export default {
         name: 'Listings',
@@ -36,6 +46,7 @@
                 bearing: 0,
                 pitch: 0,
                 searchState: {},
+                active_listing: {},
             };
         },
         props: {
@@ -142,6 +153,17 @@
 
                 setPage(url, 'Listings', update);
 
+            },
+            set_active_listing(listing) {
+                this.active_listing = listing;
+                const el = '#listing-' + listing.id;
+
+                this.$scrollTo(el, 500, {
+                    'container': '#listings__sidebar'
+                });
+            },
+            highlight_on_map(listing) {
+                this.$refs.listingsMap.highlight_listing(listing);
             }
         }
     };

@@ -51,6 +51,8 @@ Vue.use(require('vue-moment'), {
     moment
 });
 
+Vue.use(require('vue-scrollto'))
+
 import App from './views/App';
 import Listings from './views/Listings';
 
