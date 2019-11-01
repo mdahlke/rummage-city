@@ -3,7 +3,7 @@
         {{title}}
         <ul class="list-inline">
             <li v-for="(image, index) in listing.image" class="list-inline-item">
-                <img src="image.path"/>
+                <img :key="index" src="image.url"/>
             </li>
         </ul>
     </section>
