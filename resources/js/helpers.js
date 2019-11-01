@@ -34,9 +34,12 @@ export const mapbox_latlng = function (listing) {
     }
 }
 
-export function setPage(url, title) {
-    console.log(url);
-    window.history.pushState({'pageTitle': title}, title, url);
+export function setPage(url, title, state) {
+    let data = _.extend({
+        pageTitle: title
+    }, state);
+    console.log({data, state});
+    window.history.pushState(data, title, url);
 }
 
 export function updateQueryStringParameter(uri, key, value) {
@@ -44,8 +47,7 @@ export function updateQueryStringParameter(uri, key, value) {
     var separator = uri.indexOf('?') !== -1 ? "&" : "?";
     if (uri.match(re)) {
         return uri.replace(re, '$1' + key + "=" + value + '$2');
-    }
-    else {
+    } else {
         return uri + separator + key + "=" + value;
     }
 }

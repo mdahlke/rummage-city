@@ -1,0 +1,9 @@
+<div class="popup__images">
+    <% for(var i in listing.image){ %>
+    <% if(listing.image.hasOwnProperty(i)) { %>
+    <div class="popup__image">
+        <img src="<%= listing.image[i].path %>"/>
+    </div>
+    <% } %>
+    <% } %>
+</div>

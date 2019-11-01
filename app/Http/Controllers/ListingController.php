@@ -11,9 +11,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Middleware\Cors;
+use App\Http\Services\MapboxService;
 use App\Listing;
 use App\ListingDate;
 use App\ListingImage;
+use App\Providers\MapboxProvider;
 use App\User;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -35,14 +37,56 @@ class ListingController extends Controller {
 
     public function index(Request $request) {
         $data = [];
+        $geocode = false;
+
+        if ($location = $request->query('q')) {
+            $geocode = MapboxService::reverseGeocode($location);
+        }
+
+        $searchState = (object)[
+            'bounds' => (object)[
+                'lat' => false,
+                'lng' => false,
+            ],
+            'listing' => false,
+            'zoom' => false,
+            'pitch' => false,
+            'bearing' => false,
+        ];
 
         /** @var Builder $listings */
-        $listings = Listing::query()
-            ->whereHas('activeDate')
-            //			->get();
-            ->paginate(10);
+        $builder = Listing::query()
+            ->with('activeDate')
+            ->with('image')
+            ->whereHas('activeDate');
+
+        if ($geocode) {
+            if ($geocode->box) {
+                $nwLat = $geocode->box[0];
+                $nwLng = $geocode->box[1];
+                $seLat = $geocode->box[2];
+                $seLng = $geocode->box[3];
+
+                $searchState->bounds->lat = $geocode->center->lat;
+                $searchState->bounds->lng = $geocode->center->lng;
+
+                $builder->where(function ($q) use ($location) {
+                    /** @var Builder $q */
+                    $q->orWhere('street_name', 'LIKE', $location)
+                        ->orWhere('address', 'LIKE', $location)
+                        ->orWhere('city', 'LIKE', $location)
+                        ->orWhere('state', 'LIKE', $location)
+                        ->orWhere('postcode', 'LIKE', $location);
+                });
+            }
+
+//            dd($geocode, $searchState, json_encode($searchState));
+        }
+
+        $listings = $builder->paginate(10);
+
         $data['listings'] = $listings;
-        $data['searchState'] = $request->query('searchState', "{}");
+        $data['searchState'] = $request->query('searchState', json_encode($searchState));
 
         return view('listings.index', $data);
     }
@@ -89,11 +133,11 @@ class ListingController extends Controller {
      */
     public function edit(Request $request, Listing $listing) {
         $user = Auth::user();
-
+        $route = '';
         if ($listing->exists) {
-            $route = route('listings.edit', ['listing' => $listing->id]);
+            $route = route('user.listing.edit', ['listing' => $listing->id]);
         } else {
-            $route = route('listings.new');
+            $route = route('user.listing.new');
         }
 
         if ($listing->exists && $user->id != $listing->user->id) {

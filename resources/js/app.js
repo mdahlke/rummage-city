@@ -42,21 +42,27 @@ Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
 Vue.component('map-listings', require('./views/Listings.vue').default);
 Vue.component('listings-map', require('./components/Map/ListingsMap.vue').default);
 Vue.component('listings-list', require('./components/Map/ListingsList.vue').default);
+Vue.component('search-box', require('./components/SearchBox.vue').default);
+
+const moment = require('moment');
 
 Vue.use(VueRouter);
+Vue.use(require('vue-moment'), {
+    moment
+});
 
 import App from './views/App';
 import Listings from './views/Listings';
 
 const router = new VueRouter({
-	mode: 'history',
-	routes: [
-		{
-			path: '/listings',
-			name: 'listings',
-			component: Listings
-		}
-	]
+    mode: 'history',
+    routes: [
+        {
+            path: '/listings',
+            name: 'listings',
+            component: Listings
+        }
+    ]
 });
 
 /**
@@ -66,9 +72,9 @@ const router = new VueRouter({
  */
 
 const app = new Vue({
-	el: '#app',
-	components: {App},
-	router
+    el: '#app',
+    components: {App},
+    router
 });
 
 

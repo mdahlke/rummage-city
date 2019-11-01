@@ -20,7 +20,7 @@
 
         <div class="card-body">
             @foreach(Auth::user()->listing as $listing)
-                <a href="{{ route('listings.edit', ['listing' => $listing->id]) }}">
+                <a href="{{ route('user.listing.edit', ['listing' => $listing->id]) }}">
                     <h3><i class="fad fa-{{ $listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $listing->title }}
                     </h3>
                 </a>

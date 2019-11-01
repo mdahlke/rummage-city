@@ -3,22 +3,85 @@
         <template v-if="$parent.visible_listings.length">
             <section v-for="(listing, index) in $parent.visible_listings"
                      class="listing">
-                <h4>{{ listing.title }}</h4>
-                <p>{{ listing.address }}</p>
+                <div class="listing-wrap">
 
-                <h4>Dates:</h4>
-                <ul>
-                    <li v-for="(date, index) in listing.date">{{ date.start }} - {{ date.end }}</li>
-                </ul>
-                <div class="listing__actions">
-                    <ul class="list-inline">
-                        <li class="list-inline-item listing__action">
-                            <span class="cursor-pointer" v-if="listing.isSaved" @click="remove_saved(listing)">
-                                <i class="fas fa-heart"></i> Saved</span>
-                            <span class="cursor-pointer" v-else @click="save(listing)">
-                                <i class="far fa-heart"> Save</i></span>
-                        </li>
-                    </ul>
+                    <div class="listing__main-info"
+                         :class="{ 'has-image': listing.image.length}">
+                        <div class="listing__featured-image" v-if="listing.image.length">
+                            <div class="featured-image__blur"
+                                 :style="'background-image: url('+listing.image[0].url+')'"></div>
+                            <div class="featured-image__image"
+                                 :style="'background-image: url('+listing.image[0].url+')'"></div>
+                        </div>
+                        <div class="listing__content">
+                            <h1 class="listing__title">{{ listing.title }}</h1>
+                            <h3 class="listing__address">{{ listing.address }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="listing__content">
+                        <ul class="listing__dates">
+                            <li v-for="(date, index) in listing_dates(listing.active_date)"
+                                :class="(date.end.month === false) ? '' : 'spans-months'">
+                                <div class="date-wrap">
+                                    <template v-if="date.end.month === false">
+                                        <div class="calendar">
+                                            <span class="month start">{{ date.start.month }}</span>
+                                            <template v-if="date.end.day && date.start.day !== date.end.day">
+                                                <div class="day-with-end">
+                                                    <span class="day start">{{ date.start.day }}</span>
+                                                    <span class="delimiter">&dash;</span>
+                                                    <span class="day end">{{ date.end.day}}</span>
+                                                </div>
+                                            </template>
+                                            <template v-else>
+                                                <span class="day start">{{ date.start.day }}</span>
+                                            </template>
+                                            <span class="year start"
+                                                  v-if="show_year(date)">{{ date.start.year }}</span>
+                                        </div>
+                                        <div class="clock">
+                                            <span class="time start">{{ date.start.time }}</span>
+                                            <span class="delimiter">&dash;</span>
+                                            <span class="time start">{{ date.end.time }}</span>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="calendar-span">
+                                            <div class="calendar start">
+                                                <span class="month start">{{ date.start.month }}</span>
+                                                <span class="day start">{{ date.start.day }}</span>
+                                                <span class="year start"
+                                                      v-if="show_year(date)">{{ date.start.year }}</span>
+                                            </div>
+                                            <div class="calendar end" v-if="date.end.month">
+                                                <span class="month end">{{ date.end.month }}</span>
+                                                <span class="day end">{{ date.end.day }}</span>
+                                                <span class="year end"
+                                                      v-if="show_year(date)">{{ date.start.year }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="clock">
+                                            <span class="time start">{{ date.start.time }}</span>
+                                            <span class="delimiter">&dash;</span>
+                                            <span class="time end">{{ date.end.time }}</span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="listing__actions">
+                            <ul class="list-inline">
+                                <li class="list-inline-item listing__action">
+                                        <span class="cursor-pointer" v-if="listing.isSaved"
+                                              @click="remove_saved(listing)">
+                                            <i class="fas fa-heart"></i> Saved</span>
+                                    <span class="cursor-pointer" v-else @click="save(listing)">
+                                            <i class="far fa-heart"> Save</i></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
         </template>
@@ -33,16 +96,14 @@
 <script>
     import MapboxPopup from './MapboxPopup.vue';
     import {mapbox_latlng} from '../../helpers';
-    import '../../../sass/component/listings-map.scss';
+    import moment from 'moment';
+
+    import '../../../sass/component/listings-list.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
     export default {
         name: 'ListingsList',
-        // props: {
-        //     listings: Array,
-        // },
         mounted() {
-
         },
         methods: {
             save(listing) {
@@ -60,6 +121,58 @@
                         console.log(listing);
                     });
                 }
+            },
+            listing_dates(dates) {
+                console.log(dates);
+
+                let date;
+                let the_dates = [];
+                let current;
+                for (let i = 0; i < dates.length; i++) {
+                    current = {};
+                    date = dates[i];
+
+                    const start_date = moment(date.start);
+                    const end_date = moment(date.end);
+                    const start = {
+                        day: start_date.format('DD'),
+                        month: start_date.format('MMM'),
+                        year: start_date.format('YYYY'),
+                        time: start_date.format('h:mm a'),
+                    };
+
+                    const end = {
+                        day: end_date.format('DD'),
+                        month: end_date.format('MMM'),
+                        year: end_date.format('YYYY'),
+                        time: end_date.format('h:mm a'),
+                    };
+
+                    if (start.day === end.day) {
+                        end.day = false;
+                    }
+                    if (start.month === end.month) {
+                        end.month = false;
+                    }
+                    if (start.year === end.year) {
+                        end.year = false;
+                    }
+
+                    current = {start, end};
+
+                    current.time = '';
+
+                    the_dates.push(current);
+                }
+
+                console.log(the_dates);
+
+                return the_dates;
+
+            },
+            show_year(date) {
+                const this_year = new moment().format('YYYY');
+                return this_year !== date.start.year && (!date.end.year || (date.end.year && date.start.year === date.end.year));
             }
         }
     };

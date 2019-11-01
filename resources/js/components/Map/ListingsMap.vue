@@ -36,7 +36,6 @@
             }
         },
         created() {
-
         },
         mounted() {
             if (this.listings) {
@@ -65,10 +64,10 @@
 
             let l;
             let popup;
-            for (let i in this.listings) {
+            for (let i in this.$parent.listings) {
                 popup = null;
-                if (this.listings.hasOwnProperty(i)) {
-                    l = this.listings[i];
+                if (this.$parent.listings.hasOwnProperty(i)) {
+                    l = this.$parent.listings[i];
 
                     if (l.id) {
                         this.listing_ids.push(l.id);
@@ -96,6 +95,7 @@
                 let bounds = this.map.getBounds();
 
                 this.get_listings_in_bounds(bounds).then((results) => {
+                    console.log({results});
                     const listings = results.data.data.listings.data;
                     this.visible_listings = listings;
 
@@ -126,6 +126,7 @@
                         }
                     }
                 });
+                return this;
             },
             add_marker(coords = null, popup = null) {
                 if (!coords.lat || !coords.lng) {
@@ -151,8 +152,16 @@
                         .addTo(this.map);
             },
             create_popup(listing) {
+                let images = _.template(require('./popup_images.html'));
+                const imagesHtml = images({listing});
+                console.log(imagesHtml);
+                console.log(listing);
+
                 return new mapboxgl.Popup({className: 'listing__popup'})
-                    .setHTML("<h1>" + listing.title + "</h1>")
+                    .setHTML(`
+                        <h1>` + listing.title + `</h1>
+                        ` + imagesHtml + `
+                    `)
                     .setMaxWidth("300px");
             },
             get_listings_in_bounds(bounds) {
@@ -162,7 +171,7 @@
                 }));
 
                 return axios({
-                    url: '/search',
+                    url: '/graphql',
                     type: 'get',
                     params: {
                         query: `
@@ -177,13 +186,13 @@
 							      isSaved
 							      saveUrl
 							      removeSavedUrl
-							      date {
+							      active_date {
 							        start
 							        end
 							      }
 							      image {
 							        name
-							        path
+							        url
 							      }
 							    }
 							  }
@@ -192,23 +201,14 @@
                     }
                 });
             },
-            save(listing) {
-                console.log('save', listing.isSaved);
-                if (!listing.isSaved) {
-                    axios.post(listing.saveUrl).then(function (e) {
-                        console.log(e);
-                        listing.isSaved = true;
-                    });
-                }
-            },
-            remove_saved(listing) {
-                console.log('remove', listing.isSaved);
-                if (listing.isSaved) {
-                    axios.post(listing.removeSavedUrl).then((e) => {
-                        listing.isSaved = false;
-                        console.log(listing);
-                    });
-                }
+            update_map() {
+                const latlng = {lon: this.$parent.lng, lat: this.$parent.lat};
+                console.log('update_map', {latlng}, this.$parent.zoom);
+                this.map.setZoom(this.$parent.zoom);
+                this.map.setCenter(latlng);
+                this.map.setPitch(this.$parent.pitch);
+                this.map.setBearing(this.$parent.bearing);
+                return this;
             }
         }
     };

@@ -91,7 +91,7 @@
                 this.location_city = this.city;
             }
             if (this.street) {
-                this.street_name = this.street;
+                this.location_street = this.street;
             }
             if (this.house) {
                 this.location_house = this.house;

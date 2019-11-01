@@ -61,12 +61,13 @@ class Listing extends Model {
     }
 
     public function date() {
-        return $this->hasMany(ListingDate::class);
+        return $this->hasMany(ListingDate::class)->orderBy('start');
     }
 
     public function activeDate() {
-        return $this->hasMany(ListingDate::class)->whereHas('activeDate')
-            ->orderByDesc('start');
+        return $this->hasMany(ListingDate::class)
+            ->whereHas('activeDate')
+            ->orderBy('start');
     }
 
     public function image() {

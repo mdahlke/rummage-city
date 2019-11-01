@@ -17,16 +17,15 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::prefix('listings')->group(function () {
-        Route::name('listings.')->group(function () {
-            Route::match(['get', 'post'], 'new', 'ListingController@edit')->name('new');
-            Route::match(['get', 'post'], '{listing}/edit', 'ListingController@edit')->name('edit');
+
+    Route::prefix('account/listings')->group(function () {
+        Route::name('user.listing.')->group(function () {
+            Route::match(['get', 'post'], '/new', 'ListingController@edit')->name('new');
+            Route::match(['get', 'post'], '/{listing}/edit', 'ListingController@edit')->name('edit');
+            Route::post('saved/{listing}/save', 'SavedListingController@save')->name('saveListing');
+            Route::post('saved/{listing}/remove', 'SavedListingController@remove')->name('removeSavedListing');
         });
     });
-
-    Route::post('account/{user}/saved/{listing}/save', 'SavedListingController@save')->name('user.saveListing');
-    Route::post('account/{user}/saved/{listing}/remove', 'SavedListingController@remove')->name('user.removeSavedListing');
-
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
 });

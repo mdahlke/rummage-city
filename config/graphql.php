@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\GraphQL\Queries\SearchQuery;
+use App\GraphQL\Queries\TestQuery;
 use App\GraphQL\Query\ListingDatesQuery;
 use App\GraphQL\Query\ListingImagesQuery;
 use App\GraphQL\Query\ListingsQuery;
@@ -12,13 +14,16 @@ use App\GraphQL\Types\ListingDatesType;
 use App\GraphQL\Types\ListingImagesType;
 use App\GraphQL\Types\ListingsSearchType;
 use App\GraphQL\Types\ListingsType;
+use App\GraphQL\Types\MetaType;
 use App\GraphQL\Types\SavedListingsType;
+use App\GraphQL\Types\SearchType;
 use App\GraphQL\Types\UsersType;
+use GraphQL\Examples\Blog\Type\QueryType;
 
 return [
 
     // The prefix for routes
-    'prefix' => 'search',
+    'prefix' => 'graphql',
 
     // The routes to make GraphQL request. Either a string that will apply
     // to both query and mutation or an array containing the key 'query' and/or
@@ -142,9 +147,6 @@ return [
         'savedListings' => SavedListingsType::class,
         'listingDates' => ListingDatesType::class,
         'listingImages' => ListingImagesType::class,
-        // 'example'           => ExampleType::class,
-        // 'relation_example'  => ExampleRelationType::class,
-        // \Rebing\GraphQL\Support\UploadType::class,
     ],
 
     // The types will be loaded on demand. Default is to load all types on each request

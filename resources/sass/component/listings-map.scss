@@ -1,3 +1,5 @@
+@import '../colors';
+
 $navbar_height: 58px;
 $sidebar_width: 33%;
 
@@ -7,7 +9,6 @@ $sidebar_width: 33%;
 
   #listings__sidebar {
     flex: 0 0 $sidebar_width;
-    padding: 20px;
     overflow: auto;
   }
 
@@ -22,8 +23,24 @@ $sidebar_width: 33%;
 }
 
 .listing__popup {
+  max-height: 300px;
+
   h1 {
     font-size: .8rem;
+  }
+}
+
+.popup__images {
+  display: flex;
+  flex-wrap: wrap;
+
+  .popup__image {
+    flex: 0 0 33.33333%;
+    padding: 5px;
+  }
+
+  img {
+    max-width: 100%;
   }
 }
 

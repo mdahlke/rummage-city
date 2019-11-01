@@ -4,7 +4,7 @@
             <listings-list @update_url></listings-list>
         </aside>
 
-        <listings-map @update_visible="update_visible" @update_url="update_url"></listings-map>
+        <listings-map ref="listingsMap" @update_visible="update_visible" @update_url="update_url"></listings-map>
     </div>
 </template>
 
@@ -17,8 +17,8 @@
     export default {
         name: 'Listings',
         components: {
-            ListingsList,
-            ListingsMap
+            'listings-list': ListingsList,
+            'listings-map': ListingsMap
         },
         data() {
             return {
@@ -105,9 +105,24 @@
                     this.bearing = this.search.bearing;
                 }
             }
-
         },
         mounted() {
+            window.addEventListener('popstate', (event) => {
+                if (typeof event.state.bounds !== 'undefined') {
+                    if (event.state.bounds.lat) {
+                        this.lat = event.state.bounds.lat;
+                    }
+                    if (event.state.bounds.lng) {
+                        this.lng = event.state.bounds.lng || this.lng;
+                    }
+                }
+                this.pitch = event.state.pitch;
+                this.bearing = event.state.bearing;
+                this.zoom = event.state.zoom;
+
+                this.$refs.listingsMap.update_map()
+                    .update_map_listings();
+            });
         },
         methods: {
             update_visible(listings) {
@@ -122,12 +137,10 @@
                     bearing: null
                 }, update);
 
-                console.log({update});
-
                 let url = document.URL;
                 url = updateQueryStringParameter(url, 'searchState', JSON.stringify(update));
 
-                setPage(url, 'Title');
+                setPage(url, 'Listings', update);
 
             }
         }
