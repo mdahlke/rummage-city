@@ -23,7 +23,8 @@ class SavedListingController {
         // parent::__construct();
     }
 
-    public function save(Request $request, User $user, Listing $listing) {
+    public function save(Request $request, Listing $listing) {
+        $user = Auth::user();
 
         $user->savedListing()->updateOrCreate([
             'listing_id' => $listing->id,
@@ -36,6 +37,8 @@ class SavedListingController {
     }
 
     public function remove(Request $request, User $user, Listing $listing) {
+        $user = Auth::user();
+
         SavedListing::where('listing_id', $listing->id)
             ->where('user_id', $user->id)
             ->delete();

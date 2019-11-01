@@ -18,15 +18,19 @@ Auth::routes();
 
 Route::middleware(['auth', 'web'])->group(function () {
 
-    Route::prefix('account/listings')->group(function () {
-        Route::name('user.listing.')->group(function () {
-            Route::match(['get', 'post'], '/new', 'ListingController@edit')->name('new');
-            Route::match(['get', 'post'], '/{listing}/edit', 'ListingController@edit')->name('edit');
-            Route::post('saved/{listing}/save', 'SavedListingController@save')->name('saveListing');
-            Route::post('saved/{listing}/remove', 'SavedListingController@remove')->name('removeSavedListing');
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', 'DashboardController@index')->name('dashboard');
+
+        Route::prefix('listings')->group(function () {
+            Route::name('user.listing.')->group(function () {
+                Route::match(['get', 'post'], '/new', 'ListingController@edit')->name('new');
+                Route::match(['get', 'post'], '/{listing}/edit', 'ListingController@edit')->name('edit');
+                Route::post('saved/{listing}/save', 'SavedListingController@save')->name('saveListing');
+                Route::post('saved/{listing}/remove', 'SavedListingController@remove')->name('removeSavedListing');
+            });
+//        Route::get('listing-image/{image}/remove', 'ListingImageController@remove')->name('listings.image.remove');
         });
     });
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
 });
 
@@ -37,11 +41,10 @@ Route::middleware('web')->group(function () {
 
     Route::prefix('listings')->group(function () {
         Route::name('listings.')->group(function () {
-            Route::get('/{nwLat?}/{nwLng?}/{zoom?}', 'ListingController@index')->name('browse');
+            Route::get('/', 'ListingController@index')->name('browse');
             Route::get('geo', 'ListingController@geo')->name('geo');
             Route::get('{listing}/view', 'ListingController@view')->name('view');
         });
-        Route::get('listing-image/{image}/remove', 'ListingImageController@remove')->name('listings.image.remove');
     });
 });
 

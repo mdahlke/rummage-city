@@ -1,5 +1,7 @@
 @extends('layouts.full-width')
 
+@section('title', 'Edit: '. $listing->title)
+
 @include('listings.partials.scripts')
 
 @section('content')

@@ -12,7 +12,8 @@
     <div class="listing__actions">
         <ul class="list-inline">
             <li class="list-inline-item">
-                <a class="ajax-link" href="{{ route('user.saveListing', ['user' => Auth::user()->id, 'listing' => $listing->id]) }}" data-method="post"><i class="far fa-heart"></i> Save</a>
+                <a class="ajax-link" href="{{ route('user.listing.saveListing', ['listing' => $listing->id]) }}"
+                   data-method="post"><i class="far fa-heart"></i> Save</a>
             </li>
         </ul>
     </div>

@@ -11148,5 +11148,9 @@ a.text-dark:focus {
   cursor: pointer !important;
 }
 
+.navbar {
+  background-color: #ef6c57;
+}
+
 
 /*# sourceMappingURL=app.css.map*/

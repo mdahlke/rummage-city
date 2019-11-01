@@ -12,12 +12,10 @@ class ListingObserver {
             /** @var User $user */
             $user = Auth::user();
             $listing->setSaveUrl(route('user.listing.saveListing', [
-                'user' => Auth::user(),
                 'listing' => $listing->id,
             ]));
 
             $listing->setRemoveSavedUrl(route('user.listing.removeSavedListing', [
-                'user' => $user,
                 'listing' => $listing->id,
             ]));
 
