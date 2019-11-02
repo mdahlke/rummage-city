@@ -17,19 +17,20 @@ use Webpatser\Uuid\Uuid;
 */
 
 $factory->define(App\ListingDate::class, function (Faker $faker, $data) {
-	$fakeStart = ($faker->dateTimeBetween('now', '+1 year'));
+    usleep(10000);
+    $fakeStart = ($faker->dateTimeBetween('now', '+1 year'));
 
-	$start = new Carbon($fakeStart->format('m/d/Y H:i:s'));
-	$end = clone $start;
-	$add = rand(3, 8);
-	$end = $end->addHours($add);
+    $start = new Carbon($fakeStart->format('m/d/Y H:i:s'));
+    $end = clone $start;
+    $add = rand(3, 8);
+    $end = $end->addHours($add);
 
-	return [
-		'id' => Uuid::generate()->string,
-		'listing_id' => $data['id'],
-		'start' => $start,
-		'end' => $end,
-		'created_at' => $faker->unixTime,
-		'updated_at' => $faker->unixTime,
-	];
+    return [
+        'id' => Uuid::generate(1, null, rand(0, PHP_INT_MAX))->string,
+        'listing_id' => $data['id'],
+        'start' => $start,
+        'end' => $end,
+        'created_at' => $faker->unixTime,
+        'updated_at' => $faker->unixTime,
+    ];
 });

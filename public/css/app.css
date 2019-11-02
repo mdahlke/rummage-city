@@ -11150,6 +11150,8 @@ a.text-dark:focus {
 
 .navbar {
   background-color: #35495e;
+  box-shadow: 0 0 11px -5px white;
+  z-index: 2;
 }
 
 

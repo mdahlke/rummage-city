@@ -52,6 +52,7 @@
                 bearing: this.$parent.bearing,
                 // hash: true,
                 keyboard: false,
+                cluster: true,
             };
 
             this.map = new mapboxgl.Map(config);
@@ -193,7 +194,7 @@
                     params: {
                         query: `
 							query FetchListingsInBounds {
-							  listings(bounds: ` + query + `) {
+							  listings(bounds: ` + query + `, limit: 100) {
 							    data {
 							      id
 							      title

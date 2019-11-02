@@ -2,4 +2,6 @@
 
 .navbar {
   background-color: $tertiary;
+  box-shadow: 0 0 11px -5px white;
+  z-index: 2;
 }

@@ -19,17 +19,3 @@ class ListingsTableSeeder extends Seeder {
 		});
 	}
 }
-
-//factory(App\Domain::class, 4)
-//	->create()
-//	->each(function ($domain) {
-//		factory(App\Account::class, 1)->states(['rep', 'admin'])
-//		                              ->create(['DomainID' => $domain->DomainID])
-//		                              ->each(function ($user) use ($domain) {
-//			                              $domain->taxBuzzCompanies()
-//			                                     ->save(factory(App\TaxBuzzCompany::class)->make());
-//			                              $user->save();
-//			                              $this->addClients($domain, $user);
-//		                              });
-//	});
-
