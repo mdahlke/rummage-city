@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Middleware\ListingGeocode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,9 @@ Route::middleware('web')->group(function () {
 
     Route::prefix('listings')->group(function () {
         Route::name('listings.')->group(function () {
-            Route::get('/', 'ListingController@index')->name('browse');
+            Route::middleware(ListingGeocode::class)->group(function () {
+                Route::get('/{location?}', 'ListingController@index')->name('browse');
+            });
             Route::get('geo', 'ListingController@geo')->name('geo');
             Route::get('{listing}/view', 'ListingController@view')->name('view');
         });

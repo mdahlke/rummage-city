@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class Geocode extends Controller
-{
+class Geocode extends Controller {
     //
+
 }

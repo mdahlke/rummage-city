@@ -35,13 +35,9 @@ class ListingController extends Controller {
     public function __construct() {
     }
 
-    public function index(Request $request) {
+    public function index(Request $request, $location = null) {
         $data = [];
-        $geocode = false;
-
-        if ($location = $request->query('q')) {
-            $geocode = MapboxService::reverseGeocode($location);
-        }
+        $geocode = $request->get('geocode');
 
         $searchState = (object)[
             'bounds' => (object)[
@@ -61,24 +57,19 @@ class ListingController extends Controller {
             ->whereHas('activeDate');
 
         if ($geocode) {
-            if ($geocode->box) {
-                $nwLat = $geocode->box[0];
-                $nwLng = $geocode->box[1];
-                $seLat = $geocode->box[2];
-                $seLng = $geocode->box[3];
+            $searchState->bounds->lat = $geocode->getCenter()[1];
+            $searchState->bounds->lng = $geocode->getCenter()[0];
 
-                $searchState->bounds->lat = $geocode->center->lat;
-                $searchState->bounds->lng = $geocode->center->lng;
+            $searchState->zoom = 12;
 
-                $builder->where(function ($q) use ($location) {
-                    /** @var Builder $q */
-                    $q->orWhere('street_name', 'LIKE', $location)
-                        ->orWhere('address', 'LIKE', $location)
-                        ->orWhere('city', 'LIKE', $location)
-                        ->orWhere('state', 'LIKE', $location)
-                        ->orWhere('postcode', 'LIKE', $location);
-                });
-            }
+            $builder->where(function ($q) use ($location) {
+                /** @var Builder $q */
+                $q->orWhere('street_name', 'LIKE', $location)
+                    ->orWhere('address', 'LIKE', $location)
+                    ->orWhere('city', 'LIKE', $location)
+                    ->orWhere('state', 'LIKE', $location)
+                    ->orWhere('postcode', 'LIKE', $location);
+            });
 
 //            dd($geocode, $searchState, json_encode($searchState));
         }
