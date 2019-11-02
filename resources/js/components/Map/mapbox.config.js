@@ -1,6 +1,8 @@
 const mapbox_config = {
     accessToken: 'pk.eyJ1IjoibWRhaGxrZSIsImEiOiJjazI2bGgzNjUwZzlsM2dxaDd2OXgxZW9yIn0.kKYT-PvLDgQeFZWc2MMOAw',
-    style: 'mapbox://styles/mapbox/streets-v11',
+    // style: 'mapbox://styles/mapbox/streets-v11',
+    // style: 'mapbox://styles/mdahlke/ck2dnk2j10m9z1dmce4sbkkt8', // green
+    style: 'mapbox://styles/mdahlke/ck2dnk2j10m9z1dmce4sbkkt8', // blue
 };
 
 export default mapbox_config;

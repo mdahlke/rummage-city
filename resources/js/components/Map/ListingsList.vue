@@ -87,6 +87,10 @@
                                         <span class="cursor-pointer" @click="$parent.highlight_on_map(listing)">
                                             <i class="fas fa-map"></i> Show on Map</span>
                                 </li>
+                                <li class="list-inline-item listing__action">
+                                        <span class="cursor-pointer" @click="$parent.zoom_to_on_map(listing)">
+                                            <i class="fas fa-crosshairs"></i> Zoom to</span>
+                                </li>
                             </ul>
                         </div>
                     </div>

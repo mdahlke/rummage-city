@@ -64,30 +64,18 @@
 
             let l;
             let popup;
+            let marker;
             for (let i in this.$parent.listings) {
                 popup = null;
+                marker = null;
                 if (this.$parent.listings.hasOwnProperty(i)) {
                     l = this.$parent.listings[i];
 
                     if (l.id) {
                         this.listing_ids.push(l.id);
                         popup = this.create_popup(l);
-                        this.add_marker(mapbox_latlng(l), popup);
-                    }
-                }
-            }
-            let m;
-            for (let i in this.mapMarkers) {
-                popup = null;
-                if (this.mapMarkers.hasOwnProperty(i)) {
-                    m = this.mapMarkers[i];
-
-                    if (m.id) {
-                        this.listing_ids.push(m.id);
-                        popup = this.create_popup(m);
-                        marker = create_marker(mapbox_latlng(m), popup);
-
-                        this.add_marker(marker, popup);
+                        marker = this.create_marker(mapbox_latlng(l), popup);
+                        this.add_marker(l, marker, popup);
                     }
                 }
             }
@@ -134,7 +122,6 @@
                 return this;
             },
             add_marker(listing, marker, popup) {
-
                 if (popup) {
                     marker.setPopup(popup);
                 }
@@ -255,8 +242,25 @@
                         }
                     }
                 }
-            }
+            },
+            zoom_to(listing) {
+                let popup;
 
+                for (let i in this.popups) {
+                    if (this.popups.hasOwnProperty(i)) {
+                        popup = this.popups[i];
+                        popup.popup.remove();
+
+                        if (popup.id === listing.id) {
+                            popup.popup.addTo(this.map);
+                            this.map.flyTo({
+                                center: popup.popup._lngLat,
+                                zoom: 18
+                            });
+                        }
+                    }
+                }
+            }
         }
     };
 

@@ -4,7 +4,8 @@
         <listings-map ref="listingsMap"
                       @update_visible="update_visible"
                       @update_url="update_url"
-                      @set_active_listing="set_active_listing"></listings-map>
+                      @set_active_listing="set_active_listing"
+                      @scroll_to_active="scroll_to_active"></listings-map>
 
         <aside id="listings__sidebar">
             <listings-list @update_url
@@ -138,6 +139,8 @@
         methods: {
             update_visible(listings) {
                 this.visible_listings = listings;
+
+                this.scroll_to_active(100);
             },
             update_url(update) {
                 update = _.extend({
@@ -156,14 +159,23 @@
             },
             set_active_listing(listing) {
                 this.active_listing = listing;
-                const el = '#listing-' + listing.id;
+                this.scroll_to_active();
+            },
+            scroll_to_active(duration = 500) {
+                const el = '#listing-' + this.active_listing.id;
+                console.log('scrolling');
 
-                this.$scrollTo(el, 500, {
+                console.log({el, duration})
+
+                this.$scrollTo(el, duration, {
                     'container': '#listings__sidebar'
                 });
             },
             highlight_on_map(listing) {
                 this.$refs.listingsMap.highlight_listing(listing);
+            },
+            zoom_to_on_map(listing) {
+                this.$refs.listingsMap.zoom_to(listing);
             }
         }
     };

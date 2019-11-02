@@ -6,7 +6,7 @@
   box-shadow: 0 0 13px -6px;
 
   &.active {
-    box-shadow: inset 10px 0px 1px -7px $coral
+    box-shadow: inset 10px 0px 1px -7px $secondary
   }
 
   .listing__main-info {
@@ -54,7 +54,7 @@
     .listing__title {
       font-size: 24px;
       font-weight: bold;
-      color: $coral;
+      color: $secondary;
     }
 
     .listing__address {
@@ -124,8 +124,8 @@
     text-align: center;
     display: block;
     width: 100%;
-    background: $primaryLight;
-    color: #333;
+    background: $primary;
+    color: white;
   }
 
   li.spans-months {
