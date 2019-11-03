@@ -1,5 +1,5 @@
 <template>
-    <div class="listings">
+    <div id="listings">
 
         <listings-map ref="listingsMap"
                       @update_visible="update_visible"
@@ -12,6 +12,9 @@
                            @set_active_listing="set_active_listing">
             </listings-list>
         </aside>
+
+        <router-view></router-view>
+
     </div>
 </template>
 
@@ -21,7 +24,7 @@
 
     import ListingsList from '../components/Map/ListingsList.vue';
     import {setPage, updateQueryStringParameter} from '../helpers';
-    import '../../sass/component/listings-map.scss';
+    import '../../sass/component/listings.scss';
 
     const VueScrollTo = require('vue-scrollto');
 
@@ -48,6 +51,7 @@
                 pitch: 0,
                 searchState: {},
                 active_listing: {},
+                viewing: false,
             };
         },
         props: {
@@ -86,64 +90,87 @@
                 default: null
             }
         },
+        watch: {
+            // call again the method if the route changes
+        },
         created() {
-            this.platform = new H.service.Platform({
-                'app_id': this.appId,
-                'apikey': '7W5ZSgnP_hvci-01R4EbN1_T17e_5x1zVr54MheJxTk'
-            });
-            if (this.svg) {
-                this.icon = new H.map.Icon(this.svg);
-            }
-
             if (this.listings) {
                 this.visible_listings = this.listings;
+            } else {
+                console.log(this.$store.state.listings);
+                this.visible_listings = this.$store.state.listings;
             }
+
+            let searchState = false;
+
+            console.log(this.search);
 
             if (this.search) {
-                if (this.search.bounds && this.search.bounds.lat && this.search.bounds.lng) {
-                    this.lat = this.search.bounds.lat;
-                    this.lng = this.search.bounds.lng;
-                }
-
-                if (this.search.zoom) {
-                    this.zoom = this.search.zoom;
-                }
-
-                if (this.search.pitch) {
-                    this.pitch = this.search.pitch;
-                }
-
-                if (this.search.bearing) {
-                    this.bearing = this.search.bearing;
-                }
+                searchState = this.search;
+            } else if (this.$route.query.searchState) {
+                searchState = JSON.parse(this.$route.query.searchState);
+            } else {
+                searchState = this.$store.state.search;
             }
+            console.log({searchState});
+
+            this.map_data(searchState);
         },
         mounted() {
-            window.addEventListener('popstate', (event) => {
-                if (typeof event.state.bounds !== 'undefined') {
-                    if (event.state.bounds.lat) {
-                        this.lat = event.state.bounds.lat;
-                    }
-                    if (event.state.bounds.lng) {
-                        this.lng = event.state.bounds.lng || this.lng;
-                    }
-                }
-                this.pitch = event.state.pitch;
-                this.bearing = event.state.bearing;
-                this.zoom = event.state.zoom;
+            // window.addEventListener('popstate', (event) => {
+            //     if (typeof event.state.bounds !== 'undefined') {
+            //         if (event.state.bounds.lat) {
+            //             this.lat = event.state.bounds.lat;
+            //         }
+            //         if (event.state.bounds.lng) {
+            //             this.lng = event.state.bounds.lng || this.lng;
+            //         }
+            //     }
+            //     this.pitch = event.state.pitch;
+            //     this.bearing = event.state.bearing;
+            //     this.zoom = event.state.zoom;
+            //
+            //     this.$refs.listingsMap.update_map()
+            //         .update_map_listings();
+            // });
+        },
+        methods: {
+            fetch_data() {
+                const searchState = this.$store.state.search;
+
+                this.map_data(searchState);
 
                 this.$refs.listingsMap.update_map()
                     .update_map_listings();
-            });
-        },
-        methods: {
+            },
+            map_data(searchState) {
+                console.log({searchState});
+                if (searchState.bounds && searchState.bounds.lat && searchState.bounds.lng) {
+                    this.lat = searchState.bounds.lat;
+                    this.lng = searchState.bounds.lng;
+                }
+
+                if (searchState.zoom) {
+                    this.zoom = searchState.zoom;
+                }
+
+                if (searchState.pitch) {
+                    this.pitch = searchState.pitch;
+                }
+
+                if (searchState.bearing) {
+                    this.bearing = searchState.bearing;
+                }
+                console.log(searchState.zoom, this.zoom);
+            },
             update_visible(listings) {
                 this.visible_listings = listings;
+                this.$store.commit('listings', listings);
 
                 this.scroll_to_active(100);
             },
             update_url(update) {
-                update = _.extend({
+                const search = _.extend({
                     bounds: null,
                     listing: null,
                     zoom: null,
@@ -151,14 +178,37 @@
                     bearing: null
                 }, update);
 
-                let url = document.URL;
-                url = updateQueryStringParameter(url, 'searchState', JSON.stringify(update));
+                console.log({search});
 
-                setPage(url, 'Listings', update);
+                this.$store.commit('search', search);
+
+                let url = document.URL;
+                url = updateQueryStringParameter(url, 'searchState', JSON.stringify(search));
+                const searchState = {searchState: JSON.stringify(search)};
+
+                console.log(this.$route);
+
+                if (this.$route.params.location || false) {
+                    this.$router.push({
+                        name: 'listings.location',
+                        params: {
+                            location: (this.$route.params.location)
+                        },
+                        query: searchState
+                    });
+                } else {
+                    this.$router.push({
+                        name: 'listings',
+                        query: searchState
+                    });
+                }
+
+                // setPage(url, 'Listings', update);
 
             },
             set_active_listing(listing) {
                 this.active_listing = listing;
+                this.$store.commit('listing', listing);
                 this.scroll_to_active();
             },
             scroll_to_active(duration = 500) {
@@ -181,3 +231,6 @@
     };
 
 </script>
+
+
+<style scoped></style>

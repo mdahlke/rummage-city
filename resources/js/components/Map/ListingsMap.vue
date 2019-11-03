@@ -6,6 +6,7 @@
     import MapboxPopup from './MapboxPopup.vue';
     import {mapbox_latlng, setPage} from '../../helpers';
     import mapbox_config from './mapbox.config.js';
+    import _ from 'lodash';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
@@ -66,11 +67,11 @@
             let l;
             let popup;
             let marker;
-            for (let i in this.$parent.listings) {
+            for (let i in this.$parent.visible_listings) {
                 popup = null;
                 marker = null;
-                if (this.$parent.listings.hasOwnProperty(i)) {
-                    l = this.$parent.listings[i];
+                if (this.$parent.visible_listings.hasOwnProperty(i)) {
+                    l = this.$parent.visible_listings[i];
 
                     if (l.id) {
                         this.listing_ids.push(l.id);

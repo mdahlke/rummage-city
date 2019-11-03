@@ -1,5 +1,5 @@
 <template>
-    <div class="listings-list">
+    <section id="listings__list" class="listings-list">
         <template v-if="$parent.visible_listings.length">
 
             <section v-for="(listing, index) in $parent.visible_listings"
@@ -10,7 +10,8 @@
                 <div class="listing-wrap">
 
                     <div class="listing__main-info"
-                         :class="{ 'has-image': listing.image.length}">
+                         :class="{ 'has-image': listing.image.length}"
+                         @click="view(listing.id)">
                         <div class="listing__featured-image" v-if="listing.image.length">
                             <div class="featured-image__blur"
                                  :style="'background-image: url('+listing.image[0].url+')'"></div>
@@ -24,6 +25,8 @@
                     </div>
 
                     <div class="listing__content">
+                        <router-link :to="{ name: 'listing.view', params: { id: listing.id }}">View</router-link>
+
                         <ul class="listing__dates">
                             <li v-for="(date, index) in listing_dates(listing.active_date)"
                                 :class="(date.end.month === false) ? '' : 'spans-months'">
@@ -102,7 +105,7 @@
                 There are no listings in this area.
             </section>
         </template>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -115,9 +118,15 @@
 
     export default {
         name: 'ListingsList',
+        created() {
+            console.log(this.$parent.visible_listings);
+        },
         mounted() {
         },
         methods: {
+            view(id) {
+                this.$router.push({name: 'listing.view', params: {id}})
+            },
             save(listing) {
                 if (!listing.isSaved) {
                     axios.post(listing.saveUrl).then(function (e) {

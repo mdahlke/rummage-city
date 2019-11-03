@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.vue')
 
 @section('title', 'Listings')
 
-@include('listings.partials.scripts')
+{{--@include('listings.partials.scripts')--}}
 
 @section('main')
-    <section class="listings-index">
-        <map-listings :listings="{{ @json_encode($listings->all()) }}" :search="{{ $searchState }}"/>
-    </section>
+{{--    <section class="listings-index">--}}
+{{--        <listings :listings="{{ @json_encode($listings->all()) }}" :search="{{ $searchState }}"/>--}}
+{{--    </section>--}}
 @endsection

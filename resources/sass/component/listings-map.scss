@@ -1,49 +1,32 @@
 @import '../colors';
+@import '../variables';
 
-$navbar_height: 58px;
-$sidebar_width: 33%;
+#listings__map {
 
-.listings {
-  display: flex;
-  height: calc(100vh - #{$navbar_height});
+  .listing__popup {
+    max-height: 300px;
 
-  #listings__sidebar {
-    flex: 0 0 $sidebar_width;
-    overflow: auto;
+    h1 {
+      font-size: .8rem;
+    }
   }
 
-  #listings__map {
-    flex: 0 0 calc(100vw - #{$sidebar_width});
+  .popup__images {
+    display: flex;
+    flex-wrap: wrap;
+
+    .popup__image {
+      flex: 0 0 33.33333%;
+      padding: 5px;
+    }
+
+    img {
+      max-width: 100%;
+    }
   }
 
-  .listing__action {
-    cursor: pointer;
+  .mapboxgl-canvas-container,
+  .mapboxgl-canvas {
+    height: 100%;
   }
-
-}
-
-.listing__popup {
-  max-height: 300px;
-
-  h1 {
-    font-size: .8rem;
-  }
-}
-
-.popup__images {
-  display: flex;
-  flex-wrap: wrap;
-
-  .popup__image {
-    flex: 0 0 33.33333%;
-    padding: 5px;
-  }
-
-  img {
-    max-width: 100%;
-  }
-}
-
-.mapboxgl-canvas {
-  height: 100%;
 }

@@ -1,7 +1,8 @@
-@extends('layouts.full-width')
+@extends('layouts.vue')
 
 @section('title', $listing->title)
 
-@section('content')
-    @include('listings.partials.listing', ['listing' => $listing])
+@section('main')
+    {{--    @include('listings.partials.listing', ['listing' => $listing])--}}
+    <listing :listing="{{ $listing }}"></listing>
 @endsection

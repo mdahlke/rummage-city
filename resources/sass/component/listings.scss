@@ -1,0 +1,20 @@
+@import '../variables';
+
+#listings {
+  display: flex;
+  height: calc(100vh - #{$navbar_height});
+
+  #listings__sidebar {
+    flex: 0 0 $sidebar_width;
+    overflow: auto;
+  }
+
+  #listings__map {
+    flex: 0 0 calc(100vw - #{$sidebar_width});
+  }
+
+  .listing__action {
+    cursor: pointer;
+  }
+
+}

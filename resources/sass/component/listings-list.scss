@@ -1,200 +1,202 @@
 @import "../fonts";
 @import "../colors";
 
-.listing {
-  border-bottom: 2px solid $primary;
-  box-shadow: 0 0 13px -6px;
+#listings__list {
+  .listing {
+    border-bottom: 2px solid $primary;
+    box-shadow: 0 0 13px -6px;
 
-  &.active {
-    box-shadow: inset 10px 0px 1px -7px $secondary
-  }
-
-  .listing__main-info {
-    position: relative;
-    padding: 30px 0;
-    max-height: 180px;
-
-    &.has-image {
-      padding: 60px 0 0;
+    &.active {
+      box-shadow: inset 10px 0px 1px -7px $secondary
     }
 
-    .listing__featured-image {
+    .listing__main-info {
+      position: relative;
+      padding: 30px 0;
+      max-height: 180px;
 
-      .featured-image__blur,
-      .featured-image__image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: contain;
-        background-position: center;
+      &.has-image {
+        padding: 60px 0 0;
       }
 
-      .featured-image__blur {
-        filter: blur(10px);
-        background-size: cover;
-      }
+      .listing__featured-image {
 
-      .featured-image__image {
-        background-repeat: no-repeat;
-      }
+        .featured-image__blur,
+        .featured-image__image {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-size: contain;
+          background-position: center;
+        }
 
-      &::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background: transparentize(#000, .6);
-      }
-    }
+        .featured-image__blur {
+          filter: blur(10px);
+          background-size: cover;
+        }
 
-    .listing__title {
-      font-size: 24px;
-      font-weight: bold;
-      color: $secondary;
-    }
-
-    .listing__address {
-      font-size: 14px;
-    }
-
-    &.has-image {
-      overflow: hidden;
-
-      .listing__address {
-        color: white;
-      }
-
-    }
-  }
-
-  .listing-wrap {
-    margin-bottom: 10px;
-  }
-
-  .listing__content {
-    position: relative;
-    padding: 10px 20px;
-  }
-}
-
-.listing__dates {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1 0 50%;
-    align-items: flex-start;
-    padding: 8px 10px 8px 0;
-
-    &.spans-months {
-      flex: 0 0 100%;
-    }
-  }
-
-  .date-wrap {
-    border: 1px solid #e2e2e2;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    overflow: hidden;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .calendar,
-  .clock {
-    line-height: normal;
-  }
-
-  .calendar,
-  .calendar-span {
-    flex: 0 0 100%;
-    position: relative;
-    padding: 5px;
-    text-align: center;
-    display: block;
-    width: 100%;
-    background: $primary;
-    color: white;
-  }
-
-  li.spans-months {
-
-    .calendar-span {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .calendar {
-      background: transparent;
-      flex: 0 0 50%;
-
-      &.start {
-        padding-right: 5px;
+        .featured-image__image {
+          background-repeat: no-repeat;
+        }
 
         &::after {
-          display: none;
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+          background: transparentize(#000, .6);
         }
       }
 
-      &.end {
-        padding-left: 5px;
-        border-left: 1px solid #eaeaea;
+      .listing__title {
+        font-size: 24px;
+        font-weight: bold;
+        color: $secondary;
+      }
+
+      .listing__address {
+        font-size: 14px;
+      }
+
+      &.has-image {
+        overflow: hidden;
+
+        .listing__address {
+          color: white;
+        }
+
       }
     }
 
+    .listing-wrap {
+      margin-bottom: 10px;
+    }
 
-  }
-
-  .spans-months {
-  }
-
-  .day-with-end {
-    display: inline;
-    white-space: nowrap;
-
-    .day {
-      display: inline;
+    .listing__content {
+      position: relative;
+      padding: 10px 20px;
     }
   }
 
-  .day {
-    margin-bottom: -13px;
-    padding: 0 5px;
-    font-family: $fontTertiary;
-    font-size: 18px;
-    font-weight: 600;
-
-  }
-
-  .clock {
-    display: block;
-    padding: 5px 7px;
-    font-size: 14px;
-    text-align: center;
-    width: 100%;
-    align-self: flex-end;
-  }
-
-  .time {
-    white-space: nowrap;
-  }
-}
-
-.listing__actions {
-  margin: 20px 0;
-
-  ul {
+  .listing__dates {
+    display: flex;
+    flex-wrap: wrap;
     margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1 0 50%;
+      align-items: flex-start;
+      padding: 8px 10px 8px 0;
+
+      &.spans-months {
+        flex: 0 0 100%;
+      }
+    }
+
+    .date-wrap {
+      border: 1px solid #e2e2e2;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .calendar,
+    .clock {
+      line-height: normal;
+    }
+
+    .calendar,
+    .calendar-span {
+      flex: 0 0 100%;
+      position: relative;
+      padding: 5px;
+      text-align: center;
+      display: block;
+      width: 100%;
+      background: $primary;
+      color: white;
+    }
+
+    li.spans-months {
+
+      .calendar-span {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .calendar {
+        background: transparent;
+        flex: 0 0 50%;
+
+        &.start {
+          padding-right: 5px;
+
+          &::after {
+            display: none;
+          }
+        }
+
+        &.end {
+          padding-left: 5px;
+          border-left: 1px solid #eaeaea;
+        }
+      }
+
+
+    }
+
+    .spans-months {
+    }
+
+    .day-with-end {
+      display: inline;
+      white-space: nowrap;
+
+      .day {
+        display: inline;
+      }
+    }
+
+    .day {
+      margin-bottom: -13px;
+      padding: 0 5px;
+      font-family: $fontTertiary;
+      font-size: 18px;
+      font-weight: 600;
+
+    }
+
+    .clock {
+      display: block;
+      padding: 5px 7px;
+      font-size: 14px;
+      text-align: center;
+      width: 100%;
+      align-self: flex-end;
+    }
+
+    .time {
+      white-space: nowrap;
+    }
+  }
+
+  .listing__actions {
+    margin: 20px 0;
+
+    ul {
+      margin: 0;
+    }
   }
 }

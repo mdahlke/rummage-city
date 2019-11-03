@@ -15,11 +15,12 @@ const production = mix.inProduction();
 const devtool = production ? false : 'source-map';
 
 mix.webpackConfig({
-	devtool,
-	externals: {
-		'H': 'H'
-	}
+    devtool,
+    externals: {
+        'H': 'H'
+    }
 });
 
 mix.js('resources/js/app.js', 'public/js')
-	.sass('resources/sass/app.scss', 'public/css');
+    .js('resources/js/sw/sw.js', 'public/sw.js')
+    .sass('resources/sass/app.scss', 'public/css');

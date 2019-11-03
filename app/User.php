@@ -47,6 +47,10 @@ class User extends Authenticatable {
         'password', 'remember_token',
     ];
 
+    public function __toString() {
+        return $this->name;
+    }
+
     public function listing(): HasMany {
         return $this->hasMany(Listing::class, 'user_id', 'id');
     }

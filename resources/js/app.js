@@ -3,11 +3,20 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
-require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Vuex from 'vuex'
 import axios from 'axios';
+import 'es6-promise/auto'
+
+const moment = require('moment');
+
+Vue.use(require('vue-scrollto'))
+Vue.use(VueRouter);
+Vue.use(Vuex)
+Vue.use(require('vue-moment'), {
+    moment
+});
 
 window.Vue = Vue;
 window.axios = require('axios');
@@ -40,32 +49,15 @@ Vue.component('listing-dates-input', require('./components/ListingDatesInput.vue
 Vue.component('listing-image-input', require('./components/ListingImageInput.vue').default);
 Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
 Vue.component('map-listings', require('./views/Listings.vue').default);
+Vue.component('listing', require('./views/ListingView.vue').default);
 Vue.component('listings-map', require('./components/Map/ListingsMap.vue').default);
 Vue.component('listings-list', require('./components/Map/ListingsList.vue').default);
 Vue.component('search-box', require('./components/SearchBox.vue').default);
 
-const moment = require('moment');
-
-Vue.use(VueRouter);
-Vue.use(require('vue-moment'), {
-    moment
-});
-
-Vue.use(require('vue-scrollto'))
 
 import App from './views/App';
-import Listings from './views/Listings';
 
-const router = new VueRouter({
-    mode: 'history',
-    routes: [
-        {
-            path: '/listings',
-            name: 'listings',
-            component: Listings
-        }
-    ]
-});
+import router from './config/router';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -73,14 +65,22 @@ const router = new VueRouter({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import store from './config/store';
+
 const app = new Vue({
     el: '#app',
     components: {App},
-    router
-});
+    store,
+    router,
+    beforeCreate() {
+        this.$store.commit('initialiseStore');
+    }
+}).$mount('#app');
 
 
+require('./bootstrap');
 require('./ajax');
 require('./listings-map');
 require('./saved-listings');
 require('./listing-edit');
+require('./service-worker');
