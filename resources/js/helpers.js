@@ -51,3 +51,13 @@ export function updateQueryStringParameter(uri, key, value) {
         return uri + separator + key + "=" + value;
     }
 }
+
+let call = {};
+export const axios_one = (config = {}, requestType = 'unnamed') => {
+    if (call[requestType]) {
+        call[requestType].cancel("Only one request allowed at a time. Cancelling first.");
+    }
+    call[requestType] = axios.CancelToken.source();
+    config.cancelToken = call[requestType].token;
+    return axios(config);
+}

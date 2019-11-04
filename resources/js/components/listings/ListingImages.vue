@@ -1,7 +1,6 @@
 <template>
     <section id="listing__images">
-        <slick
-                ref="slick"
+        <slick ref="slick"
                 :options="slickOptions"
                 @afterChange="handleAfterChange"
                 @beforeChange="handleBeforeChange"
@@ -14,9 +13,9 @@
                 @swipe="handleSwipe"
                 @lazyLoaded="handleLazyLoaded"
                 @lazyLoadError="handleLazeLoadError">
-            <div class="listing__image-wrap" v-for="(image) in images" :src="image.url">
-                <div class="listing__image-blur" :style="'background-image: url('+ image.url +');'"></div>
-                <div class="listing__image" :style="'background-image: url('+ image.url +');'"></div>
+            <div class="listing__image-wrap" v-for="(image) in images">
+                <picture class="listing__image-blur" :style="'background-image: url('+ image.url +');'"></picture>
+                <picture class="listing__image" :style="'background-image: url('+ image.url +');'"></picture>
             </div>
         </slick>
     </section>

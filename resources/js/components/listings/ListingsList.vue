@@ -11,7 +11,7 @@
 
                     <div class="listing__main-info"
                          :class="{ 'has-image': listing.image.length}"
-                         @click="view(listing.id, slugify(listing.address))">
+                         @click="$emit('view',listing)">
                         <div class="listing__featured-image" v-if="listing.image.length">
                             <div class="featured-image__blur"
                                  :style="'background-image: url('+listing.image[0].url+')'"></div>
@@ -25,10 +25,7 @@
                     </div>
 
                     <div class="listing__content">
-                        <router-link
-                                :to="{ name: 'listing.view', params: { id: listing.id, address: slugify(listing.address) }}">
-                            View
-                        </router-link>
+                        <a @click="$emit('view', listing)">View</a>
 
                         <listing-dates :dates="listing.active_date"></listing-dates>
 
@@ -66,19 +63,14 @@
 <script>
     import '../../../sass/component/listings-list.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
-    import slugify from 'slugify';
 
     export default {
         name: 'ListingsList',
         created() {
-            console.log(this.$parent.visible_listings);
         },
         mounted() {
         },
         methods: {
-            view(id, address = null) {
-                this.$router.push({name: 'listing.view', params: {id, address}})
-            },
             save(listing) {
                 if (!listing.isSaved) {
                     axios.post(listing.saveUrl).then(function (e) {
@@ -92,9 +84,6 @@
                         listing.isSaved = false;
                     });
                 }
-            },
-            slugify(text) {
-                return slugify(text);
             }
         }
     };

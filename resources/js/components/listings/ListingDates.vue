@@ -25,7 +25,7 @@
                         <span class="time start">{{ date.end.time }}</span>
                     </div>
                 </template>
-                
+
                 <template v-else>
                     <div class="calendar-span">
                         <div class="calendar start">
@@ -63,13 +63,11 @@
             dates: Array,
         },
         created() {
-            console.log(this.$parent.visible_listings);
         },
         mounted() {
         },
         computed: {
             the_dates: function () {
-                console.log(this.dates);
                 return this.listing_dates(this.dates);
             }
         },

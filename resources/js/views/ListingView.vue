@@ -1,20 +1,26 @@
 <template>
     <section id="listing-popup-view">
-        <div class="listing-wrap">
-            <div class="container">
+        <article class="listing-wrap">
 
+            <a @click="$router.go(-1)" class="cursor-pointer"><i class="far fa-map"></i> Back to map</a>
+
+            <section v-if="loading" class="listing__loading">
+                Loading...
+            </section>
+
+            <div v-if="sale" class="container">
                 <section class="listing">
                     <div class="row">
-                        <div class="col-12 col-md-7 col-lg-8">
-
+                        <section class="col-12 col-md-7 col-lg-8">
                             <div class="listing__main-content">
                                 <listing-images :images="sale.image"></listing-images>
 
-                                <a @click="$router.go(-1)" class="cursor-pointer"><i class="far fa-map"></i> Back to map</a>
 
-                                <h4>{{ sale.title }}</h4>
+                                <header>
+                                    <h4>{{ sale.title }}</h4>
+                                </header>
 
-                                <div class="listing__actions">
+                                <section class="listing__actions">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <span class="cursor-pointer" v-if="sale.isSaved"
@@ -26,23 +32,30 @@
                                             </span>
                                         </li>
                                     </ul>
-                                </div>
-                            </div>
-                        </div>
+                                </section>
 
-                        <div class="col-12 col-md-5 col-lg-4">
+                                <section class="listing__description">
+                                    {{ sale.description }}
+                                </section>
+
+
+                            </div>
+                        </section>
+
+                        <aside class="col-12 col-md-5 col-lg-4">
                             <p>{{ sale.address }}</p>
                             <listing-dates :dates="sale.active_date"></listing-dates>
-                        </div>
+                        </aside>
                     </div>
                 </section>
             </div>
-        </div>
+        </article>
     </section>
 
 </template>
 
 <script>
+    import axios from 'axios';
     import ListingImages from '../components/listings/ListingImages';
     import '../../sass/component/listings-popup-view.scss';
 
@@ -51,79 +64,72 @@
         components: {ListingImages},
         data() {
             return {
-                l: {}
+                loading: true,
+                l: false
             };
         },
         props: {
             listing: Object,
         },
         created() {
-            this.fetchData();
+            console.log('the listing', this.listing);
+            if (this.listing) {
+                this.l = this.listing;
+            } else {
+                this.fetch_data();
+            }
         },
         watch: {
             // call again the method if the route changes
             '$route': 'fetchData'
         },
         mounted() {
-            console.log(this.$store);
         },
         computed: {
             sale: function () {
-                console.log(this.$store);
+                console.log(this.l);
+                return this.l;
                 return this.$store.state.listing;
             }
         },
         methods: {
-            fetchData() {
+            fetch_data() {
                 const id = this.$route.params.id;
-                console.log({id});
+
                 axios({
                     url: '/graphql',
                     type: 'get',
                     params: {
                         query: `
-                    query FetchListings {
-                      listings(id: "` + id + `") {
-                        data {
-                          id
-                          title
-                          address
-                          latitude
-                          longitude
-                          saveUrl
-                          removeSavedUrl
-                          isSaved
-                          image {
-                              path
-                              url
-                          }
-                          user {
-                            name
-                            savedListing{
-                              listing {
-                                title
+                            query FetchListings {
+                              listings(id: "` + id + `") {
+                                data {
+                                  id
+                                  title
+                                  description
+                                  address
+                                  latitude
+                                  longitude
+                                  saveUrl
+                                  removeSavedUrl
+                                  isSaved
+                                  image {
+                                      path
+                                      url
+                                  }
+                                  active_date {
+                                    start
+                                    end
+                                  }
+                                }
                               }
                             }
-                          }
-                          active_date {
-                            start
-                            end
-                          }
-                          date {
-                            start
-                            end
-                          }
-                        }
-                        total
-                        per_page
-                        current_page
-                      }
-                    }
-                `
-                    }
+                        `
+                    },
                 }).then((results) => {
-                    console.log(results.data.data.listings);
-                    this.$store.commit('listing', results.data.data.listings.data[0]);
+                    this.l = results.data.data.listings.data[0];
+                    this.$store.commit('listing', this.l);
+                    this.loading = false;
                 });
             },
             save(listing) {

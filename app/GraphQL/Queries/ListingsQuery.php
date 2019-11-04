@@ -115,7 +115,7 @@ class ListingsQuery extends Query {
             $limit = $args['limit'];
         } else {
             // set the limit high to get all listings
-            $limit = (int)100000000;
+            $limit = (int)PHP_INT_MAX;
             // set the page to zero so we get listings
             $page = 0;
         }

@@ -1,5 +1,9 @@
 #listing__images {
 
+  .slick-list {
+    height: 300px;
+  }
+
   .slick-slide > div,
   .listing__image-wrap,
   .listing__image-blur,
@@ -9,6 +13,7 @@
 
   .slick-slide {
     position: relative;
+    overflow: hidden;
   }
 
   .listing__image-blur,

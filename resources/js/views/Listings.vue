@@ -2,6 +2,7 @@
     <div id="listings">
 
         <listings-map ref="listingsMap"
+                      @view="view"
                       @update_visible="update_visible"
                       @update_url="update_url"
                       @set_active_listing="set_active_listing"
@@ -9,6 +10,7 @@
 
         <aside id="listings__sidebar">
             <listings-list @update_url
+                           @view="view"
                            @set_active_listing="set_active_listing">
             </listings-list>
         </aside>
@@ -23,6 +25,7 @@
 
     import ListingsList from '../components/listings/ListingsList.vue';
     import {setPage, updateQueryStringParameter} from '../helpers';
+    import slugify from 'slugify';
     import '../../sass/component/listings.scss';
 
     const VueScrollTo = require('vue-scrollto');
@@ -96,13 +99,10 @@
             if (this.listings) {
                 this.visible_listings = this.listings;
             } else {
-                console.log(this.$store.state.listings);
                 this.visible_listings = this.$store.state.listings;
             }
 
             let searchState = false;
-
-            console.log(this.search);
 
             if (this.search) {
                 searchState = this.search;
@@ -111,27 +111,11 @@
             } else {
                 searchState = this.$store.state.search;
             }
-            console.log({searchState});
 
             this.map_data(searchState);
         },
         mounted() {
-            // window.addEventListener('popstate', (event) => {
-            //     if (typeof event.state.bounds !== 'undefined') {
-            //         if (event.state.bounds.lat) {
-            //             this.lat = event.state.bounds.lat;
-            //         }
-            //         if (event.state.bounds.lng) {
-            //             this.lng = event.state.bounds.lng || this.lng;
-            //         }
-            //     }
-            //     this.pitch = event.state.pitch;
-            //     this.bearing = event.state.bearing;
-            //     this.zoom = event.state.zoom;
-            //
-            //     this.$refs.listingsMap.update_map()
-            //         .update_map_listings();
-            // });
+
         },
         methods: {
             fetch_data() {
@@ -143,7 +127,6 @@
                     .update_map_listings();
             },
             map_data(searchState) {
-                console.log({searchState});
                 if (searchState.bounds && searchState.bounds.lat && searchState.bounds.lng) {
                     this.lat = searchState.bounds.lat;
                     this.lng = searchState.bounds.lng;
@@ -160,13 +143,21 @@
                 if (searchState.bearing) {
                     this.bearing = searchState.bearing;
                 }
-                console.log(searchState.zoom, this.zoom);
+            },
+            view(listing) {
+                this.$router.push({
+                    name: 'listing.view',
+                    params: {
+                        id: listing.id,
+                        address: slugify(listing.address)
+                    }
+                })
             },
             update_visible(listings) {
                 this.visible_listings = listings;
                 this.$store.commit('listings', listings);
 
-                this.scroll_to_active(100);
+                this.scroll_to_active(0);
             },
             update_url(update) {
                 const search = _.extend({
@@ -177,15 +168,11 @@
                     bearing: null
                 }, update);
 
-                console.log({search});
-
                 this.$store.commit('search', search);
 
                 let url = document.URL;
                 url = updateQueryStringParameter(url, 'searchState', JSON.stringify(search));
                 const searchState = {searchState: JSON.stringify(search)};
-
-                console.log(this.$route);
 
                 if (this.$route.params.location || false) {
                     this.$router.push({
@@ -208,16 +195,16 @@
             set_active_listing(listing) {
                 this.active_listing = listing;
                 this.$store.commit('listing', listing);
-                this.scroll_to_active();
+                this.scroll_to_active(1);
             },
             scroll_to_active(duration = 500) {
                 const el = '#listing-' + this.active_listing.id;
-                console.log('scrolling');
-
-                console.log({el, duration})
 
                 this.$scrollTo(el, duration, {
-                    'container': '#listings__sidebar'
+                    container: '#listings__sidebar',
+                    offset: () => {
+                        return -100
+                    }
                 });
             },
             highlight_on_map(listing) {

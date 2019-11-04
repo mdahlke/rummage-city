@@ -7,6 +7,7 @@
     import {mapbox_latlng, setPage} from '../../helpers';
     import mapbox_config from './mapbox.config.js';
     import _ from 'lodash';
+    import {axios_one} from '../../helpers';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
@@ -64,23 +65,7 @@
             this.map.on('dragend', this.update_map_listings);
             this.map.on('zoomend', this.update_map_listings);
 
-            let l;
-            let popup;
-            let marker;
-            for (let i in this.$parent.visible_listings) {
-                popup = null;
-                marker = null;
-                if (this.$parent.visible_listings.hasOwnProperty(i)) {
-                    l = this.$parent.visible_listings[i];
-
-                    if (l.id) {
-                        this.listing_ids.push(l.id);
-                        popup = this.create_popup(l);
-                        marker = this.create_marker(mapbox_latlng(l), popup);
-                        this.add_marker(l, marker, popup);
-                    }
-                }
-            }
+            this.add_markers_to_map(this.$parent.visible_listings);
         },
         methods: {
             update_map_listings() {
@@ -90,6 +75,9 @@
                     const listings = results.data.data.listings.data;
                     this.visible_listings = listings;
 
+
+                    this.remove_all_markers();
+
                     this.$emit('update_visible', listings);
                     this.$emit('update_url', {
                         bounds: this.map.getCenter(),
@@ -98,30 +86,34 @@
                         bearing: this.map.getBearing()
                     });
 
-                    let r;
-                    let popup;
-                    let marker;
-                    for (let i in listings) {
-                        popup = null;
-                        marker = null;
-                        if (listings.hasOwnProperty(i)) {
-                            r = listings[i];
-                            // laravel is sending this value back as a string
-                            // we need to change it to a boolean
-                            r.isSaved = (r.isSaved.toLowerCase() === 'true');
+                    this.add_markers_to_map(listings);
 
-                            if (!this.listing_ids.includes(r.id)) {
-                                this.listing_ids.push(r.id);
-
-                                popup = this.create_popup(r);
-                                marker = this.create_marker(mapbox_latlng(r), popup);
-
-                                this.add_marker(r, marker, popup);
-                            }
-                        }
-                    }
                 });
                 return this;
+            },
+            add_markers_to_map(listings) {
+                let listing;
+                let popup;
+                let marker;
+                for (let i in listings) {
+                    popup = null;
+                    marker = null;
+                    if (listings.hasOwnProperty(i)) {
+                        listing = listings[i];
+
+                        if (listing.id) {
+                            this.listing_ids.push(listing.id);
+                            marker = this.create_marker(mapbox_latlng(listing));
+                            (listing => {
+                                marker.getElement().addEventListener('click', () => {
+                                    this.$emit('view', listing);
+                                });
+                            })(listing);
+
+                            this.add_marker(listing, marker, popup);
+                        }
+                    }
+                }
             },
             add_marker(listing, marker, popup) {
                 if (popup) {
@@ -189,7 +181,7 @@
                     ne: bounds._ne
                 }));
 
-                return axios({
+                return axios_one({
                     url: '/graphql',
                     type: 'get',
                     params: {
@@ -217,6 +209,12 @@
 							  }
 							}
 					`
+                    },
+                }, 'listings').catch(function (thrown) {
+                    if (axios.isCancel(thrown)) {
+                        console.log('Request canceled', thrown.message);
+                    } else {
+                        // handle error
                     }
                 });
             },
@@ -261,6 +259,15 @@
                             });
                         }
                     }
+                }
+            },
+            remove_all_markers() {
+                if (this.markers !== null) {
+                    for (let i = this.markers.length - 1; i >= 0; i--) {
+                        this.markers[i].marker.remove();
+                    }
+                    this.markers = [];
+                    this.listing_ids = [];
                 }
             }
         }
