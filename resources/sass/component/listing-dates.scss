@@ -1,0 +1,113 @@
+@import '../fonts';
+
+@import '../colors';
+
+.listing__dates {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1 0 50%;
+    align-items: flex-start;
+    padding: 8px 10px 8px 0;
+
+    &.spans-months {
+      flex: 0 0 100%;
+    }
+  }
+
+  .date-wrap {
+    border: 1px solid #e2e2e2;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .calendar,
+  .clock {
+    line-height: normal;
+  }
+
+  .calendar,
+  .calendar-span {
+    flex: 0 0 100%;
+    position: relative;
+    padding: 5px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    background: $primary;
+    color: white;
+  }
+
+  li.spans-months {
+
+    .calendar-span {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .calendar {
+      background: transparent;
+      flex: 0 0 50%;
+
+      &.start {
+        padding-right: 5px;
+
+        &::after {
+          display: none;
+        }
+      }
+
+      &.end {
+        padding-left: 5px;
+        border-left: 1px solid #eaeaea;
+      }
+    }
+
+
+  }
+
+  .spans-months {
+  }
+
+  .day-with-end {
+    display: inline;
+    white-space: nowrap;
+
+    .day {
+      display: inline;
+    }
+  }
+
+  .day {
+    margin-bottom: -13px;
+    padding: 0 5px;
+    font-family: $fontTertiary;
+    font-size: 18px;
+    font-weight: 600;
+
+  }
+
+  .clock {
+    display: block;
+    padding: 5px 7px;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .time {
+    white-space: nowrap;
+  }
+}

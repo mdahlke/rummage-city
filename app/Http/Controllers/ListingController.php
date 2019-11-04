@@ -37,44 +37,46 @@ class ListingController extends Controller {
 
     public function index(Request $request, $location = null) {
         $data = [];
-        $geocode = $request->get('geocode');
-
-        $searchState = (object)[
-            'bounds' => (object)[
-                'lat' => false,
-                'lng' => false,
-            ],
-            'listing' => false,
-            'zoom' => false,
-            'pitch' => false,
-            'bearing' => false,
-        ];
-
-        /** @var Builder $listings */
-        $builder = Listing::query()
-            ->with('activeDate')
-            ->with('image')
-            ->whereHas('activeDate');
-
-        if ($geocode) {
-            $searchState->bounds->lat = $geocode->getCenter()[1];
-            $searchState->bounds->lng = $geocode->getCenter()[0];
-
-            $searchState->zoom = 12;
-
-            $builder->where(function ($q) use ($location) {
-                /** @var Builder $q */
-                $q->orWhere('street_name', 'LIKE', $location)
-                    ->orWhere('address', 'LIKE', $location)
-                    ->orWhere('city', 'LIKE', $location)
-                    ->orWhere('state', 'LIKE', $location)
-                    ->orWhere('postcode', 'LIKE', $location);
-            });
-
-//            dd($geocode, $searchState, json_encode($searchState));
-        }
-
-        $listings = $builder->paginate(10);
+        $listings = [];
+        $searchState = (object)[];
+//        $geocode = $request->get('geocode');
+//
+//        $searchState = (object)[
+//            'bounds' => (object)[
+//                'lat' => false,
+//                'lng' => false,
+//            ],
+//            'listing' => false,
+//            'zoom' => false,
+//            'pitch' => false,
+//            'bearing' => false,
+//        ];
+//
+//        /** @var Builder $listings */
+//        $builder = Listing::query()
+//            ->with('activeDate')
+//            ->with('image')
+//            ->whereHas('activeDate');
+//
+//        if ($geocode) {
+//            $searchState->bounds->lat = $geocode->getCenter()[1];
+//            $searchState->bounds->lng = $geocode->getCenter()[0];
+//
+//            $searchState->zoom = 12;
+//
+//            $builder->where(function ($q) use ($location) {
+//                /** @var Builder $q */
+//                $q->orWhere('street_name', 'LIKE', $location)
+//                    ->orWhere('address', 'LIKE', $location)
+//                    ->orWhere('city', 'LIKE', $location)
+//                    ->orWhere('state', 'LIKE', $location)
+//                    ->orWhere('postcode', 'LIKE', $location);
+//            });
+//
+////            dd($geocode, $searchState, json_encode($searchState));
+//        }
+//
+//        $listings = $builder->paginate(10);
 
         $data['listings'] = $listings;
         $data['searchState'] = $request->query('searchState', json_encode($searchState));
@@ -106,11 +108,17 @@ class ListingController extends Controller {
         dd(DB::getQueryLog(), $listings);
     }
 
-    public function view(Request $request, Listing $listing) {
+    /**
+     * @param Request $request
+     * @param string $address
+     * @param Listing $listing
+     * @return Factory|View
+     */
+    public function view(Request $request, $address = '', Listing $listing) {
         $data = [];
 
         $data['listing'] = $listing;
-
+        
         return view('listings.view', $data);
     }
 

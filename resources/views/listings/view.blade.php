@@ -3,6 +3,5 @@
 @section('title', $listing->title)
 
 @section('main')
-    {{--    @include('listings.partials.listing', ['listing' => $listing])--}}
-    <listing :listing="{{ $listing }}"></listing>
+    <router-view :listing="{{ json_encode($listing) }}"></router-view>
 @endsection

@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router';
+import pathToRegexp from 'path-to-regexp';
 
 const Listings = () => import('../views/Listings');
 const ListingView = () => import( '../views/ListingView');
@@ -15,7 +16,7 @@ const router = new VueRouter({
                 // component should be rendered as a nested
                 // route of the `Product` component.
                 {
-                    path: ':id/view',
+                    path: ':address?/:id/view',
                     name: 'listing.view',
                     component: ListingView
                 }

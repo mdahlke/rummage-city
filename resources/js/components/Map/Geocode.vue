@@ -31,9 +31,7 @@
     </div>
 </template>
 <script>
-    import MapboxPopup from './MapboxPopup.vue';
-    import {mapbox_latlng, setPage} from '../../helpers';
-    import mapbox_config from './mapbox.config.js';
+    import mapbox_config from './../listings/mapbox.config.js';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
     import '../../../../node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';

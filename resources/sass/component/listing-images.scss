@@ -1,0 +1,44 @@
+#listing__images {
+
+  .slick-slide > div,
+  .listing__image-wrap,
+  .listing__image-blur,
+  .listing__image {
+    height: 100%;
+  }
+
+  .slick-slide {
+    position: relative;
+  }
+
+  .listing__image-blur,
+  .listing__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .listing__image-blur {
+    filter: blur(30px);
+    background-size: cover;
+    background-posistion: center;
+  }
+
+  .listing__image {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+
+  .slick-prev {
+    left: 25px;
+    z-index: 9;
+  }
+
+  .slick-next {
+    right: 25px;
+  }
+}

@@ -46,7 +46,7 @@ Route::middleware('web')->group(function () {
                 Route::get('/{location?}', 'ListingController@index')->name('browse');
             });
             Route::get('geo', 'ListingController@geo')->name('geo');
-            Route::get('{listing}/view', 'ListingController@view')->name('view');
+            Route::get('{address?}/{listing}/view', 'ListingController@view')->name('view');
         });
     });
 });

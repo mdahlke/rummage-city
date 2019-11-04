@@ -19,10 +19,9 @@
 </template>
 
 <script>
-    import ListingsMap from '../components/Map/ListingsMap.vue';
+    import ListingsMap from '../components/listings/ListingsMap.vue';
 
-
-    import ListingsList from '../components/Map/ListingsList.vue';
+    import ListingsList from '../components/listings/ListingsList.vue';
     import {setPage, updateQueryStringParameter} from '../helpers';
     import '../../sass/component/listings.scss';
 
