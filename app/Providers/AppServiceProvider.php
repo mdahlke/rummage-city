@@ -9,8 +9,8 @@ use App\Observers\ListingObserver;
 use App\Observers\UserObserver;
 use App\User;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Url;
 
 class AppServiceProvider extends ServiceProvider {
     /**
@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     public function boot() {
         if (App::environment('production')) {
-            Url::forceScheme('https');
+            URL::forceScheme('https');
         }
         User::observe(UserObserver::class);
         Listing::observe(ListingObserver::class);
