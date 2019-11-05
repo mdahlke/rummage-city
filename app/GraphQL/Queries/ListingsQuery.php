@@ -3,6 +3,7 @@
 namespace App\GraphQL\Query;
 
 use App\Listing;
+use Carbon\Carbon;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -103,11 +104,21 @@ class ListingsQuery extends Query {
             }
         };
 
+        $select = $fields()->getSelect();
+
         $builder = Listing::query()
+            ->select($select)
+            // this allows ONLY still alive listings to appear.
+            // @TODO ask Mark for the correct way of doing this
+            ->selectRaw('(SELECT `start` FROM listing_dates WHERE listings.id = listing_dates.listing_id AND `end` >= "' . Carbon::now() . '"
+	ORDER BY `start` LIMIT 1 ) as sort')
             ->with(array_keys($fields()->getRelations()))
+            ->with(['activeDate' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
             ->where($where)
             ->whereHas('activeDate')
-            ->select($fields()->getSelect());
+            ->orderBy('sort');
 
         $page = ($args['page'] ?? 1);
 
@@ -115,7 +126,7 @@ class ListingsQuery extends Query {
             $limit = $args['limit'];
         } else {
             // set the limit high to get all listings
-            $limit = (int)PHP_INT_MAX;
+            $limit = (int)99999999;
             // set the page to zero so we get listings
             $page = 0;
         }

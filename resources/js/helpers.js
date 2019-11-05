@@ -61,3 +61,11 @@ export const axios_one = (config = {}, requestType = 'unnamed') => {
     config.cancelToken = call[requestType].token;
     return axios(config);
 }
+
+export const create_element_from_html = htmlString => {
+    let div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+
+    // Change this to div.childNodes to support multiple top-level nodes
+    return div.firstChild;
+}
