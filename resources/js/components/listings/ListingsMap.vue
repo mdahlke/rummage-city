@@ -159,21 +159,26 @@
                     ellipsisColor = '#35495e';
                     ellipsisStrokeColor = '#fff';
                 }
+                /**
+                 * @see https://editor.method.ac/
+                 */
+                let html = `
+                    <div class="marker">
+                        <svg width="39" height="40" xmlns="http://www.w3.org/2000/svg">
+                         <title>` + listing.title + `</title>
 
-                let html = `<div class="marker">
-<svg width="39" height="40" xmlns="http://www.w3.org/2000/svg">
- <title>` + listing.title + `</title>
-
- <g>
-  <title>background</title>
-  <rect fill="none" id="canvas_background" height="5.43643" width="5.35052" y="-1" x="-1"/>
- </g>
- <g>
-  <title>Layer 1</title>
-  <path stroke="` + strokeColor + `" stroke-width="1" id="svg_1" stroke-linecap="round" stroke-linejoin="round" d="m19.50242,39.5023c2.03471,-19.49403 9.19609,-16.47947 12.47161,-25.56621a12.61174,11.59174 0 1 0 -25.08335,-1.48118a12.40154,11.39853 0 0 0 0.14014,1.41678c1.8596,8.79571 10.93298,5.5876 12.4716,25.63061z" fill="` + color + `" stroke-miterlimit="10"/>
-  <ellipse transform="rotate(0.08227808773517609 19.500000000001684,10.655783653258416) " ry="4.93409" rx="5.20869" id="svg_2" cy="10.65578" cx="19.5" stroke-width="0.5" fill="` + ellipsisColor + `" stroke="` + ellipsisStrokeColor + `"/>
- </g>
-</svg></div>`;
+                         <g>
+                          <title>background</title>
+                          <rect fill="none" id="canvas_background" height="5.43643" width="5.35052" y="-1" x="-1"/>
+                         </g>
+                         <g>
+                          <title>Layer 1</title>
+                          <path stroke="` + strokeColor + `" stroke-width="1" id="svg_1" stroke-linecap="round" stroke-linejoin="round" d="m19.50242,39.5023c2.03471,-19.49403 9.19609,-16.47947 12.47161,-25.56621a12.61174,11.59174 0 1 0 -25.08335,-1.48118a12.40154,11.39853 0 0 0 0.14014,1.41678c1.8596,8.79571 10.93298,5.5876 12.4716,25.63061z" fill="` + color + `" stroke-miterlimit="10"/>
+                          <ellipse transform="rotate(0.08227808773517609 19.500000000001684,10.655783653258416) " ry="4.93409" rx="5.20869" id="svg_2" cy="10.65578" cx="19.5" stroke-width="0.5" fill="` + ellipsisColor + `" stroke="` + ellipsisStrokeColor + `"/>
+                         </g>
+                        </svg>
+                    </div>
+                `;
 
                 el = create_element_from_html(html);
 

@@ -1,0 +1,63 @@
+# This is a sample build configuration for PHP.
+# Check our guides at https://confluence.atlassian.com/x/e8YWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: php:7.2.1
+
+pipelines:
+  branches:
+    feature/*:
+      - step:
+          name: Deploy Feature Branch
+          caches:
+            - composer-vendor
+            - node-modules
+          script:
+            - apt-get update && apt-get install -y unzip ssh iputils-ping zip rsync git
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install
+            - composer test
+            #            - npm install --production
+            - echo 'Node modules installed'
+            - echo 'Tests passed. Beginning Deploy'
+            - bash ./deploy/deploy-feature.sh
+            - bash ./build-commit-info.sh
+    staging:
+      - step:
+          name: Deploy to staging
+          script:
+            - >
+              curl -d '{"push": {"changes":[{"new": {"name": "staging", "hash": "'$BITBUCKET_COMMIT'"}}]}}'
+              -H "Content-Type: application/json"
+              -X POST http://secured-site7.com/wisnetds/staging/deployment_pull.php
+    master:
+      #      - step:
+      #          name: Deploy to Testing
+      #          deployment: test
+      #          caches:
+      #            - composer
+      #          script:
+      #            - apt-get update && apt-get install -y unzip
+      #            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      #            - composer require monolog/monolog
+      #            - composer install
+      #            - composer test
+      #            - echo 'master deploy'
+
+      - step:
+          name: Deploy Production
+          caches:
+            - composer-vendor
+            - node-modules
+          script:
+            - apt-get update && apt-get install -y unzip ssh iputils-ping zip rsync git
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install
+            - bash ./deploy/deploy-production.sh
+
+definitions:
+  caches:
+    composer-vendor: vendor/
+    node-modules: node_modules/
+
