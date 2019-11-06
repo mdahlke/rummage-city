@@ -41,6 +41,7 @@ class ListingController extends Controller {
         $listings = [];
         $searchState = (object)[];
         $geocode = $request->get('geocode');
+        $query = $request->query('q');
 
         $searchState = (object)[
             'bounds' => (object)[
@@ -99,16 +100,16 @@ class ListingController extends Controller {
                     ->whereBetween('latitude', [$feature->getSouth(), $feature->getNorth()]);
             });
 
+            $query = $feature->place_name;
+
         }
 
         $builder->limit(100);
 
-
         $listings = $builder->get();
 
 
-
-
+        $data['query'] = $query;
         $data['listings'] = $listings->toArray();
         $data['searchState'] = $request->query('searchState', json_encode($searchState));
 

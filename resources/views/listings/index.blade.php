@@ -4,7 +4,7 @@
 
 @section('sub-nav')
     <section class="search-bar sub-nav">
-        <search-box route="{{ route('listings.browse') }}" query="{{ request('q') }}"></search-box>
+        <search-box route="{{ route('listings.browse') }}" query="{{ $query }}"></search-box>
     </section>
 @endsection
 
