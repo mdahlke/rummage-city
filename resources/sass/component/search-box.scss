@@ -1,0 +1,49 @@
+@import '../../sass/_colors.scss';
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+
+  &.filters {
+    justify-content: flex-end;
+  }
+
+  .search-input {
+    border-color: $tertiary;
+    border-right: 0;
+    min-width: 300px;
+
+    &:active,
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+
+  .input-group {
+    flex-wrap: nowrap;
+  }
+
+  #search-button {
+    border-color: $tertiary;
+    border-left: 0;
+  }
+
+  .search-filters {
+    margin-right: 30px;
+    margin-bottom: 0;
+
+    li {
+      padding: 7px 20px;
+      margin: 0 8px;
+      border: 1px solid $tertiary;
+      cursor: pointer;
+
+      i {
+        color: $tertiary;
+      }
+    }
+  }
+}

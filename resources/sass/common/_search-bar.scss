@@ -1,0 +1,23 @@
+@import "../colors";
+
+.search-bar {
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: $white;
+  border-bottom: 1px solid $tertiary;
+  z-index: 1;
+  min-height: 59px;
+
+  .search-box {
+
+    .search-form {
+      flex: 0 0 calc(33% - 20px);
+    }
+
+    .input-group {
+      width: 100%;
+    }
+  }
+}

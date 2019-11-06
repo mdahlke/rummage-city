@@ -2,10 +2,8 @@
 
 @section('title', 'Listings')
 
-{{--@include('listings.partials.scripts')--}}
-
-@section('main')
-{{--    <section class="listings-index">--}}
-{{--        <listings :listings="{{ @json_encode($listings->all()) }}" :search="{{ $searchState }}"/>--}}
-{{--    </section>--}}
+@section('sub-nav')
+    <section class="search-bar sub-nav">
+        <search-box route="{{ route('listings.browse') }}" query="{{ request('q') }}"></search-box>
+    </section>
 @endsection

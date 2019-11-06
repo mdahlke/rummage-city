@@ -1,7 +1,22 @@
 @import "../colors";
 
-.navbar {
-  background-color: $tertiary;
-  box-shadow: 0 0 11px -5px white;
-  z-index: 2;
+#main-navigation {
+  border-bottom: 1px solid $tertiary;
+
+  .navbar {
+    position: relative;
+    background-color: $white;
+    box-shadow: 0 0 11px -5px white;
+    z-index: 2;
+
+    .navbar-brand {
+      color: $tertiary;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link {
+      color: $tertiary;
+      font-size: 18px;
+    }
+  }
 }
