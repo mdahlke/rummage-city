@@ -8,6 +8,7 @@
     import mapbox_config from './mapbox.config.js';
     import moment from 'moment';
     import _ from 'lodash';
+    import geolocation from '../../geolocation';
     import {axios_one, create_element_from_html} from '../../helpers';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
@@ -67,6 +68,22 @@
             this.map.on('zoomend', this.update_map_listings);
 
             this.add_markers_to_map(this.$parent.visible_listings);
+
+
+            geolocation.get().then((r) => {
+                console.log(this.listings, this.mapMarkers)
+                if (!this.listings.length && this.mapMarkers.length) {
+                    this.center_map_on(r.lat, r.lng);
+                }
+                console.log(r);
+            });
+
+            geolocation.watch((r) => {
+
+                console.log(r);
+            });
+
+
         },
         methods: {
             update_map_listings() {
@@ -263,6 +280,9 @@
                         // handle error
                     }
                 });
+            },
+            center_map_on(lat, lng) {
+                this.map.setCenter([lat, lng]);
             },
             update_map() {
                 const latlng = {lon: this.$parent.lng, lat: this.$parent.lat};

@@ -32,6 +32,7 @@
 </template>
 <script>
     import mapbox_config from './../listings/mapbox.config.js';
+    import geolocation from '../../geolocation';
     import '../../../sass/component/listings-map.scss';
     import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
     import '../../../../node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';
@@ -137,10 +138,22 @@
 
             this.add_marker(this.lat, this.lng);
 
+            geolocation.get().then((r) => {
+                if (!this.latitude.length && !this.longitude.length) {
+                    let lat = r.coords.latitude;
+                    let lng = r.coords.longitude;
+                    this.center_map_on(lat, lng);
+                    this.update_lat_lng(lng, lat);
+                    this.marker.setLngLat([lng, lat]);
+                }
+            });
+
+            geolocation.watch((r) => {
+            });
+
         },
         methods: {
             add_marker(lat = null, lon = null) {
-                console.log({lat, lon});
 
                 if (!lat || !lon) {
                     return false;
@@ -205,9 +218,18 @@
                 this.lng = r.center[0];
                 this.marker.setLngLat([this.lng, this.lat]);
             },
-            update_lat_lng() {
-                const latlng = this.marker.getLngLat();
-                console.log(latlng);
+            center_map_on(lat, lng) {
+                this.map.setCenter([lng, lat]);
+            },
+            update_lat_lng(lng = false, lat = false) {
+                let latlng;
+                if (!lng || !lat) {
+                    console.warn('Both longitude AND latitude need to be passed to Geocde.update_lat_lng');
+                    latlng = this.marker.getLngLat();
+                } else {
+                    latlng = {lat, lng};
+                }
+
                 this.lat = latlng.lat;
                 this.lng = latlng.lng;
             }
