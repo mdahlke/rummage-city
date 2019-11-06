@@ -51,14 +51,14 @@ else
         ssh -t $user@$ip "unzip -oq /home/$user/deploy/${test_branch}-release.zip -d /home/$user/deploy/${test_branch}-release"
 
         echo -e "Create destination directory: ${destination}"
-        ssh -t $deployUser@$ip "sudo mkdir -p $destination && sudo chown -R $user:www-data $destination"
+        ssh -t $deployUser@$ip "sudo mkdir -p $destination && sudo chown -R www-data:www-data $destination"
         echo -e "Fix ownership"
-        ssh -t $deployUser@$ip "sudo chown -R $user:www-data $destination"
+        ssh -t $deployUser@$ip "sudo chown -R www-data:www-data $destination"
         echo -e "Copy deployment to production root"
         ssh -t $user@$ip "cp -r /home/$user/deploy/${test_branch}-release/. $destination/"
 
         echo -e "Fix ownership"
-        ssh -t $deployUser@$ip "sudo chown -R $user:www-data $destination"
+        ssh -t $deployUser@$ip "sudo chown -R www-data:www-data $destination"
 
         echo -e "Fix templates 'tmp' directory owner permissions"
         ssh -t $deployUser@$ip "sudo chown -R www-data:www-data $destination/public/tmp"
