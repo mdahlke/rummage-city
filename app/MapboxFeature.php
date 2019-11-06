@@ -61,22 +61,36 @@ use Jenssegers\Model\Model as OfflineModel;
  * @property string $matching_place_name;
  * @property array center;
  * @property array $geometry;
+ * @property array $bbox;
  * @property array $context;
  */
 class MapboxFeature extends OfflineModel {
 
-    protected $fillable = ['relevance', 'text', 'place_name', 'matching_text', 'matching_place_name', 'center', 'geometry', 'context'];
+    protected $fillable = ['relevance', 'text', 'place_name', 'matching_text', 'matching_place_name', 'center', 'geometry', 'context', 'bbox'];
 
     public function __construct(array $attributes = []) {
         parent::__construct($attributes);
     }
 
+    public function getWest(){
+        return (float)$this->bbox[0];
+    }
+    public function getEast(){
+        return (float)$this->bbox[2];
+    }
+    public function getNorth(){
+        return (float)$this->bbox[3];
+    }
+    public function getSouth(){
+        return (float)$this->bbox[1];
+    }
+
     public function getLng() {
-        return $this->center[0] ?? '';
+        return (float)$this->center[0] ?? '';
     }
 
     public function getLat() {
-        return $this->center[1] ?? '';
+        return (float)$this->center[1] ?? '';
     }
 
 }

@@ -96,10 +96,9 @@ class ListingsQuery extends Query {
                 $bounds = json_decode($args['bounds']);
                 $sw = $bounds->sw;
                 $ne = $bounds->ne;
-
                 $query->where(function ($q) use ($sw, $ne) {
-                    $q->whereBetween('latitude', [$sw->lat, $ne->lat])
-                        ->whereBetween('longitude', [$sw->lng, $ne->lng]);
+                    $q->whereBetween('longitude', [$sw->lng, $ne->lng])
+                        ->whereBetween('latitude', [$sw->lat, $ne->lat]);
                 });
             }
         };
@@ -119,6 +118,8 @@ class ListingsQuery extends Query {
             ->where($where)
             ->whereHas('activeDate')
             ->orderBy('sort');
+
+//        dd(sql_with_bindings($builder));
 
         $page = ($args['page'] ?? 1);
 

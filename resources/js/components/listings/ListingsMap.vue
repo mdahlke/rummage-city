@@ -46,7 +46,10 @@
                 this.visible_listings = this.listings;
             }
 
+            console.log(this.visible_listings, this.$parent.visible_listings);
+
             mapboxgl.accessToken = mapbox_config.accessToken;
+
             let config = {
                 container: 'listings__map',
                 style: mapbox_config.style,
@@ -71,16 +74,12 @@
 
 
             geolocation.get().then((r) => {
-                console.log(this.listings, this.mapMarkers)
                 if (!this.listings.length && this.mapMarkers.length) {
                     this.center_map_on(r.lat, r.lng);
                 }
-                console.log(r);
             });
 
             geolocation.watch((r) => {
-
-                console.log(r);
             });
 
 
@@ -113,26 +112,24 @@
                 let listing;
                 let popup;
                 let marker;
-                for (let i in listings) {
+
+                listings.forEach(listing => {
                     popup = null;
                     marker = null;
-                    if (listings.hasOwnProperty(i)) {
-                        listing = listings[i];
 
-                        if (listing.id) {
-                            this.listing_ids.push(listing.id);
-                            popup = this.create_popup(listing);
-                            marker = this.create_marker(listing, popup);
-                            (listing => {
-                                marker.getElement().addEventListener('click', () => {
-                                    this.$emit('view', listing);
-                                });
-                            })(listing);
+                    if (listing.id) {
+                        this.listing_ids.push(listing.id);
+                        popup = this.create_popup(listing);
+                        marker = this.create_marker(listing, popup);
+                        (listing => {
+                            marker.getElement().addEventListener('click', () => {
+                                this.$emit('view', listing);
+                            });
+                        })(listing);
 
-                            this.add_marker(listing, marker, popup);
-                        }
+                        this.add_marker(listing, marker, popup);
                     }
-                }
+                });
             },
             add_marker(listing, marker, popup) {
                 if (popup) {
@@ -153,18 +150,9 @@
                     return false;
                 }
 
-
-                let el = document.createElement('div');
-                el.className = 'marker';
-                el.style.backgroundImage = 'url(https://placekitten.com/g/30/30/)';
-                el.style.width = '30px';
-                el.style.height = '30px';
-
+                let el;
                 let ldate = new moment(listing.active_date[0].start);
-                let duration = moment.duration(ldate.diff(moment()))
-
-                console.log(duration.as('days'));
-
+                let duration = moment.duration(ldate.diff(moment()));
                 let color = '#35495e';
                 let strokeColor = '#eaeaea';
                 let ellipsisColor = '#fff';
@@ -199,18 +187,14 @@
 
                 el = create_element_from_html(html);
 
-                let marker = new mapboxgl.Marker(el)
-                    .setLngLat({lon: coords.lng, lat: coords.lat});
-
-                return marker;
+                return new mapboxgl.Marker(el).setLngLat({lon: coords.lng, lat: coords.lat});
             },
             add_popup(listing) {
-                const popup =
-                    new mapboxgl.Popup({className: 'listing__popup'})
-                        .setLngLat(mapbox_latlng(listing))
-                        .setHTML("<h1>" + listing.title + "</h1>")
-                        .setMaxWidth("300px")
-                        .addTo(this.map);
+                const popup = new mapboxgl.Popup({className: 'listing__popup'})
+                    .setLngLat(mapbox_latlng(listing))
+                    .setHTML("<h1>" + listing.title + "</h1>")
+                    .setMaxWidth("300px")
+                    .addTo(this.map);
             },
             create_popup(listing) {
                 let images = _.template(require('./popup_images.html'));

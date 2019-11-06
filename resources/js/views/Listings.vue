@@ -2,6 +2,7 @@
     <div id="listings">
 
         <listings-map ref="listingsMap"
+                      :listings="visible_listings"
                       @view="view"
                       @update_visible="update_visible"
                       @update_url="update_url"
@@ -96,6 +97,7 @@
             // call again the method if the route changes
         },
         created() {
+            console.log(this.listings);
             if (this.listings) {
                 this.visible_listings = this.listings;
             } else {

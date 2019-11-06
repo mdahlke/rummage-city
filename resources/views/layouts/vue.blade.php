@@ -7,9 +7,7 @@
 <div id="app">
     @include('common/main-navigation')
     @yield('sub-nav')
-    <router-view>
-        @yield('main')
-    </router-view>
+    @yield('main')
     @include('common/footer')
 </div>
 

@@ -11,6 +11,7 @@ const router = new VueRouter({
             path: '/listings',
             name: 'listings',
             component: Listings,
+            props: {listings: []},
             children: [
                 // Here we specify that the `ProductImagePopup`
                 // component should be rendered as a nested

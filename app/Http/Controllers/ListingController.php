@@ -15,6 +15,7 @@ use App\Http\Services\MapboxService;
 use App\Listing;
 use App\ListingDate;
 use App\ListingImage;
+use App\MapboxFeature;
 use App\Providers\MapboxProvider;
 use App\User;
 use Exception;
@@ -61,24 +62,54 @@ class ListingController extends Controller {
         if ($geocode) {
             $searchState->bounds->lat = $geocode->getCenter()[1];
             $searchState->bounds->lng = $geocode->getCenter()[0];
+            /** @var MapboxFeature $feature */
+            $feature = $geocode->features[0];
 
             $searchState->zoom = 12;
 
-            $builder->where(function ($q) use ($location) {
-                /** @var Builder $q */
-                $q->orWhere('street_name', 'LIKE', $location)
-                    ->orWhere('address', 'LIKE', $location)
-                    ->orWhere('city', 'LIKE', $location)
-                    ->orWhere('state', 'LIKE', $location)
-                    ->orWhere('postcode', 'LIKE', $location);
+//            dd($geocode, $geocode->getBoundingBox());
+
+//            $builder->where(function ($q) use ($location, $feature) {
+//                $city = $feature->text;
+//                $context = $feature->context;
+//                $state = "";
+//
+//                dd($feature);
+//
+//                foreach ($context as $c) {
+//                    if (strpos($c->id, 'region.') && isset($c->short_code)) {
+//                        $state = end(explode('-', $c->short_code));
+//                        break;
+//                    }
+//                }
+//                /** @var Builder $q */
+//                $q->orWhere('street_name', 'LIKE', $city)
+//                    ->orWhere('address', 'LIKE', $location)
+//                    ->orWhere('city', 'LIKE', '%' . $city . '%')
+//                    ->orWhere('postcode', 'LIKE', $location);
+//
+//                if ($state) {
+//                    $q->orWhere('state', 'LIKE', '%' . $state . '%');
+//                }
+//            });
+
+//            dd([$feature->getWest(), $feature->getEast()]);
+            $builder->where(function ($q) use ($feature) {
+                $q->whereBetween('longitude', [$feature->getWest(), $feature->getEast()])
+                    ->whereBetween('latitude', [$feature->getSouth(), $feature->getNorth()]);
             });
 
-//            dd($geocode, $searchState, json_encode($searchState));
         }
 
-        $listings = $builder->paginate(100);
+        $builder->limit(100);
 
-        $data['listings'] = $listings;
+
+        $listings = $builder->get();
+
+
+
+
+        $data['listings'] = $listings->toArray();
         $data['searchState'] = $request->query('searchState', json_encode($searchState));
 
         return view('listings.index', $data);

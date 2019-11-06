@@ -67,6 +67,12 @@ function valid_postal_code($value, $country = null) {
     return $valid;
 }
 
+/**
+ * @param \Illuminate\Database\Eloquent\Builder $builder
+ * @return string
+ */
 function sql_with_bindings(\Illuminate\Database\Eloquent\Builder $builder) {
-    return str_replace_array('?', $builder->getBindings(), $builder->toSql());
+    return str_replace_array('?', array_map(function ($item) {
+        return (is_string($item) && !($item instanceof \Carbon\Factory)) ? '"' . $item . '"' : $item;
+    }, $builder->getBindings()), $builder->toSql());
 }
