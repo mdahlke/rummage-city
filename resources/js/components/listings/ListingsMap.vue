@@ -46,8 +46,6 @@
                 this.visible_listings = this.listings;
             }
 
-            console.log(this.visible_listings, this.$parent.visible_listings);
-
             mapboxgl.accessToken = mapbox_config.accessToken;
 
             let config = {
@@ -88,6 +86,8 @@
             update_map_listings() {
                 let bounds = this.map.getBounds();
 
+                this.$emit('set_fetching', true);
+
                 this.get_listings_in_bounds(bounds).then((results) => {
                     const listings = results.data.data.listings.data;
                     this.visible_listings = listings;
@@ -104,6 +104,8 @@
                     });
 
                     this.add_markers_to_map(listings);
+
+                    this.$emit('set_fetching', false);
 
                 });
                 return this;

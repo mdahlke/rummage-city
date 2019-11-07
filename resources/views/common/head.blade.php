@@ -4,7 +4,7 @@
 
 <title>@yield('title') | Rummage City</title>
 
-<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" href="/favicon.png"/>
 
 <link rel="manifest" href="/manifest.webmanifest">
 <!-- Fonts -->
@@ -13,7 +13,6 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('css/fontawesome.css') }}">
-
 
 
 <!-- Styles -->
@@ -73,5 +72,8 @@
 <script type="text/javascript">
     window.csrf_token = "{{ csrf_token() }}"
 </script>
+
+{{-- Vue DevTools --}}
+{!! \App::environment('local') ?  '<script src="http://localhost:8098"></script>' : '' !!}
 
 @stack('head')

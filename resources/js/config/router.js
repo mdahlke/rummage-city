@@ -28,7 +28,6 @@ const router = new VueRouter({
             name: 'listings.location',
             component: Listings
         },
-
     ]
 });
 

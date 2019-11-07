@@ -7,7 +7,9 @@
                       @update_visible="update_visible"
                       @update_url="update_url"
                       @set_active_listing="set_active_listing"
-                      @scroll_to_active="scroll_to_active"></listings-map>
+                      @scroll_to_active="scroll_to_active"
+                      @set_fetching="set_fetching"
+        ></listings-map>
 
         <aside id="listings__sidebar">
             <listings-list @update_url
@@ -55,6 +57,7 @@
                 searchState: {},
                 active_listing: {},
                 viewing: false,
+                fetching: false,
             };
         },
         props: {
@@ -113,20 +116,29 @@
             } else {
                 searchState = this.$store.state.search;
             }
-
             this.map_data(searchState);
         },
         mounted() {
-
+            if (!this.visible_listings.length) {
+                // when the component is mounted then we will be fetching data
+                this.fetching = true;
+                this.fetch_data();
+            }
         },
         methods: {
+            set_fetching(is = true) {
+                this.fetching = is;
+            },
             fetch_data() {
+                this.fetching = true;
                 const searchState = this.$store.state.search;
 
                 this.map_data(searchState);
 
                 this.$refs.listingsMap.update_map()
                     .update_map_listings();
+
+                this.fetching = false;
             },
             map_data(searchState) {
                 if (searchState.bounds && searchState.bounds.lat && searchState.bounds.lng) {

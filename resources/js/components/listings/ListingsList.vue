@@ -1,6 +1,8 @@
 <template>
     <section id="listings__list" class="listings-list">
-        <template v-if="$parent.visible_listings.length">
+        <template v-if="$parent.visible_listings.length || $parent.fetching">
+
+            <div class="listings__fetching" v-if="$parent.fetching"><i class="fas fa-spinner fa-spin"></i></div>
 
             <section v-for="(listing, index) in $parent.visible_listings"
                      :id="'listing-'+ listing.id"
@@ -52,8 +54,11 @@
                 </div>
             </section>
         </template>
+        <template v-else-if="$parent.fetching">
+            <div class="fetching"><i class="fas fa-spinner fa-spin"></i></div>
+        </template>
         <template v-else>
-            <section>
+            <section class="p-2">
                 There are no listings in this area.
             </section>
         </template>
