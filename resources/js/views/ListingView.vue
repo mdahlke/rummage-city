@@ -15,7 +15,6 @@
                             <div class="listing__main-content">
                                 <listing-images :images="sale.image"></listing-images>
 
-
                                 <header>
                                     <h4>{{ sale.title }}</h4>
                                 </header>
@@ -23,13 +22,13 @@
                                 <section class="listing__actions">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <span class="cursor-pointer" v-if="sale.isSaved"
+                                            <a class="cursor-pointer" v-if="is_saved"
                                                   @click="remove_saved(sale)">
                                                 <i class="fas fa-heart"></i> Saved
-                                            </span>
-                                            <span class="cursor-pointer" v-else @click="save(sale)">
+                                            </a>
+                                            <a class="cursor-pointer" v-else @click="save(sale)">
                                                 <i class="far fa-heart"> Save</i>
-                                            </span>
+                                            </a>
                                         </li>
                                     </ul>
                                 </section>
@@ -37,7 +36,6 @@
                                 <section class="listing__description">
                                     {{ sale.description }}
                                 </section>
-
 
                             </div>
                         </section>
@@ -72,9 +70,15 @@
             listing: Object,
         },
         created() {
-            console.log('the listing', this.listing);
+            console.log('the listing', this.listing, this.$store);
+            const preloaded = this.$store.getters.getListingById(this.$route.params.id);
+
             if (this.listing) {
                 this.l = this.listing;
+            } else if (preloaded) {
+                this.loading = false;
+                this.l = preloaded;
+                this.fetch_data();
             } else {
                 this.fetch_data();
             }
@@ -87,9 +91,11 @@
         },
         computed: {
             sale: function () {
-                console.log(this.l);
                 return this.l;
-                return this.$store.state.listing;
+            },
+            is_saved() {
+                const saved = this.l.isSaved;
+                return saved == "false" ? false : true;
             }
         },
         methods: {
@@ -133,14 +139,14 @@
                 });
             },
             save(listing) {
-                if (!listing.isSaved) {
+                if (!this.is_saved) {
                     axios.post(listing.saveUrl).then(function (e) {
                         listing.isSaved = true;
                     });
                 }
             },
             remove_saved(listing) {
-                if (listing.isSaved) {
+                if (this.is_saved) {
                     axios.post(listing.removeSavedUrl).then((e) => {
                         listing.isSaved = false;
                     });

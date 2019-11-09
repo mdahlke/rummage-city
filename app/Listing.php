@@ -122,7 +122,7 @@ class Listing extends Model {
      * @return bool
      */
     public function isSaved(): bool {
-        return $this->isSaved;
+        return (bool) $this->isSaved;
     }
 
     /**

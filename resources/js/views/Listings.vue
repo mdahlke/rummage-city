@@ -9,6 +9,7 @@
                       @set_active_listing="set_active_listing"
                       @scroll_to_active="scroll_to_active"
                       @set_fetching="set_fetching"
+                      @preload="preload"
         ></listings-map>
 
         <aside id="listings__sidebar">
@@ -226,6 +227,40 @@
             },
             zoom_to_on_map(listing) {
                 this.$refs.listingsMap.zoom_to(listing);
+            },
+            preload(listing) {
+                // axios({
+                //     url: 'graphql',
+                //     type: 'get',
+                //     params: {
+                //         query: `
+				// 			query FetchListing {
+				// 			  listings(id: "` + listing.id + `") {
+				// 			    data {
+				// 			      id
+				// 			      title
+				// 			      address
+				// 			      latitude
+				// 			      longitude
+				// 			      isSaved
+				// 			      saveUrl
+				// 			      removeSavedUrl
+				// 			      active_date {
+				// 			        start
+				// 			        end
+				// 			      }
+				// 			      image {
+				// 			        name
+				// 			        url
+				// 			      }
+				// 			    }
+				// 			  }
+				// 			}
+				// 	`
+                //     }
+                // }).then(response => {
+                //     this.$store.commit('preloaded_listing', response.data.data.listings[0]);
+                // });
             }
         }
     };

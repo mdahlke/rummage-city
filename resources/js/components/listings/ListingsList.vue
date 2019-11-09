@@ -13,7 +13,8 @@
 
                     <div class="listing__main-info"
                          :class="{ 'has-image': listing.image.length}"
-                         @click="$emit('view',listing)">
+                         @click="$emit('view',listing)"
+                    >
                         <div class="listing__featured-image" v-if="listing.image.length">
                             <div class="featured-image__blur"
                                  :style="'background-image: url('+listing.image[0].url+')'"></div>
@@ -34,7 +35,7 @@
                         <div class="listing__actions">
                             <ul class="list-inline">
                                 <li class="list-inline-item listing__action">
-                                    <span class="cursor-pointer" v-if="listing.isSaved"
+                                    <span class="cursor-pointer" v-if="is_saved(listing)"
                                           @click="remove_saved(listing)">
                                             <i class="fas fa-heart"></i> Saved</span>
                                     <span class="cursor-pointer" v-else @click="save(listing)">
@@ -75,16 +76,21 @@
         },
         mounted() {
         },
+        computed: {},
         methods: {
+            is_saved(listing) {
+                const saved = listing.isSaved;
+                return saved == "false" ? false : true;
+            },
             save(listing) {
-                if (!listing.isSaved) {
+                if (!this.is_saved(listing)) {
                     axios.post(listing.saveUrl).then(function (e) {
                         listing.isSaved = true;
                     });
                 }
             },
             remove_saved(listing) {
-                if (listing.isSaved) {
+                if (this.is_saved(listing)) {
                     axios.post(listing.removeSavedUrl).then((e) => {
                         listing.isSaved = false;
                     });

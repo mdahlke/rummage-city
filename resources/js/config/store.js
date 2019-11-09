@@ -11,7 +11,7 @@ const store = new Vuex.Store({
         search: {},
     },
     getters: {
-        getListingById: (store) => (id) => {
+        getListingById: (state) => (id) => {
             return state.listings.find(listing => listing.id === id);
         },
         savedListings: store => {

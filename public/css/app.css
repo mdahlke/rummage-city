@@ -11148,6 +11148,10 @@ a.text-dark:focus {
   cursor: pointer !important;
 }
 
+a {
+  cursor: pointer;
+}
+
 #main-navigation {
   border-bottom: 1px solid #35495e;
 }

@@ -83,6 +83,10 @@
 
         },
         methods: {
+            is_saved(listing) {
+                const saved = listing.isSaved;
+                return saved == "false" ? false : true;
+            },
             update_map_listings() {
                 let bounds = this.map.getBounds();
 
@@ -123,11 +127,17 @@
                         this.listing_ids.push(listing.id);
                         popup = this.create_popup(listing);
                         marker = this.create_marker(listing, popup);
-                        (listing => {
+                        ((listing, marker) => {
                             marker.getElement().addEventListener('click', () => {
                                 this.$emit('view', listing);
                             });
-                        })(listing);
+
+                            marker.getElement().addEventListener('mouseenter', () => {
+                                this.close_all_popups();
+                                marker.togglePopup();
+                                this.$emit('preload', listing);
+                            });
+                        })(listing, marker);
 
                         this.add_marker(listing, marker, popup);
                     }
@@ -166,6 +176,12 @@
                     ellipsisColor = '#35495e';
                     ellipsisStrokeColor = '#fff';
                 }
+                if (this.is_saved(listing)) {
+                    color = '#ff444e';
+                    ellipsisColor = '#ff444e';
+                    ellipsisStrokeColor = '#ff444e';
+                    // ellipsisColor = '#fff';
+                }
                 /**
                  * @see https://editor.method.ac/
                  */
@@ -199,21 +215,35 @@
                     .addTo(this.map);
             },
             create_popup(listing) {
-                let images = _.template(require('./popup_images.html'));
-                const imagesHtml = images({listing});
-                const popup = new mapboxgl.Popup({className: 'listing__popup'})
+                // let images = _.template(require('./popup_images.html'));
+                // const imagesHtml = images({listing});
+                let markerHeight = 20, markerRadius = 10, linearOffset = 25;
+                let popupOffsets = {
+                    'top': [0, 0],
+                    'top-left': [0, 0],
+                    'top-right': [0, 0],
+                    'bottom': [0, -markerHeight],
+                    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                }
+                const popup = new mapboxgl.Popup({
+                    className: 'listing__popup',
+                    offset: popupOffsets,
+                })
                     .setHTML(`<strong>` + listing.title + ` </strong>`)
                     .setMaxWidth("300px");
 
                 popup.on('open', (e, d) => {
-                    this.$emit('set_active_listing', listing);
+                    // this.$emit('set_active_listing', listing);
                     this.active_listing_id = listing.id;
                 });
                 popup.on('close', (e, d) => {
                     // we only send the update event if the listing id matches the active_listing_id
                     // this allows other markers to be clicked without this event firing
                     if (listing.id === this.active_listing_id) {
-                        this.$emit('set_active_listing', {});
+                        // this.$emit('set_active_listing', {});
                     }
                 });
 
@@ -240,6 +270,7 @@
 							    data {
 							      id
 							      title
+							      description
 							      address
 							      latitude
 							      longitude
@@ -292,6 +323,15 @@
                                 center: popup.popup._lngLat
                             });
                         }
+                    }
+                }
+            },
+            close_all_popups() {
+                let marker;
+                for (let i in this.markers) {
+                    if (this.markers.hasOwnProperty(i)) {
+                        marker = this.markers[i].marker;
+                        marker.getPopup().remove()
                     }
                 }
             },
