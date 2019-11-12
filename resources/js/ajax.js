@@ -121,8 +121,6 @@ const parseAjaxResponse = function (response) {
 					});
 				}
 
-				console.log({html, target, placement});
-
 				viewMutation(html, target, placement);
 			}
 		} else {

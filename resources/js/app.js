@@ -66,7 +66,7 @@ import router from './config/router';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import store from './config/store';
+import store from './config/store/store';
 
 const app = new Vue({
     el: '#app',
@@ -74,8 +74,8 @@ const app = new Vue({
     store,
     router,
     beforeCreate() {
-        this.$store.commit('initialiseStore');
-    }
+        this.$store.commit('initialise_store');
+    },
 }).$mount('#app');
 
 

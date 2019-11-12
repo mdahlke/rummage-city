@@ -46,7 +46,6 @@
         created() {
         },
         mounted() {
-            console.log(this.images);
         },
         computed: {},
         methods: {

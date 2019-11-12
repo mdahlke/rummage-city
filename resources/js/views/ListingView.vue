@@ -1,5 +1,5 @@
 <template>
-    <section id="listing-popup-view">
+    <section id="listing-popup-view" :key="'listing-view-' + sale.id ">
         <article class="listing-wrap">
 
             <a @click="$router.go(-1)" class="cursor-pointer"><i class="far fa-map"></i> Back to map</a>
@@ -22,11 +22,11 @@
                                 <section class="listing__actions">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a class="cursor-pointer" v-if="is_saved"
-                                                  @click="remove_saved(sale)">
+                                            <a class="cursor-pointer" v-if="is_saved(sale.isSaved)"
+                                               @click="remove_saved_listing(sale)">
                                                 <i class="fas fa-heart"></i> Saved
                                             </a>
-                                            <a class="cursor-pointer" v-else @click="save(sale)">
+                                            <a class="cursor-pointer" v-else @click="save_listing(sale)">
                                                 <i class="far fa-heart"> Save</i>
                                             </a>
                                         </li>
@@ -56,49 +56,45 @@
     import axios from 'axios';
     import ListingImages from '../components/listings/ListingImages';
     import '../../sass/component/listings-popup-view.scss';
+    import {listing_mixin} from "../components/listings/shared";
+    import {is_true} from '../helpers';
 
     export default {
         name: 'ListingView',
         components: {ListingImages},
+        mixins: [listing_mixin],
         data() {
             return {
                 loading: true,
-                l: false
+                sale: false,
             };
         },
         props: {
             listing: Object,
         },
-        created() {
-            console.log('the listing', this.listing, this.$store);
-            const preloaded = this.$store.getters.getListingById(this.$route.params.id);
-
-            if (this.listing) {
-                this.l = this.listing;
-            } else if (preloaded) {
-                this.loading = false;
-                this.l = preloaded;
-                this.fetch_data();
-            } else {
-                this.fetch_data();
-            }
-        },
         watch: {
             // call again the method if the route changes
             '$route': 'fetchData'
         },
-        mounted() {
-        },
-        computed: {
-            sale: function () {
-                return this.l;
-            },
-            is_saved() {
-                const saved = this.l.isSaved;
-                return saved == "false" ? false : true;
+        created() {
+            const preloaded = this.$store.getters.get_listing_by_id(this.$route.params.id);
+
+            if (this.listing) {
+                this.sale = this.listing;
+            } else if (preloaded) {
+                this.loading = false;
+                this.sale = preloaded;
+                this.fetch_data();
+            } else {
+                this.fetch_data();
             }
+
+            this.$store.commit('set_listing', this.sale);
         },
         methods: {
+            is_saved(val) {
+                return is_true(val);
+            },
             fetch_data() {
                 const id = this.$route.params.id;
 
@@ -133,25 +129,11 @@
                         `
                     },
                 }).then((results) => {
-                    this.l = results.data.data.listings.data[0];
-                    this.$store.commit('listing', this.l);
+                    this.sale = results.data.data.listings.data[0];
+                    this.$store.commit('set_listing', this.sale);
                     this.loading = false;
                 });
             },
-            save(listing) {
-                if (!this.is_saved) {
-                    axios.post(listing.saveUrl).then(function (e) {
-                        listing.isSaved = true;
-                    });
-                }
-            },
-            remove_saved(listing) {
-                if (this.is_saved) {
-                    axios.post(listing.removeSavedUrl).then((e) => {
-                        listing.isSaved = false;
-                    });
-                }
-            }
         }
     };
 

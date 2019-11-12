@@ -38,7 +38,6 @@ export function setPage(url, title, state) {
     let data = _.extend({
         pageTitle: title
     }, state);
-    console.log({data, state});
     window.history.pushState(data, title, url);
 }
 
@@ -60,7 +59,7 @@ export const axios_one = (config = {}, requestType = 'unnamed') => {
     call[requestType] = axios.CancelToken.source();
     config.cancelToken = call[requestType].token;
     return axios(config);
-}
+};
 
 export const create_element_from_html = htmlString => {
     let div = document.createElement('div');
@@ -68,4 +67,12 @@ export const create_element_from_html = htmlString => {
 
     // Change this to div.childNodes to support multiple top-level nodes
     return div.firstChild;
-}
+};
+
+export const is_true = val => {
+    return (val == 'true' || val === true);
+};
+
+export const is_false = val => {
+    return !is_true(val);
+};

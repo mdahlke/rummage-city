@@ -1,8 +1,12 @@
 @import '../colors';
 @import '../variables';
 
+
 #listings__map {
 
+.mapbox {
+  height: 100%;
+}
   .listing__popup {
     max-height: 300px;
 

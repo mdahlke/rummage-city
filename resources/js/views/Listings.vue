@@ -2,20 +2,17 @@
     <div id="listings">
 
         <listings-map ref="listingsMap"
-                      :listings="visible_listings"
-                      @view="view"
-                      @update_visible="update_visible"
+                      @update_listings="update_listings"
                       @update_url="update_url"
                       @set_active_listing="set_active_listing"
                       @scroll_to_active="scroll_to_active"
                       @set_fetching="set_fetching"
-                      @preload="preload"
         ></listings-map>
 
         <aside id="listings__sidebar">
-            <listings-list @update_url
-                           @view="view"
-                           @set_active_listing="set_active_listing">
+            <listings-list
+                    @update_url
+                    @set_active_listing="set_active_listing">
             </listings-list>
         </aside>
 
@@ -29,16 +26,16 @@
 
     import ListingsList from '../components/listings/ListingsList.vue';
     import {setPage, updateQueryStringParameter} from '../helpers';
-    import slugify from 'slugify';
     import '../../sass/component/listings.scss';
+    import {mapState} from 'vuex';
 
     const VueScrollTo = require('vue-scrollto');
 
     export default {
         name: 'Listings',
         components: {
-            'listings-list': ListingsList,
-            'listings-map': ListingsMap
+            ListingsList,
+            ListingsMap
         },
         data() {
             return {
@@ -101,11 +98,8 @@
             // call again the method if the route changes
         },
         created() {
-            console.log(this.listings);
             if (this.listings) {
-                this.visible_listings = this.listings;
-            } else {
-                this.visible_listings = this.$store.state.listings;
+                this.$store.commit('listings', this.listings);
             }
 
             let searchState = false;
@@ -120,11 +114,18 @@
             this.map_data(searchState);
         },
         mounted() {
-            if (!this.visible_listings.length) {
+            if (!this._listings.length) {
                 // when the component is mounted then we will be fetching data
                 this.fetching = true;
                 this.fetch_data();
             }
+        },
+        computed: {
+            localComputed() {
+            },
+            ...mapState({
+                _listings: 'listings',
+            })
         },
         methods: {
             set_fetching(is = true) {
@@ -159,17 +160,7 @@
                     this.bearing = searchState.bearing;
                 }
             },
-            view(listing) {
-                this.$router.push({
-                    name: 'listing.view',
-                    params: {
-                        id: listing.id,
-                        address: slugify(listing.address)
-                    }
-                })
-            },
-            update_visible(listings) {
-                this.visible_listings = listings;
+            update_listings(listings) {
                 this.$store.commit('listings', listings);
 
                 this.scroll_to_active(0);
@@ -203,9 +194,6 @@
                         query: searchState
                     });
                 }
-
-                // setPage(url, 'Listings', update);
-
             },
             set_active_listing(listing) {
                 this.active_listing = listing;
@@ -227,40 +215,6 @@
             },
             zoom_to_on_map(listing) {
                 this.$refs.listingsMap.zoom_to(listing);
-            },
-            preload(listing) {
-                // axios({
-                //     url: 'graphql',
-                //     type: 'get',
-                //     params: {
-                //         query: `
-				// 			query FetchListing {
-				// 			  listings(id: "` + listing.id + `") {
-				// 			    data {
-				// 			      id
-				// 			      title
-				// 			      address
-				// 			      latitude
-				// 			      longitude
-				// 			      isSaved
-				// 			      saveUrl
-				// 			      removeSavedUrl
-				// 			      active_date {
-				// 			        start
-				// 			        end
-				// 			      }
-				// 			      image {
-				// 			        name
-				// 			        url
-				// 			      }
-				// 			    }
-				// 			  }
-				// 			}
-				// 	`
-                //     }
-                // }).then(response => {
-                //     this.$store.commit('preloaded_listing', response.data.data.listings[0]);
-                // });
             }
         }
     };
