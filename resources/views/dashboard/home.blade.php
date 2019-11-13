@@ -13,7 +13,7 @@
                 </div>
             @endif
 
-            You are logged in!
+            Welcome back {{ \Auth::user()->name }}!
         </div>
     </div>
 
@@ -21,7 +21,7 @@
         <div class="card-header">Your Listings</div>
 
         <div class="card-body">
-            @foreach(Auth::user()->listing as $listing)
+            @foreach($activeListings as $listing)
                 <a href="{{ route('user.listing.edit', ['listing' => $listing->id]) }}">
                     <h3><i class="fad fa-{{ $listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $listing->title }}
                     </h3>
@@ -34,7 +34,7 @@
         <div class="card-header">Saved Listings</div>
 
         <div class="card-body">
-            @foreach(Auth::user()->savedListing as $saved)
+            @foreach($savedListings as $saved)
                 <a href="{{ route('listings.view', ['listing' => $saved->listing->id]) }}">
                     <h3>
                         <i class="fad fa-{{ $saved->listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $saved->listing->title }}

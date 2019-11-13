@@ -60,6 +60,10 @@ class Listing extends Model {
         return $this->belongsTo(User::class);
     }
 
+    public function savedListing() {
+        return $this->belongsTo(SavedListing::class);
+    }
+
     public function date() {
         return $this->hasMany(ListingDate::class)->orderBy('start');
     }
@@ -122,7 +126,7 @@ class Listing extends Model {
      * @return bool
      */
     public function isSaved(): bool {
-        return (bool) $this->isSaved;
+        return (bool)$this->isSaved;
     }
 
     /**

@@ -11150,6 +11150,8 @@ a.text-dark:focus {
 
 a {
   cursor: pointer;
+  color: #35495e;
+  font-weight: 400;
 }
 
 #main-navigation {
@@ -11192,11 +11194,57 @@ a {
   width: 100%;
 }
 
+#account-area main {
+  padding: 30px 60px;
+}
+
+@media (min-width: 768px) {
+  #account-area main {
+    padding: 60px 120px;
+  }
+}
+
 #dashboard-navigation {
-  padding: 20px;
-  background-color: #333;
-  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  padding: 20px 0;
+  border-right: 1px solid #35495e;
   height: 100%;
+  min-height: calc(100vh - 59px);
+}
+
+#dashboard-navigation .nav-links .list-group {
+  text-align: left;
+}
+
+#dashboard-navigation .nav-links .list-group .list-group-item {
+  background-color: transparent;
+}
+
+#dashboard-navigation .nav-links .list-group i {
+  padding-right: 10px;
+}
+
+@media (max-width: 767.98px) {
+  #dashboard-navigation .nav-links .list-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: none;
+  }
+
+  #dashboard-navigation .nav-links .list-group .list-group-item {
+    margin: 0 10px 10px 0;
+  }
+}
+
+.card {
+  margin-bottom: 60px;
+}
+
+.card-header {
+  background-color: #35495e;
+  color: #ffffff;
 }
 
 

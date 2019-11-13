@@ -19,6 +19,11 @@ class UserController {
         // parent::__construct();
     }
 
+    public function settings(Request $request) {
+
+        return view('user.settings');
+    }
+
     public function saveListing(Request $request, \App\User $user, \App\Listing $listing) {
         $user->savedListing()->create([
             'listing_id' => $listing->id,

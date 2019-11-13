@@ -12,7 +12,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('listings.browse') }}"
                            role="button"
-                           aria-expanded="false" v-pre>Listings</a>
+                           aria-expanded="false">Browse Sales</a>
                     </li>
 
                 </ul>

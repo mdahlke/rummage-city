@@ -93,8 +93,12 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var CACHE_NAME = 'rc-cache-v1';
-var urlsToCache = ['/listings', '/css/app.css', '/css/fontawesome.css', '/js/app.js'];
+var CACHE_NAME = 'rc-cache-v2';
+var urlsToCache = [// '/listings',
+  // '/css/app.css',
+  // '/css/fontawesome.css',
+  // '/js/app.js',
+];
 self.addEventListener('install', function (event) {
   // Perform install steps
   event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {

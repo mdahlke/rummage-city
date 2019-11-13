@@ -1,3 +1,7 @@
+@import 'colors';
+
 a {
   cursor: pointer;
+  color: $tertiary;
+  font-weight: 400;
 }

@@ -24,6 +24,8 @@ class SavedListing extends Model {
 
     public function listing() {
         return $this->hasOne(Listing::class, 'id', 'listing_id');
+//            ->with('listing')
+//            ->whereHas('activeDate');
     }
 
     public function user() {

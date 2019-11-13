@@ -55,6 +55,11 @@ class User extends Authenticatable {
         return $this->hasMany(Listing::class, 'user_id', 'id');
     }
 
+    public function activeListing(): HasMany {
+        return $this->listing()
+            ->whereHas('activeDate');
+    }
+
     public function savedListing(): HasMany {
         return $this->hasMany(SavedListing::class);
     }

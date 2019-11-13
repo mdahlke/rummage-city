@@ -31,8 +31,11 @@ Route::middleware(['auth', 'web'])->group(function () {
             });
 //        Route::get('listing-image/{image}/remove', 'ListingImageController@remove')->name('listings.image.remove');
         });
-    });
 
+        Route::name('user.')->group(function () {
+            Route::get('settings', 'UserController@settings')->name('settings');
+        });
+    });
 });
 
 Route::middleware('web')->group(function () {
