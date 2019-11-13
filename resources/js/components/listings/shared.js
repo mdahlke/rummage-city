@@ -1,11 +1,11 @@
 import slugify from 'slugify';
-import {is_true} from "../../helpers";
+import {isTrue} from "../../helpers";
 
 export const listing_mixin = {
     methods: {
-        is_saved: (listing) => {
+        isSaved: (listing) => {
             const saved = listing.isSaved;
-            return is_true(saved);
+            return isTrue(saved);
         },
         view_listing: function (listing) {
             this.$router.push({
@@ -17,7 +17,7 @@ export const listing_mixin = {
             })
         },
         save_listing(listing) {
-            if (!is_true(listing.isSaved)) {
+            if (!isTrue(listing.isSaved)) {
                 axios.post(listing.saveUrl).then((e) => {
                     listing.isSaved = true;
                     this.$store.commit('update_listing', listing);
@@ -25,7 +25,7 @@ export const listing_mixin = {
             }
         },
         remove_saved_listing(listing) {
-            if (is_true(listing.isSaved)) {
+            if (isTrue(listing.isSaved)) {
                 axios.post(listing.removeSavedUrl).then((e) => {
                     listing.isSaved = false;
                     this.$store.commit('update_listing', listing);

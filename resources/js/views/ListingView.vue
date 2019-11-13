@@ -57,7 +57,7 @@
     import ListingImages from '../components/listings/ListingImages';
     import '../../sass/component/listings-popup-view.scss';
     import {listing_mixin} from "../components/listings/shared";
-    import {is_true} from '../helpers';
+    import {isTrue} from '../helpers';
 
     export default {
         name: 'ListingView',
@@ -92,8 +92,8 @@
             this.$store.commit('set_listing', this.sale);
         },
         methods: {
-            is_saved(val) {
-                return is_true(val);
+            isSaved(val) {
+                return isTrue(val);
             },
             fetch_data() {
                 const id = this.$route.params.id;

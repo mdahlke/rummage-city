@@ -25,7 +25,6 @@
     import Slick from 'vue-slick';
     import '../../../../node_modules/slick-carousel/slick/slick.scss';
     import '../../../../node_modules/slick-carousel/slick/slick-theme.scss';
-
     import '../../../sass/component/listing-images.scss';
 
     export default {
@@ -90,3 +89,6 @@
         }
     }
 </script>
+
+<style lang="scss">
+</style>

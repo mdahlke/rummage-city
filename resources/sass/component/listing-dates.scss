@@ -9,7 +9,7 @@
   padding: 0;
   list-style: none;
 
-  li {
+  .listing-date {
     display: flex;
     flex-wrap: wrap;
     flex: 1 0 50%;
@@ -49,7 +49,7 @@
     color: white;
   }
 
-  li.spans-months {
+  .listing-date.spans-months {
 
     .calendar-span {
       display: flex;

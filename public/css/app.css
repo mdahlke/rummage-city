@@ -11192,5 +11192,12 @@ a {
   width: 100%;
 }
 
+#dashboard-navigation {
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+  height: 100%;
+}
+
 
 /*# sourceMappingURL=app.css.map*/

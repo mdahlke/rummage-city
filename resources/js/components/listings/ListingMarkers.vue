@@ -1,23 +1,19 @@
 <template>
     <div style="">
         <div v-for="(listing, index) in _listings">
-            <map-marker :key="'marker-' + listing.id"
-                        :listing="listing"
-                        :bus="bus"
-                        :map="map"
-                        @add_marker="add_marker"
-                        @close_all_popups="close_all_popups"></map-marker>
+            <MapMarker :key="'marker-' + listing.id"
+                       :listing="listing"
+                       :map="map"
+                       @add_marker="add_marker"
+                       @close_all_popups="close_all_popups"/>
         </div>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
-    import {mapbox_latlng, is_true} from '../../helpers';
-    import {create_element_from_html} from '../../helpers';
     import MapMarker from './MapMarker.vue';
     import Popup from './Popup.vue';
-    import moment from 'moment';
 
     export default {
         name: 'ListingMarkers',
@@ -29,7 +25,6 @@
         },
         props: {
             listings: Array,
-            bus: Object,
             map: Object,
         },
         computed: {

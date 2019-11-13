@@ -27,7 +27,7 @@ export const empty = function (subject) {
  * @param listing
  * @returns {{lng: *, lat: *}}
  */
-export const mapbox_latlng = function (listing) {
+export const mapboxLatLng = function (listing) {
     return {
         lat: listing.latitude,
         lng: listing.longitude
@@ -52,7 +52,7 @@ export function updateQueryStringParameter(uri, key, value) {
 }
 
 let call = {};
-export const axios_one = (config = {}, requestType = 'unnamed') => {
+export const axiosOne = (config = {}, requestType = 'unnamed') => {
     if (call[requestType]) {
         call[requestType].cancel("Only one request allowed at a time. Cancelling first.");
     }
@@ -61,7 +61,7 @@ export const axios_one = (config = {}, requestType = 'unnamed') => {
     return axios(config);
 };
 
-export const create_element_from_html = htmlString => {
+export const createElementFromHtml = htmlString => {
     let div = document.createElement('div');
     div.innerHTML = htmlString.trim();
 
@@ -69,10 +69,10 @@ export const create_element_from_html = htmlString => {
     return div.firstChild;
 };
 
-export const is_true = val => {
+export const isTrue = val => {
     return (val == 'true' || val === true);
 };
 
 export const is_false = val => {
-    return !is_true(val);
+    return !isTrue(val);
 };

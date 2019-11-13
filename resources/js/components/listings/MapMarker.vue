@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import {mapbox_latlng, is_true, create_element_from_html} from '../../helpers';
+    import {mapboxLatLng, isTrue, createElementFromHtml} from '../../helpers';
     import Popup from './Popup.vue';
     import moment from 'moment';
     import mapboxgl from 'mapbox-gl';
@@ -46,13 +46,12 @@
         },
         props: {
             listing: Object,
-            bus: Object,
             map: Object,
         },
         computed: {
-            is_saved: {
+            isSaved: {
                 get: function () {
-                    return is_true(this.listing.isSaved);
+                    return isTrue(this.listing.isSaved);
                 },
                 set: function (val) {
                     //
@@ -91,7 +90,7 @@
                     this.ellipsisColor = '#35495e';
                     this.ellipsisStrokeColor = '#fff';
                 }
-                if (this.is_saved) {
+                if (this.isSaved) {
 
                     this.color = '#ff444e';
                     this.ellipsisColor = '#ff444e';
@@ -132,7 +131,7 @@
                 this.$emit('add_marker', listing, marker);
             },
             create_marker(listing = null, popup = null) {
-                const coords = mapbox_latlng(listing);
+                const coords = mapboxLatLng(listing);
 
                 if (!coords.lat || !coords.lng) {
                     return false;
@@ -144,7 +143,7 @@
             },
             add_popup(listing) {
                 return new mapboxgl.Popup({className: 'listing__popup'})
-                    .setLngLat(mapbox_latlng(listing))
+                    .setLngLat(mapboxLatLng(listing))
                     .setHTML("<h1>" + listing.title + "</h1>")
                     .setMaxWidth("300px")
                     .addTo(this.map);

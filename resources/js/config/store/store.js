@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import Vue from 'vue';
 import getters from './getters';
-import {is_true} from '../../helpers';
+import {isTrue} from '../../helpers';
 
 Vue.use(Vuex);
 

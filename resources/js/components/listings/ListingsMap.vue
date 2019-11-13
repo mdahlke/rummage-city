@@ -1,25 +1,20 @@
 <template>
     <section id="listings__map">
         <div id="mapbox"></div>
-        <listing-markers
+        <ListingMarkers
                 :listings="_listings"
-                :bus="bus"
-                :map="map"></listing-markers>
+                :map="map"/>
     </section>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
     import mapbox_config from './mapbox.config.js';
-    import {mapbox_latlng, setPage} from '../../helpers';
-    import moment from 'moment';
     import geolocation from '../../geolocation';
-    import {axios_one, create_element_from_html} from '../../helpers';
+    import {axiosOne, createElementFromHtml} from '../../helpers';
     import ListingMarkers from './ListingMarkers.vue';
     import MapMarker from './MapMarker.vue';
     import Popup from './Popup.vue';
-    import '../../../sass/component/listings-map.scss';
-    import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 
     const mapboxgl = require('mapbox-gl');
 
@@ -29,14 +24,6 @@
         data() {
             return {
                 map: {},
-                platform: {},
-                mapEvents: {},
-                data_points: [],
-                icon: null,
-                listing_ids: [],
-                popups: [],
-                active_listing_id: null, // only storing id to avoid confusion with parent data
-                bus: new Vue(),
             };
         },
         props: {
@@ -48,7 +35,6 @@
             }
         },
         created() {
-            this.bus.$on('add_marker', this.add_marker);
         },
         mounted() {
             mapboxgl.accessToken = mapbox_config.accessToken;
@@ -125,7 +111,7 @@
                     ne: bounds._ne
                 }));
 
-                return axios_one({
+                return axiosOne({
                     url: '/graphql',
                     type: 'get',
                     params: {
@@ -213,3 +199,8 @@
     };
 
 </script>
+
+<style lang="scss">
+    @import '../../../sass/component/listings-map.scss';
+    @import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+</style>

@@ -1,7 +1,7 @@
 <template>
     <section class="listings-list-item listing"
              :id="'listing-'+ listing.id"
-             :key="'listing-item-'+listing.id">
+    >
 
         <div class="listing-wrap">
 
@@ -9,11 +9,15 @@
                  :class="{ 'has-image': listing.image.length}"
                  @click="view_listing( listing)"
             >
-                <div class="listing__featured-image" v-if="listing.image.length">
+                <div v-if="listing.image.length"
+                     class="listing__featured-image"
+                >
                     <div class="featured-image__blur"
-                         :style="'background-image: url('+listing.image[0].url+')'"></div>
+                         :style="'background-image: url('+listing.image[0].url+')'"
+                    ></div>
                     <div class="featured-image__image"
-                         :style="'background-image: url('+listing.image[0].url+')'"></div>
+                         :style="'background-image: url('+listing.image[0].url+')'"
+                    ></div>
                 </div>
                 <div class="listing__content">
                     <h1 class="listing__title">{{ listing.title }}</h1>
@@ -24,12 +28,12 @@
             <div class="listing__content">
                 <a @click="view_listing( listing)">View</a>
 
-                <listing-dates :dates="listing.active_date"></listing-dates>
+                <ListingDates :dates="listing.active_date"/>
 
                 <div class="listing__actions">
                     <ul class="list-inline">
                         <li class="list-inline-item listing__action">
-                                    <span class="cursor-pointer" v-if="is_saved(listing.isSaved)"
+                                    <span class="cursor-pointer" v-if="isSaved(listing.isSaved)"
                                           @click="remove_saved_listing(listing)">
                                             <i class="fas fa-heart"></i> Saved</span>
                             <span class="cursor-pointer" v-else @click="save_listing(listing)">
@@ -51,24 +55,28 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex';
+    import ListingDates from "./ListingDates";
     import {listing_mixin} from "./shared";
-    import {is_true} from '../../helpers';
-    import '../../../sass/component/listings-list.scss';
-    import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+    import {isTrue} from '../../helpers';
 
     export default {
         name: 'ListingsListItem',
         mixins: [listing_mixin],
+        components: {ListingDates},
         props: {
             listing: Object
         },
         computed: {},
         methods: {
-            is_saved(val) {
-                return is_true(val);
+            isSaved(val) {
+                return isTrue(val);
             }
         }
     };
 
 </script>
+
+<style lang="scss">
+    @import '../../../sass/component/listings-list.scss';
+    @import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+</style>

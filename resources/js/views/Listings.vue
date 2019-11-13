@@ -1,19 +1,18 @@
 <template>
     <div id="listings">
 
-        <listings-map ref="listingsMap"
-                      @update_listings="update_listings"
-                      @update_url="update_url"
-                      @set_active_listing="set_active_listing"
-                      @scroll_to_active="scroll_to_active"
-                      @set_fetching="set_fetching"
-        ></listings-map>
+        <ListingsMap ref="listingsMap"
+                     @update_listings="update_listings"
+                     @update_url="update_url"
+                     @set_active_listing="set_active_listing"
+                     @scroll_to_active="scroll_to_active"
+                     @set_fetching="set_fetching"
+        />
 
         <aside id="listings__sidebar">
-            <listings-list
-                    @update_url
-                    @set_active_listing="set_active_listing">
-            </listings-list>
+            <ListingsList @update_url="update_url"
+                          @set_active_listing="set_active_listing"
+            />
         </aside>
 
         <router-view></router-view>
@@ -23,10 +22,8 @@
 
 <script>
     import ListingsMap from '../components/listings/ListingsMap.vue';
-
     import ListingsList from '../components/listings/ListingsList.vue';
-    import {setPage, updateQueryStringParameter} from '../helpers';
-    import '../../sass/component/listings.scss';
+    import {updateQueryStringParameter} from '../helpers';
     import {mapState} from 'vuex';
 
     const VueScrollTo = require('vue-scrollto');
@@ -39,13 +36,7 @@
         },
         data() {
             return {
-                map: {},
-                platform: {},
-                mapEvents: {},
-                data_points: [],
                 icon: null,
-                listing_ids: [],
-                visible_listings: [],
                 loaded: false,
                 lat: 43.75171,
                 lng: -88.44867,
@@ -53,7 +44,6 @@
                 bearing: 0,
                 pitch: 0,
                 searchState: {},
-                active_listing: {},
                 viewing: false,
                 fetching: false,
             };
@@ -222,4 +212,6 @@
 </script>
 
 
-<style scoped></style>
+<style lang="scss">
+    @import '../../sass/component/listings.scss';
+</style>
