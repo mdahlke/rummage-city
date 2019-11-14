@@ -8,6 +8,7 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex'
 import axios from 'axios';
 import 'es6-promise/auto'
+import VueLazyload from 'vue-lazyload'
 
 const moment = require('moment');
 
@@ -17,6 +18,7 @@ Vue.use(Vuex)
 Vue.use(require('vue-moment'), {
     moment
 });
+Vue.use(VueLazyload);
 
 window.Vue = Vue;
 window.axios = require('axios');
@@ -84,5 +86,4 @@ require('./ajax');
 require('./listings-map');
 require('./saved-listings');
 require('./listing-edit');
-require('./lazy-images');
 require('./service-worker');

@@ -117,7 +117,7 @@
                     params: {
                         query: `
 							query FetchListingsInBounds {
-							  listings(bounds: ` + query + `, limit: 100) {
+							  listings(bounds: ` + query + `, limit: 150) {
 							    data {
 							      id
 							      title
