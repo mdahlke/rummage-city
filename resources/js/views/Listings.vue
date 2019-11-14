@@ -191,7 +191,8 @@
                 this.scroll_to_active(1);
             },
             scroll_to_active(duration = 500) {
-                const el = '#listing-' + this.active_listing.id;
+                const el = '#listings__list';
+                // const el = '#listing-' + this.listings[0].id;
 
                 this.$scrollTo(el, duration, {
                     container: '#listings__sidebar',

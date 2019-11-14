@@ -59,7 +59,7 @@
             }
         },
         watch: {
-            is_saved: function (val, old) {
+            isSaved: function (val, old) {
                 this.recreate_marker();
             }
         },

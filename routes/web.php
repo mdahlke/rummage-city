@@ -27,7 +27,7 @@ Route::middleware(['auth', 'web'])->group(function () {
                 Route::match(['get', 'post'], '/new', 'ListingController@edit')->name('new');
                 Route::match(['get', 'post'], '/{listing}/edit', 'ListingController@edit')->name('edit');
                 Route::post('saved/{listing}/save', 'SavedListingController@save')->name('saveListing');
-                Route::post('saved/{listing}/remove', 'SavedListingController@remove')->name('removeSavedListing');
+                Route::delete('saved/{listing}/remove', 'SavedListingController@remove')->name('removeSavedListing');
             });
 //        Route::get('listing-image/{image}/remove', 'ListingImageController@remove')->name('listings.image.remove');
         });

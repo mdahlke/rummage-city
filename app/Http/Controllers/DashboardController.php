@@ -24,9 +24,7 @@ class DashboardController extends Controller {
         $user = \Auth::user();
 
         $saved = $user->savedListing;
-
-//        dd($saved->listing);
-
+        
         $data['activeListings'] = $user->activeListing ?? [];
         $data['savedListings'] = $saved;
 

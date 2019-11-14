@@ -22,7 +22,7 @@
                                 <section class="listing__actions">
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a class="cursor-pointer" v-if="is_saved(sale.isSaved)"
+                                            <a class="cursor-pointer" v-if="isSaved(sale.isSaved)"
                                                @click="remove_saved_listing(sale)">
                                                 <i class="fas fa-heart"></i> Saved
                                             </a>

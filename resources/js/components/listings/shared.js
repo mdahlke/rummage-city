@@ -26,7 +26,7 @@ export const listing_mixin = {
         },
         remove_saved_listing(listing) {
             if (isTrue(listing.isSaved)) {
-                axios.post(listing.removeSavedUrl).then((e) => {
+                axios.delete(listing.removeSavedUrl).then((e) => {
                     listing.isSaved = false;
                     this.$store.commit('update_listing', listing);
                 });

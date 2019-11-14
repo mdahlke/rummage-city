@@ -23,7 +23,7 @@
         <div class="card-body">
             @foreach($activeListings as $listing)
                 <a href="{{ route('user.listing.edit', ['listing' => $listing->id]) }}">
-                    <h3><i class="fad fa-{{ $listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $listing->title }}
+                    <h3><i class="fad fa-warehouse-alt"></i> {{ $listing->title }}
                     </h3>
                 </a>
             @endforeach
@@ -35,9 +35,10 @@
 
         <div class="card-body">
             @foreach($savedListings as $saved)
-                <a href="{{ route('listings.view', ['listing' => $saved->listing->id]) }}">
+
+                <a href="{{ route('listings.view', ['listing' => $saved->id]) }}">
                     <h3>
-                        <i class="fad fa-{{ $saved->listing->hasActiveDate()? 'check' : 'ban' }}"></i> {{ $saved->listing->title }}
+                        <i class="fad fa-heart"></i> {{ $saved->title }}
                     </h3>
                 </a>
             @endforeach

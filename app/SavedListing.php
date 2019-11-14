@@ -23,13 +23,12 @@ class SavedListing extends Model {
     public $fillable = ['user_id', 'listing_id'];
 
     public function listing() {
-        return $this->hasOne(Listing::class, 'id', 'listing_id');
-//            ->with('listing')
-//            ->whereHas('activeDate');
+        return $this->belongsToMany(Listing::class, 'id', 'listing_id');
+//            ->with('listing');
     }
 
     public function user() {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsToMany(User::class, 'id', 'user_id');
     }
 
 }

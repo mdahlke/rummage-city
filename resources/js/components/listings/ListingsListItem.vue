@@ -12,11 +12,11 @@
                 <div v-if="listing.image.length"
                      class="listing__featured-image"
                 >
-                    <div class="featured-image__blur"
-                         :style="'background-image: url('+listing.image[0].url+')'"
+                    <div class="featured-image__blur lazy-background"
+                         :data-lazy-image="listing.image[0].url"
                     ></div>
-                    <div class="featured-image__image"
-                         :style="'background-image: url('+listing.image[0].url+')'"
+                    <div class="featured-image__image lazy-background"
+                         :data-lazy-image="listing.image[0].url"
                     ></div>
                 </div>
                 <div class="listing__content">

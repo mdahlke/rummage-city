@@ -84,4 +84,5 @@ require('./ajax');
 require('./listings-map');
 require('./saved-listings');
 require('./listing-edit');
+require('./lazy-images');
 require('./service-worker');

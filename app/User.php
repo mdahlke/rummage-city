@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,8 +61,10 @@ class User extends Authenticatable {
             ->whereHas('activeDate');
     }
 
-    public function savedListing(): HasMany {
-        return $this->hasMany(SavedListing::class);
+    public function savedListing(): BelongsToMany {
+        return $this->belongsToMany(Listing::class, 'saved_listings')
+            ->whereHas('activeDate')
+            ->withTimestamps();
     }
 
     public static function storagePath(): string {
@@ -69,9 +72,7 @@ class User extends Authenticatable {
     }
 
     public function fetchSavedListings(): array {
-        $saved = $this->savedListing;
-
-        return $this->savedListingsIds = $saved->pluck('listing_id')->all();
+        return $this->savedListingsIds = $this->savedListing()->pluck('listing_id')->all();
     }
 
     public function hasSavedListing(string $id): bool {

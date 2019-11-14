@@ -16,6 +16,7 @@ use App\User;
 use App\Http\Controllers\SavedListingController as Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Webpatser\Uuid\Uuid;
 
 class SavedListingController {
 
@@ -26,27 +27,17 @@ class SavedListingController {
     public function save(Request $request, Listing $listing) {
         $user = Auth::user();
 
-        $user->savedListing()->updateOrCreate([
-            'listing_id' => $listing->id,
-        ]);
+        $user->savedListing()->attach($listing->id, ['id' => Uuid::generate()->string]);
 
-        return response()->json([
-            'name' => 'Abigail',
-            'state' => 'CA'
-        ]);
+        return response()->json(true);
     }
 
     public function remove(Request $request, User $user, Listing $listing) {
         $user = Auth::user();
 
-        SavedListing::where('listing_id', $listing->id)
-            ->where('user_id', $user->id)
-            ->delete();
+        $user->savedListing()->detach($listing->id);
 
-        return response()->json([
-            'name' => 'Abigail',
-            'state' => 'CA'
-        ]);
+        return response()->json(true);
     }
 
 }

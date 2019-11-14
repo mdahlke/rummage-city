@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -60,8 +61,10 @@ class Listing extends Model {
         return $this->belongsTo(User::class);
     }
 
-    public function savedListing() {
-        return $this->belongsTo(SavedListing::class);
+    public function savedListing(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'saved_listings')
+            ->whereHas('activeDate')
+            ->withTimestamps();
     }
 
     public function date() {
