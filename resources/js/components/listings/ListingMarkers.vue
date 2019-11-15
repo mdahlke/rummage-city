@@ -34,6 +34,7 @@
         },
         methods: {
             add_marker(listing, marker) {
+                console.log('this.map', this.map);
                 marker.addTo(this.map);
                 this.markers.push({
                     id: listing.id,

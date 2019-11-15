@@ -2,7 +2,8 @@
     <section id="listings__map">
         <div id="mapbox"></div>
         <ListingMarkers
-                :listings="_listings"
+                v-if="isMounted"
+                :listings="listings"
                 :map="map"/>
     </section>
 </template>
@@ -24,28 +25,71 @@
         data() {
             return {
                 map: {},
+                center: {
+                    lat: '43.7730',
+                    lng: '-88.4471',
+                },
+                zoom: 10,
+                pitch: 0,
+                bearing: 0,
+                isMounted: false,
             };
         },
         props: {
-            listings: Array,
-            mapMarkers: {},
-            svg: {
-                type: String,
-                default: null
+            mapAttributes: {
+                type: Object,
+                require: false, // if not passed in we retrieve from the store
+            },
+        },
+        computed: {
+            ...mapGetters({
+                listings: 'get_listings',
+                searchState: 'searchState',
+            })
+        },
+        watch: {
+            '$route.params.query.searchState': {
+                handler: function (searchState) {
+                    // this.update_map();
+                },
+                deep: true
             }
         },
         created() {
+            mapboxgl.accessToken = mapbox_config.accessToken;
+
+            if (this.mapAttributes.center) {
+                this.center = this.mapAttributes.center;
+            }
+            if (this.mapAttributes.zoom) {
+                this.zoom = this.mapAttributes.zoom;
+            }
+            if (this.mapAttributes.pitch) {
+                this.pitch = this.mapAttributes.pitch;
+            }
+            if (this.mapAttributes.bearing) {
+                this.bearing = this.mapAttributes.bearing;
+            }
+
+
+            geolocation.get().then((r) => {
+                // if (!this.listings.length && this.mapMarkers.length) {
+                //     this.center_map_on(r.lat, r.lng);
+                // }
+            });
+
+            geolocation.watch((r) => {
+            });
         },
         mounted() {
-            mapboxgl.accessToken = mapbox_config.accessToken;
 
             let config = {
                 container: 'mapbox',
                 style: mapbox_config.style,
-                center: {lng: this.$parent.lng, lat: this.$parent.lat},
-                zoom: this.$parent.zoom,
-                pitch: this.$parent.pitch,
-                bearing: this.$parent.bearing,
+                center: this.center,
+                zoom: this.zoom,
+                pitch: this.pitch,
+                bearing: this.bearing,
                 // hash: true,
                 keyboard: false,
                 cluster: true,
@@ -59,22 +103,11 @@
             this.map.on('dragend', this.update_map_listings);
             this.map.on('zoomend', this.update_map_listings);
 
-            geolocation.get().then((r) => {
-                // if (!this.listings.length && this.mapMarkers.length) {
-                //     this.center_map_on(r.lat, r.lng);
-                // }
-            });
+            this.isMounted = true;
 
-            geolocation.watch((r) => {
-            });
-        },
-        computed: {
-            ...mapGetters({
-                _listings: 'get_listings',
-            })
         },
         methods: {
-            update_map_listings() {
+            update_map_listings(updateUrl = false) {
                 let bounds = this.map.getBounds();
 
                 this.$emit('set_fetching', true);
@@ -83,12 +116,18 @@
                     const listings = results.data.data.listings.data;
 
                     this.$emit('update_listings', listings);
-                    this.$emit('update_url', {
-                        bounds: this.map.getCenter(),
-                        zoom: this.map.getZoom(),
-                        pitch: this.map.getPitch(),
-                        bearing: this.map.getBearing()
-                    });
+
+                    this.searchState.query.map.center = this.map.getCenter();
+                    this.searchState.query.map.zoom = this.map.getZoom();
+                    this.searchState.query.map.pitch = this.map.getPitch();
+                    this.searchState.query.map.bearing = this.map.getBearing();
+                    this.searchState.query.map.bounds = this.map.getBounds();
+
+                    this.$store.commit('search', this.searchState);
+
+                    if (updateUrl) {
+                        this.$emit('push_state');
+                    }
 
                     this.$emit('set_fetching', false);
 
@@ -153,11 +192,12 @@
                 this.map.setCenter([lat, lng]);
             },
             update_map() {
-                const latlng = {lon: this.$parent.lng, lat: this.$parent.lat};
-                this.map.setZoom(this.$parent.zoom);
-                this.map.setCenter(latlng);
-                this.map.setPitch(this.$parent.pitch);
-                this.map.setBearing(this.$parent.bearing);
+                console.log('updating_map');
+                this.map.setZoom(this.zoom);
+                this.map.setCenter(this.center);
+                this.map.setPitch(this.pitch);
+                this.map.setBearing(this.bearing);
+                //
                 return this;
             },
             highlight_listing(listing) {

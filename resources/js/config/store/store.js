@@ -18,7 +18,6 @@ const store = new Vuex.Store({
             return state.listings;
         },
         get_listing_by_id: state => id => {
-            console.log(id);
             return state.listings.find(listing => listing.id === id);
         },
         saved_listings: store => {
@@ -26,6 +25,9 @@ const store = new Vuex.Store({
         },
         saved_listings_count: (store, getters) => {
             return getters.saved_listings.count;
+        },
+        searchState: store => {
+            return store.search;
         }
     },
     mutations: {
@@ -41,14 +43,14 @@ const store = new Vuex.Store({
                 );
             }
         },
+        listings(state, listings) {
+            state.listings = listings;
+        },
         set_listing(state, listing) {
             state.listing = listing;
         },
         listing(state, listing) {
             state.listing = listing;
-        },
-        listings(state, listings) {
-            state.listings = listings;
         },
         search(state, search) {
             state.search = search;

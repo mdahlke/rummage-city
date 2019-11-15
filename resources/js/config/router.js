@@ -10,8 +10,16 @@ const router = new VueRouter({
         {
             path: '/listings',
             name: 'listings',
+            beforeRouteUpdate(to, from, next) {
+                console.log('before route', {to, from, next});
+                this.update_map();
+                next();
+            },
             component: Listings,
-            props: {listings: []},
+            props: {
+                // listings: [],
+                // search: {}
+            },
             children: [
                 // Here we specify that the `ProductImagePopup`
                 // component should be rendered as a nested

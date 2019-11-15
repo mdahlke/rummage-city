@@ -24,10 +24,10 @@
                                         <li class="list-inline-item">
                                             <a class="cursor-pointer" v-if="isSaved(sale.isSaved)"
                                                @click="remove_saved_listing(sale)">
-                                                <i class="fas fa-heart"></i> Saved
+                                                <i class="fas fa-star"></i> Saved
                                             </a>
                                             <a class="cursor-pointer" v-else @click="save_listing(sale)">
-                                                <i class="far fa-heart"> Save</i>
+                                                <i class="far fa-star"> Save</i>
                                             </a>
                                         </li>
                                     </ul>
@@ -67,6 +67,7 @@
             return {
                 loading: true,
                 sale: false,
+                transitionName: 'slide-left',
             };
         },
         props: {

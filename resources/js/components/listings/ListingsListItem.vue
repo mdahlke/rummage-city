@@ -35,9 +35,9 @@
                         <li class="list-inline-item listing__action">
                                     <span class="cursor-pointer" v-if="isSaved(listing.isSaved)"
                                           @click="remove_saved_listing(listing)">
-                                            <i class="fas fa-heart"></i> Saved</span>
+                                            <i class="fas fa-star"></i> Saved</span>
                             <span class="cursor-pointer" v-else @click="save_listing(listing)">
-                                            <i class="far fa-heart"> Save</i></span>
+                                            <i class="far fa-star"> Save</i></span>
                         </li>
                         <li class="list-inline-item listing__action">
                                         <span class="cursor-pointer" @click="highlight_on_map(listing)">

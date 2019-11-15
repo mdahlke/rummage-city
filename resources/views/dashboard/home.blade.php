@@ -36,7 +36,10 @@
         <div class="card-body">
             @foreach($savedListings as $saved)
 
-                <a href="{{ route('listings.view', ['listing' => $saved->id]) }}">
+                <a href="{{ route('listings.view', [
+                'address' => str_slug($saved->address),
+                'listing' => $saved->id
+                ]) }}">
                     <h3>
                         <i class="fad fa-heart"></i> {{ $saved->title }}
                     </h3>

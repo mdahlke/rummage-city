@@ -41,18 +41,23 @@ class ListingController extends Controller {
         $listings = [];
         $searchState = (object)[];
         $geocode = $request->get('geocode');
-        $query = $request->query('q');
+        $searchState = $request->query('searchState');
 
-        $searchState = (object)[
-            'bounds' => (object)[
-                'lat' => false,
-                'lng' => false,
-            ],
-            'listing' => false,
-            'zoom' => false,
-            'pitch' => false,
-            'bearing' => false,
-        ];
+        if (!$searchState) {
+
+            $searchState = (object)[
+                'map' => (object)[
+                    'center' => (object)[
+                        'lat' => false,
+                        'lng' => false,
+                    ],
+                    'zoom' => false,
+                    'pitch' => false,
+                    'bearing' => false,
+                ],
+                'listing' => false,
+            ];
+        }
 
         /** @var Builder $listings */
         $builder = Listing::query()
@@ -61,12 +66,12 @@ class ListingController extends Controller {
             ->whereHas('activeDate');
 
         if ($geocode) {
-            $searchState->bounds->lat = $geocode->getCenter()[1];
-            $searchState->bounds->lng = $geocode->getCenter()[0];
+            $searchState->map->center->lat = $geocode->getCenter()[1];
+            $searchState->map->center->lng = $geocode->getCenter()[0];
             /** @var MapboxFeature $feature */
             $feature = $geocode->features[0];
 
-            $searchState->zoom = 12;
+            $searchState->map->zoom = 12;
 
 //            dd($geocode, $geocode->getBoundingBox());
 
@@ -108,10 +113,13 @@ class ListingController extends Controller {
 
         $listings = $builder->get();
 
+        $searchState = [
+            'url' => route('listings.browse'),
+            'query' => $request->query('searchState', json_encode($searchState)),
+        ];
 
-        $data['query'] = $query;
         $data['listings'] = $listings->toArray();
-        $data['searchState'] = $request->query('searchState', json_encode($searchState));
+        $data['searchState'] = $searchState;
 
         return view('listings.index', $data);
     }
