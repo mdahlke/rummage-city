@@ -2,7 +2,7 @@
 
     <section class="listings-component">
         <section class="search-bar sub-nav">
-            <SearchBox :query="'Fon dud alc'"/>
+            <SearchBox :query="searchedTerm"/>
         </section>
 
         <div id="listings">
@@ -21,6 +21,7 @@
                               @set_active_listing="set_active_listing"
                 />
             </aside>
+            å
 
             <transition>
                 <router-view></router-view>
@@ -76,6 +77,9 @@
             mapAttributes() {
                 return this.searchState.query.map;
             },
+            searchedTerm() {
+                return this.searchState.query.term;
+            },
             ...mapState({
                 _listings: 'listings',
             })
@@ -94,7 +98,7 @@
             }
 
             if (this.search) {
-                this.search.query = JSON.parse(this.search.query);
+                this.search.query = this.search.query;
                 this.searchState = this.search;
 
                 this.$store.commit('search', this.searchState);
@@ -123,8 +127,6 @@
                 const searchState = this.$store.state.search;
 
                 this.map_data(searchState);
-
-                console.log('$REFS', this.$refs);
 
                 // this.$refs.listingsMap.update_map()
                 //     .update_map_listings(updateUrl);
@@ -184,8 +186,6 @@
 
                 let queryString = JSON.stringify(this.$store.getters.searchState.query);
                 route.query = {searchState: queryString};
-
-                console.log('pushing state');
 
                 this.$router.push(route);
             },

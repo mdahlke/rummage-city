@@ -1,25 +1,92 @@
 <template>
     <div class="marker">
-        <svg width="39" height="40" xmlns="http://www.w3.org/2000/svg">
-            <title>{{ title }}</title>
 
-            <g>
-                <title>background</title>
-                <rect fill="none" id="canvas_background" height="5.43643" width="5.35052" y="-1" x="-1"/>
-            </g>
-            <g>
-                <title>Layer 1</title>
-                <path :stroke="strokeColor" stroke-width="1" id="svg_1" stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m19.50242,39.5023c2.03471,-19.49403 9.19609,-16.47947 12.47161,-25.56621a12.61174,11.59174 0 1 0 -25.08335,-1.48118a12.40154,11.39853 0 0 0 0.14014,1.41678c1.8596,8.79571 10.93298,5.5876 12.4716,25.63061z"
-                      :fill="color" stroke-miterlimit="10"/>
-                <ellipse transform="rotate(0.08227808773517609 19.500000000001684,10.655783653258416) "
-                         ry="4.93409"
-                         rx="5.20869" id="svg_2" cy="10.65578" cx="19.5" stroke-width="0.5"
-                         :fill="ellipsisColor"
-                         :stroke="ellipsisStrokeColor"/>
-            </g>
-        </svg>
+        <template v-if="!isSaved">
+            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
+                <title>{{ title }}</title>
+                <g>
+                    <title>background</title>
+                    <rect fill="none"
+                          id="canvas_background"
+                          :height="markerHeight"
+                          :width="markerWidth"
+                          y="-1"
+                          x="-1"
+                    />
+                    <g display="none"
+                       overflow="visible"
+                       y="0"
+                       x="0"
+                       height="100%"
+                       width="100%"
+                       id="canvasGrid"
+                    >
+                        <rect fill="url(#gridpattern)"
+                              stroke-width="0"
+                              y="0"
+                              x="0"
+                              height="100%" width="100%"
+                        />
+                    </g>
+                </g>
+                <g>
+                    <title>` + title + `</title>
+                    <ellipse id="svg_5"
+                             :stroke="strokeColor"
+                             :ry="(markerHeight/2)"
+                             :rx="(markerWidth/2)"
+                             :cy="(markerHeight/2)" :cx="(markerWidth/2)"
+                             fill-opacity="null"
+                             stroke-opacity="null"
+                             stroke-width="2"
+                             :fill="color"
+                    />
+                </g>
+            </svg>
+        </template>
+        <template v-else>
+            <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                <title>{{ title }}</title>
+                <g>
+                    <title>background</title>
+                    <rect fill="none"
+                          id="canvas_background"
+                          height="22"
+                          width="22"
+                          y="-1"
+                          x="-1"/>
+                    <g display="none"
+                       overflow="visible"
+                       y="0"
+                       x="0"
+                       height="100%"
+                       width="100%"
+                       id="canvasGrid">
+                        <rect fill="url(#gridpattern)"
+                              stroke-width="0"
+                              y="0"
+                              x="0"
+                              height="100%"
+                              width="100%"/>
+                    </g>
+                </g>
+                <g>
+                    <title>{{ title }}</title>
+                    <path :stroke="strokeColor"
+                          id="svg_3"
+                          d="m0.8639,7.68563l7.01874,0l2.16884,-6.94115l2.16885,6.94115l7.01874,0l-5.67827,4.28982l2.16896,6.94115l-5.67827,-4.28993l-5.67827,4.28993l2.16896,-6.94115l-5.67827,-4.28982z"
+                          stroke-opacity="null"
+                          stroke-width=".5"
+                          fill="#ffffaa"/>
+                    <path :stroke="color"
+                          id="svg_4"
+                          d="m3.2069,8.44376l5.23011,0l1.61614,-5.17185l1.61615,5.17185l5.23011,0l-4.23124,3.19634l1.61623,5.17185l-4.23124,-3.19643l-4.23124,3.19643l1.61623,-5.17185l-4.23124,-3.19634z"
+                          stroke-opacity="null"
+                          stroke-width="1"
+                          :fill="color"/>
+                </g>
+            </svg>
+        </template>
     </div>
 </template>
 
@@ -37,11 +104,13 @@
         data() {
             return {
                 title: 'Map Marker',
-                color: '#35495e',
-                strokeColor: '#eaeaea',
+                color: '#ff7e67',
+                strokeColor: '#fff',
                 ellipsisColor: '#ffffff',
                 ellipsisStrokeColor: '#000000',
                 marker: {},
+                markerHeight: 12,
+                markerWidth: 12,
             }
         },
         props: {
@@ -86,12 +155,12 @@
 
                 if (duration.as('days') < 1) {
                     this.color = '#42b883';
-                    this.strokeColor = '#000';
+                    this.strokeColor = '#fff';
                     this.ellipsisColor = '#35495e';
                     this.ellipsisStrokeColor = '#fff';
                 }
-                if (this.isSaved) {
 
+                if (this.isSaved) {
                     this.color = '#ff444e';
                     this.ellipsisColor = '#ff444e';
                     this.ellipsisStrokeColor = '#ff444e';
@@ -115,7 +184,10 @@
                         m.getElement().addEventListener('mouseenter', () => {
                             this.$emit('close_all_popups');
                             m.togglePopup();
-                            this.$emit('preload', l);
+                        });
+
+                        m.getElement().addEventListener('mouseleave', () => {
+                            this.$emit('close_all_popups');
                         });
                     })(listing, marker);
 
@@ -190,3 +262,12 @@
     };
 
 </script>
+
+<style lang="scss">
+    .marker {
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+</style>

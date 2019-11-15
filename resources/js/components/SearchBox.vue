@@ -54,8 +54,6 @@
             if (this.route) {
                 this.action = this.route;
             }
-
-            console.log(this.showFilters);
         },
         methods: {
             search(query) {
