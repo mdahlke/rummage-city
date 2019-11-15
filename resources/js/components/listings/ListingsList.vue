@@ -12,6 +12,7 @@
 
             <ListingsListItem v-for="(listing, index) in listings"
                               :key="'listing-' + listing.id"
+                              v-on="$listeners"
                               :listing="listing"
             />
         </template>

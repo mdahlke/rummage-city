@@ -17,7 +17,9 @@
             />
 
             <aside id="listings__sidebar">
-                <ListingsList @push_state="push_state"
+                <ListingsList @highlight-on-map="highlightOnMap"
+                              @zoom-to-on-map="zoomToOnMap"
+                              @push_state="push_state"
                               @set_active_listing="set_active_listing"
                 />
             </aside>
@@ -107,6 +109,12 @@
             }
         },
         mounted() {
+            // this.$el.addEventListener("hightlightOnMap", (e) => {
+            //     console.log({e});
+            //     this.hightlightOnMap(e)
+            // });
+            this.$el.addEventListener("zoomToOnMap", (e) => this.zoomToOnMap(e));
+
             if (!this._listings.length) {
                 // when the component is mounted then we will be fetching data
                 this.fetch_data();
@@ -196,7 +204,6 @@
             },
             scroll_to_active(duration = 500) {
                 const el = '#listings__list';
-                // const el = '#listing-' + this.listings[0].id;
 
                 this.$scrollTo(el, duration, {
                     container: '#listings__sidebar',
@@ -205,17 +212,16 @@
                     }
                 });
             },
-            highlight_on_map(listing) {
-                this.$refs.listingsMap.highlight_listing(listing);
+            highlightOnMap(listing) {
+                this.$refs.listingsMap.highlightListing(listing);
             },
-            zoom_to_on_map(listing) {
-                this.$refs.listingsMap.zoom_to(listing);
+            zoomToOnMap(listing) {
+                this.$refs.listingsMap.zoomTo(listing);
             }
         }
     };
 
 </script>
-
 
 <style lang="scss">
     @import '../../sass/component/listings.scss';

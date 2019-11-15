@@ -40,11 +40,11 @@
                                             <i class="far fa-star"> Save</i></span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="highlight_on_map(listing)">
+                                        <span class="cursor-pointer" @click="emitHightlightOnMap(listing)">
                                             <i class="fas fa-map"></i> Show on Map</span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="zoom_to_on_map(listing)">
+                                        <span class="cursor-pointer" @click="emitZoomToOnMap(listing)">
                                             <i class="fas fa-crosshairs"></i> Zoom to</span>
                         </li>
                     </ul>
@@ -68,6 +68,12 @@
         },
         computed: {},
         methods: {
+            emitHightlightOnMap() {
+                this.$emit('highlight-on-map', this.listing);
+            },
+            emitZoomToOnMap() {
+                this.$emit('zoom-to-on-map', this.listing);
+            },
             isSaved(val) {
                 return isTrue(val);
             }

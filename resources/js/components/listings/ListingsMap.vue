@@ -2,6 +2,7 @@
     <section id="listings__map">
         <div id="mapbox"></div>
         <ListingMarkers
+                ref="listingMarkers"
                 v-if="isMounted"
                 :listings="listings"
                 :map="map"/>
@@ -200,40 +201,27 @@
                 //
                 return this;
             },
-            highlight_listing(listing) {
-                let popup;
+            highlightListing(listing) {
+                this.$refs.listingMarkers.markers.forEach(marker => {
+                    marker.marker.getPopup().remove();
 
-                for (let i in this.popups) {
-                    if (this.popups.hasOwnProperty(i)) {
-                        popup = this.popups[i];
-                        popup.popup.remove();
-
-                        if (popup.id === listing.id) {
-                            popup.popup.addTo(this.map);
-                            this.map.flyTo({
-                                center: popup.popup._lngLat
-                            });
-                        }
+                    if (marker.id === listing.id) {
+                        marker.marker.getPopup().addTo(this.map);
                     }
-                }
+                });
             },
-            zoom_to(listing) {
-                let popup;
+            zoomTo(listing) {
+                this.$refs.listingMarkers.markers.forEach(marker => {
+                    marker.marker.getPopup().remove();
 
-                for (let i in this.popups) {
-                    if (this.popups.hasOwnProperty(i)) {
-                        popup = this.popups[i];
-                        popup.popup.remove();
-
-                        if (popup.id === listing.id) {
-                            popup.popup.addTo(this.map);
-                            this.map.flyTo({
-                                center: popup.popup._lngLat,
-                                zoom: 18
-                            });
-                        }
+                    if (marker.id === listing.id) {
+                        marker.marker.getPopup().addTo(this.map);
+                        this.map.flyTo({
+                            center: marker.marker.getPopup()._lngLat,
+                            zoom: 18
+                        });
                     }
-                }
+                });
             },
         }
     };

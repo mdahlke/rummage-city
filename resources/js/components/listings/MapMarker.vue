@@ -221,7 +221,7 @@
                     .addTo(this.map);
             },
             create_popup(listing) {
-                let markerHeight = 20, markerRadius = 10, linearOffset = 25;
+                let markerHeight = 12, markerRadius = 10, linearOffset = 25;
                 let popupOffsets = {
                     'top': [0, 0],
                     'top-left': [0, 0],
@@ -269,5 +269,9 @@
         &:hover {
             cursor: pointer;
         }
+    }
+
+    #mapbox .mapboxgl-popup-content {
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.55);
     }
 </style>
