@@ -59,19 +59,6 @@
         created() {
             mapboxgl.accessToken = mapbox_config.accessToken;
 
-            if (this.mapAttributes.center) {
-                this.center = this.mapAttributes.center;
-            }
-            if (this.mapAttributes.zoom) {
-                this.zoom = this.mapAttributes.zoom;
-            }
-            if (this.mapAttributes.pitch) {
-                this.pitch = this.mapAttributes.pitch;
-            }
-            if (this.mapAttributes.bearing) {
-                this.bearing = this.mapAttributes.bearing;
-            }
-
 
             geolocation.get().then((r) => {
                 // if (!this.listings.length && this.mapMarkers.length) {
@@ -83,6 +70,20 @@
             });
         },
         mounted() {
+
+            console.log(this.mapAttributes);
+            if (this.mapAttributes.center && Object.keys(this.mapAttributes.center).length !== 0) {
+                this.center = this.mapAttributes.center;
+            }
+            if (this.mapAttributes.zoom) {
+                this.zoom = this.mapAttributes.zoom;
+            }
+            if (this.mapAttributes.pitch) {
+                this.pitch = this.mapAttributes.pitch;
+            }
+            if (this.mapAttributes.bearing) {
+                this.bearing = this.mapAttributes.bearing;
+            }
 
             let config = {
                 container: 'mapbox',

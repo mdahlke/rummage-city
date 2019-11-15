@@ -12,9 +12,10 @@ $font-family-sans-serif: 'Nunito', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
-$search_bar_height: 60px;
-$navbar_height: 73px + $search_bar_height;
-$sidebar_width: 33%;
+$navbar-height: 60px;
+$search-bar-height: 75px;
+$main-header-height: $navbar-height + $search-bar-height;
+$sidebar-width: 33%;
 
 @import "colors";
 @import "fonts";

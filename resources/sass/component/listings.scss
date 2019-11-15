@@ -2,15 +2,16 @@
 
 #listings {
   display: flex;
-  height: calc(100vh - #{$navbar_height});
+  height: calc(100vh - #{$main-header-height});
+  overflow: hidden;
 
   #listings__sidebar {
-    flex: 0 0 $sidebar_width;
+    flex: 0 0 $sidebar-width;
     overflow: auto;
   }
 
   #listings__map {
-    flex: 0 0 calc(100vw - #{$sidebar_width});
+    flex: 0 0 calc(100vw - #{$sidebar-width});
   }
 
   .listing__action {
