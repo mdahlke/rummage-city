@@ -1,7 +1,9 @@
+@import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
 @import '../../sass/_colors.scss';
 
 .search-box {
   display: flex;
+  align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
@@ -43,6 +45,29 @@
 
       i {
         color: $tertiary;
+      }
+    }
+  }
+
+
+  @media (max-width: 575px) {
+
+    .search-filters {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      justify-content: space-evenly;
+      margin-right: 0;
+      width: 100%;
+
+      li {
+        display: block;
+        flex: 1 0 calc(33% - 5px);
+        padding: 7px 20px;
+        margin: 0 0 8px 0;
+        border: 1px solid #35495e;
+        cursor: pointer;
+        white-space: nowrap;
       }
     }
   }

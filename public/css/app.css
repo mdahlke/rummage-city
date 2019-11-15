@@ -11190,6 +11190,12 @@ a {
   flex: 0 0 calc(33% - 20px);
 }
 
+@media (max-width: 575px) {
+  .search-bar .search-box .search-form {
+    flex: 0 0 100%;
+  }
+}
+
 .search-bar .search-box .input-group {
   width: 100%;
 }

@@ -23,12 +23,10 @@
                               @set_active_listing="set_active_listing"
                 />
             </aside>
-            å
 
             <transition>
                 <router-view></router-view>
             </transition>
-
         </div>
     </section>
 </template>

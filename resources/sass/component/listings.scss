@@ -1,3 +1,4 @@
+@import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
 @import '../variables';
 
 #listings {
@@ -6,12 +7,24 @@
   overflow: hidden;
 
   #listings__sidebar {
-    flex: 0 0 $sidebar-width;
+    display: none;
+    flex: 0 0 100%;
     overflow: auto;
   }
 
   #listings__map {
-    flex: 0 0 calc(100vw - #{$sidebar-width});
+    flex: 0 0 100%;
+  }
+
+  @include media-breakpoint-up(md) {
+    #listings__sidebar {
+      display: block;
+      flex: 0 0 $sidebar-width;
+    }
+    #listings__map {
+
+      flex: 0 0 calc(100vw - #{$sidebar-width});
+    }
   }
 
   .listing__action {
