@@ -171,18 +171,18 @@
             },
             push_state() {
                 let route;
-                if (this.$route.params.location || false) {
-                    route = {
-                        name: 'listings.location',
-                        params: {
-                            location: (this.$route.params.location)
-                        },
-                    }
-                } else {
-                    route = {
-                        name: 'listings',
-                    }
+                // if (this.$route.params.location || false) {
+                //     route = {
+                //         name: 'listings.location',
+                //         params: {
+                //             location: (this.$route.params.location)
+                //         },
+                //     }
+                // } else {
+                route = {
+                    name: 'listings',
                 }
+                // }
 
                 let queryString = JSON.stringify(this.$store.getters.searchState.query);
                 route.query = {searchState: queryString};

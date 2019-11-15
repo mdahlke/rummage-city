@@ -42,25 +42,18 @@ class ListingController extends Controller {
         $searchState = (object)[];
         $geocode = $request->get('geocode');
         $searchState = $request->query('searchState');
+        $searchStateLoaded = false;
         $term = '';
 
         if ($searchState) {
+            $searchStateLoaded = true;
             $searchState = json_decode($searchState);
-        }
-
-        /** @var Builder $listings */
-        $builder = Listing::query()
-            ->with('activeDate')
-            ->with('image')
-            ->whereHas('activeDate');
-
-        if (!$searchState && $geocode) {
-
+        } else {
             $searchState = (object)[
                 'map' => (object)[
                     'center' => (object)[
-                        'lat' => false,
-                        'lng' => false,
+//                        'lat' => false,
+//                        'lng' => false,
                     ],
                     'zoom' => false,
                     'pitch' => false,
@@ -69,6 +62,15 @@ class ListingController extends Controller {
                 'listing' => false,
                 'searchedTerm' => false,
             ];
+        }
+
+        /** @var Builder $listings */
+        $builder = Listing::query()
+            ->with('activeDate')
+            ->with('image')
+            ->whereHas('activeDate');
+
+        if (!$searchStateLoaded && $geocode) {
 
             $searchState->map->center->lat = $geocode->getCenter()[1];
             $searchState->map->center->lng = $geocode->getCenter()[0];
