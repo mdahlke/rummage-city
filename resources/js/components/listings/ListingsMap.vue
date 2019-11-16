@@ -117,6 +117,8 @@
                 this.get_listings_in_bounds(bounds).then((results) => {
                     const listings = results.data.data.listings.data;
 
+                    this.$refs.listingMarkers.removeAllMarkers();
+
                     this.$emit('update_listings', listings);
 
                     this.searchState.query.map.center = this.map.getCenter();

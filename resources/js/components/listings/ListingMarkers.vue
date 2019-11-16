@@ -58,7 +58,7 @@
                     markers[i].marker.remove();
                 }
             },
-            remove_all_markers() {
+            removeAllMarkers() {
                 if (this.markers !== null) {
                     for (let i = this.markers.length - 1; i >= 0; i--) {
                         this.markers[i].marker.remove();
