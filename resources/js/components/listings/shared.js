@@ -20,7 +20,7 @@ export const listing_mixin = {
             if (!isTrue(listing.isSaved)) {
                 axios.post(listing.saveUrl).then((e) => {
                     listing.isSaved = true;
-                    this.$store.commit('update_listing', listing);
+                    this.$store.dispatch('update_listing', listing);
                 });
             }
         },
@@ -28,7 +28,7 @@ export const listing_mixin = {
             if (isTrue(listing.isSaved)) {
                 axios.delete(listing.removeSavedUrl).then((e) => {
                     listing.isSaved = false;
-                    this.$store.commit('update_listing', listing);
+                    this.$store.dispatch('update_listing', listing);
                 });
             }
         },

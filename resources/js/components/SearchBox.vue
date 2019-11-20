@@ -66,22 +66,10 @@
         },
         methods: {
             filterAdd(val) {
-                const state = this.searchState;
-
-                if (state.query.filter.indexOf(val) !== false) {
-                    state.query.filter.push(val);
-                    this.$store.commit('search', state);
-                }
+                this.$store.dispatch('filterAdd', val);
             },
             filterRemove(val) {
-                const state = this.searchState;
-
-                if (!state.query.filter) {
-                    state.query.filter = [];
-                }
-
-                state.query.filter = _.without(state.query.filter, val);
-                this.$store.commit('search', state);
+                this.$store.dispatch('filterRemove', val);
 
             }
         }

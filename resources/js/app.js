@@ -46,16 +46,16 @@ Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('listings', require('./views/Listings.vue').default);
-Vue.component('listing', require('./views/ListingView.vue').default);
-Vue.component('listing-dates-input', require('./components/listings/ListingDatesInput.vue').default);
-Vue.component('listing-image-input', require('./components/listings/ListingImageInput.vue').default);
-Vue.component('listings-map', require('./components/listings/ListingsMap.vue').default);
-Vue.component('listings-list', require('./components/listings/ListingsList.vue').default);
-Vue.component('listing-dates', require('./components/listings/ListingDates.vue').default);
-Vue.component('listing-images', require('./components/listings/ListingImages.vue').default);
-Vue.component('map-geocode', require('./components/Map/Geocode.vue').default);
-Vue.component('search-box', require('./components/SearchBox.vue').default);
+Vue.component('listings', () => import('./views/Listings.vue'));
+Vue.component('listing', () => import('./views/ListingView.vue'));
+Vue.component('listing-dates-input', () => import('./components/listings/ListingDatesInput.vue'));
+Vue.component('listing-image-input', () => import('./components/listings/ListingImageInput.vue'));
+Vue.component('listings-map', () => import('./components/listings/ListingsMap.vue'));
+Vue.component('listings-list', () => import('./components/listings/ListingsList.vue'));
+Vue.component('listing-dates', () => import('./components/listings/ListingDates.vue'));
+Vue.component('listing-images', () => import('./components/listings/ListingImages.vue'));
+Vue.component('map-geocode', () => import('./components/Map/Geocode.vue'));
+Vue.component('search-box', () => import('./components/SearchBox.vue'));
 
 
 import App from './views/App';

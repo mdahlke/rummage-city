@@ -26,7 +26,7 @@
         },
         computed: {
             active() {
-                return this.$store.state.search.query.filter.indexOf(this.name) >= 0;
+                return this.$store.getters.searchFilters.indexOf(this.name) >= 0;
             }
         },
         methods: {

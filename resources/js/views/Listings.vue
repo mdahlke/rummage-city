@@ -129,14 +129,6 @@
                     updateUrl = true;
                 }
 
-                this.fetching = true;
-                const searchState = this.$store.state.search;
-
-                this.map_data(searchState);
-
-                // this.$refs.listingsMap.update_map()
-                //     .update_map_listings(updateUrl);
-
                 this.fetching = false;
             },
             update_listings(listings) {
@@ -150,7 +142,7 @@
                     name: 'listings',
                 };
 
-                let queryString = JSON.stringify(this.$store.getters.searchState.query);
+                let queryString = JSON.stringify(this.$store.state.search.query);
                 route.query = {searchState: queryString};
 
                 this.$router.push(route);

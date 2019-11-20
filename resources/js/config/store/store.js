@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         count: 0,
         listings: [],
         allListings: [],
+        savedListings: [],
         listing: {},
         search: {
             query: {
@@ -24,14 +25,16 @@ const store = new Vuex.Store({
         },
     },
     getters: {
-        get_listings: (state, getters) => {
-            if (state.search.query.filter.length) {
-                if (state.search.query.filter.indexOf('saved') !== false) {
-                    return getters.saved_listings;
+        getListings: (state, getters) => {
+            let listings = state.allListings;
+
+            if (state.search.query.filter.length > 0) {
+                if (state.search.query.filter.indexOf('saved') >= 0) {
+                    return getters.savedListings;
                 }
-            } else {
-                return state.listings;
             }
+
+            return listings;
         },
         getAllListings: state => {
             return state.allListings;
@@ -39,15 +42,14 @@ const store = new Vuex.Store({
         get_listing_by_id: state => id => {
             return state.allListings.find(listing => listing.id === id);
         },
-        saved_listings: (store, getters) => {
-            const saved = getters.getAllListings.filter(listing => (isTrue(listing.isSaved)));
-            return saved;
+        savedListings: (state, getters) => {
+            return getters.getAllListings.filter(listing => (isTrue(listing.isSaved)));
         },
-        saved_listings_count: (store, getters) => {
-            return getters.saved_listings.count;
+        saved_listings_count: (state, getters) => {
+            return getters.savedListings.count;
         },
-        searchState: store => {
-            return store.search;
+        searchFilters: state => {
+            return state.search.query.filter;
         }
     },
     mutations: {
@@ -78,24 +80,39 @@ const store = new Vuex.Store({
         search(state, search) {
             state.search = search;
         },
-        update_listing: (state, getters) => (listing) => {
-            let l = getters.get_listing_by_id(listing.id);
-            let index = state.listings.findIndex(el => l.id === el.id);
-            let listings = state.listings;
-
-            state.listings[index] = listing;
-            listings[index] = listing;
-
-            state.commit('listings', listings);
-        },
     },
     actions: {
+        update_listing: ({commit, getters, state}, listing) => {
+            let l = getters.get_listing_by_id(listing.id);
+            let index = state.allListings.findIndex(el => l.id === el.id);
+            let listings = state.listings;
+
+            state.allListings[index] = listing;
+            listings[index] = listing;
+
+
+            commit('allListings', listings);
+        },
         filterListings({commit, state, getters}) {
-            //     if (!state.search.query.filter.length) {
-            //         commit('setListings', getters.getAllListings);
-            //     } else if (state.search.query.filter.indexOf('saved') !== false) {
-            //         commit('setListings', getters.saved_listings);
-            //     }
+            if (!getters.searchFilters.length) {
+                commit('setListings', getters.getAllListings);
+            } else if (getters.searchFilters.indexOf('saved') !== false) {
+                commit('setListings', getters.saved_listings);
+            }
+        },
+        filterAdd({commit, state}, filter) {
+            let search = state.search;
+
+            if (search.query.filter.indexOf(filter) < 0) {
+                search.query.filter.push(filter);
+                commit('search', search);
+            }
+        },
+        filterRemove({commit, state}, filter) {
+            let search = state.search;
+            const updatedFilter = _.without(getters.searchFilters, filter);
+            search.query.filter = updatedFilter;
+            commit('search', search);
         }
     }
 });

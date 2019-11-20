@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapState, mapGetters} from 'vuex';
     import mapbox_config from './mapbox.config.js';
     import geolocation from '../../geolocation';
     import {axiosOne, createElementFromHtml} from '../../helpers';
@@ -44,8 +44,10 @@
         },
         computed: {
             ...mapGetters({
-                listings: 'get_listings',
-                searchState: 'searchState',
+                listings: 'getListings',
+            }),
+            ...mapState({
+                searchState: 'search'
             })
         },
         watch: {
@@ -103,7 +105,6 @@
             this.map.on('zoomend', this.update_map_listings);
 
             this.isMounted = true;
-
         },
         methods: {
             async update_map_listings(updateUrl = false) {
@@ -112,10 +113,13 @@
                 this.$emit('set_fetching', true);
 
                 await this.get_listings_in_bounds(bounds).then((results) => {
-                    const listings = results.data.data.listings.data;
+                    const listings = results.data.data.listings.data || false;
+
+                    if (!listings) {
+                        return this;
+                    }
 
                     this.$refs.listingMarkers.removeAllMarkers();
-
                     this.$emit('update_listings', listings);
 
                     this.searchState.query.map.center = this.map.getCenter();
@@ -197,7 +201,7 @@
                 this.map.setCenter(this.center);
                 this.map.setPitch(this.pitch);
                 this.map.setBearing(this.bearing);
-                
+
                 return this;
             },
             highlightListing(listing) {

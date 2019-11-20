@@ -2,87 +2,42 @@
     <div class="marker">
 
         <template v-if="!isSaved">
-            <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
+            <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg">
                 <title>{{ title }}</title>
                 <g>
-                    <title>background</title>
-                    <rect fill="none"
-                          id="canvas_background"
-                          :height="markerHeight"
-                          :width="markerWidth"
-                          y="-1"
-                          x="-1"
-                    />
-                    <g display="none"
-                       overflow="visible"
-                       y="0"
-                       x="0"
-                       height="100%"
-                       width="100%"
-                       id="canvasGrid"
-                    >
-                        <rect fill="url(#gridpattern)"
-                              stroke-width="0"
-                              y="0"
-                              x="0"
-                              height="100%" width="100%"
-                        />
-                    </g>
-                </g>
-                <g>
-                    <title>` + title + `</title>
-                    <ellipse id="svg_5"
-                             :stroke="strokeColor"
-                             :ry="(markerHeight/2)"
-                             :rx="(markerWidth/2)"
-                             :cy="(markerHeight/2)" :cx="(markerWidth/2)"
-                             fill-opacity="null"
-                             stroke-opacity="null"
-                             stroke-width="2"
-                             :fill="color"
+                    <title>{{ title }}</title>
+                    <ellipse
+                            :stroke="strokeColor"
+                            :ry="((height-3)/2)"
+                            :rx="((width-3)/2)"
+                            :cy="(height/2)"
+                            :cx="(width/2)"
+                            fill-opacity="null"
+                            stroke-opacity="null"
+                            stroke-width="2"
+                            :fill="color"
                     />
                 </g>
             </svg>
         </template>
         <template v-else>
-            <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+            <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg">
                 <title>{{ title }}</title>
-                <g>
-                    <title>background</title>
-                    <rect fill="none"
-                          id="canvas_background"
-                          height="22"
-                          width="22"
-                          y="-1"
-                          x="-1"/>
-                    <g display="none"
-                       overflow="visible"
-                       y="0"
-                       x="0"
-                       height="100%"
-                       width="100%"
-                       id="canvasGrid">
-                        <rect fill="url(#gridpattern)"
-                              stroke-width="0"
-                              y="0"
-                              x="0"
-                              height="100%"
-                              width="100%"/>
-                    </g>
-                </g>
                 <g>
                     <title>{{ title }}</title>
                     <path :stroke="strokeColor"
-                          id="svg_3"
                           d="m0.8639,7.68563l7.01874,0l2.16884,-6.94115l2.16885,6.94115l7.01874,0l-5.67827,4.28982l2.16896,6.94115l-5.67827,-4.28993l-5.67827,4.28993l2.16896,-6.94115l-5.67827,-4.28982z"
                           stroke-opacity="null"
                           stroke-width=".5"
+                          :cy="(height/2)"
+                          :cx="(width/2)"
                           fill="#ffffaa"/>
                     <path :stroke="color"
-                          id="svg_4"
                           d="m3.2069,8.44376l5.23011,0l1.61614,-5.17185l1.61615,5.17185l5.23011,0l-4.23124,3.19634l1.61623,5.17185l-4.23124,-3.19643l-4.23124,3.19643l1.61623,-5.17185l-4.23124,-3.19634z"
                           stroke-opacity="null"
                           stroke-width="1"
+                          :cy="(height/2)"
+                          :cx="(width/2)"
                           :fill="color"/>
                 </g>
             </svg>
@@ -109,8 +64,8 @@
                 ellipsisColor: '#ffffff',
                 ellipsisStrokeColor: '#000000',
                 marker: {},
-                markerHeight: 12,
-                markerWidth: 12,
+                height: 15,
+                width: 15,
             }
         },
         props: {
@@ -136,7 +91,9 @@
             if (this.listing) {
                 this.add_marker_to_map(this.listing);
             }
-
+        },
+        beforeDestroy(){
+            this.$emit('removeMarker', this.listing);
         },
         methods: {
             add_marker_to_map(listing) {
@@ -146,7 +103,7 @@
                 let ldate = new moment(listing.active_date[0].start);
                 let duration = moment.duration(ldate.diff(moment()));
 
-                this.$emit('remove_marker', this.listing);
+                this.$emit('removeMarker', this.listing);
 
                 this.title = listing.title;
 
@@ -164,6 +121,8 @@
                     this.color = '#ff444e';
                     this.ellipsisColor = '#ff444e';
                     this.ellipsisStrokeColor = '#ff444e';
+                    this.height = 20;
+                    this.width = 20;
                 }
 
                 if (!listing) {
@@ -209,7 +168,9 @@
                     return false;
                 }
 
-                this.marker = new mapboxgl.Marker(this.$vnode.elm).setLngLat({lng: coords.lng, lat: coords.lat});
+                this.marker = new mapboxgl.Marker(this.$vnode.elm, {
+                    offset: 0
+                }).setLngLat({lng: coords.lng, lat: coords.lat});
 
                 return this.marker;
             },
@@ -217,20 +178,20 @@
                 return new mapboxgl.Popup({className: 'listing__popup'})
                     .setLngLat(mapboxLatLng(listing))
                     .setHTML("<h1>" + listing.title + "</h1>")
-                    .setMaxWidth("300px")
+                    .setMaxwidth("300px")
                     .addTo(this.map);
             },
             create_popup(listing) {
-                let markerHeight = 12, markerRadius = 10, linearOffset = 25;
+                let height = 12, markerRadius = 10, linearOffset = 25;
                 let popupOffsets = {
                     'top': [0, 0],
                     'top-left': [0, 0],
                     'top-right': [0, 0],
-                    'bottom': [0, -markerHeight],
-                    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                    'left': [markerRadius, (markerHeight - markerRadius) * -1],
-                    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                    'bottom': [0, -height],
+                    'bottom-left': [linearOffset, (height - markerRadius + linearOffset) * -1],
+                    'bottom-right': [-linearOffset, (height - markerRadius + linearOffset) * -1],
+                    'left': [markerRadius, (height - markerRadius) * -1],
+                    'right': [-markerRadius, (height - markerRadius) * -1]
                 }
                 const popup = new mapboxgl.Popup({
                     className: 'listing__popup',

@@ -40,11 +40,11 @@
                                             <i class="far fa-star"> Save</i></span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="emitHightlighOnMap(listing)">
+                                        <span class="cursor-pointer" @click="emitHightlightOnMap()">
                                             <i class="fas fa-map"></i> Show on Map</span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="emitZoomToOnMap(listing)">
+                                        <span class="cursor-pointer" @click="emitZoomToOnMap()">
                                             <i class="fas fa-crosshairs"></i> Zoom to</span>
                         </li>
                     </ul>
@@ -68,7 +68,8 @@
         },
         computed: {},
         methods: {
-            emitHightlighOnMap() {
+            emitHightlightOnMap() {
+                console.log(this.listing.title);
                 this.$emit('highlight-on-map', this.listing);
             },
             emitZoomToOnMap() {

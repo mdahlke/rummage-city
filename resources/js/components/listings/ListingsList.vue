@@ -40,7 +40,7 @@
         components: {ListingsListItem},
         computed: {
             ...mapGetters({
-                listings: 'get_listings',
+                listings: 'getListings',
             })
         },
         methods: {
