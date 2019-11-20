@@ -40,7 +40,7 @@
                                             <i class="far fa-star"> Save</i></span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="emitHightlightOnMap(listing)">
+                                        <span class="cursor-pointer" @click="emitHightlighOnMap(listing)">
                                             <i class="fas fa-map"></i> Show on Map</span>
                         </li>
                         <li class="list-inline-item listing__action">
@@ -68,7 +68,7 @@
         },
         computed: {},
         methods: {
-            emitHightlightOnMap() {
+            emitHightlighOnMap() {
                 this.$emit('highlight-on-map', this.listing);
             },
             emitZoomToOnMap() {

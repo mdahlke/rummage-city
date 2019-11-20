@@ -61,17 +61,24 @@ class ListingController extends Controller {
                 ],
                 'listing' => false,
                 'searchedTerm' => false,
+                'filter' => []
             ];
         }
 
         /** @var Builder $listings */
-        $builder = Listing::query()
-            ->with('activeDate')
+        $builder = Listing::query();
+
+        $user = \Auth::user();
+        if ($user && isset($searchState->filter['saved'])) {
+            $builder = $user->savedListing();
+        }
+
+        $builder->with('activeDate')
             ->with('image')
             ->whereHas('activeDate');
 
-        if (!$searchStateLoaded && $geocode) {
 
+        if (!$searchStateLoaded && $geocode) {
             $searchState->map->center->lat = $geocode->getCenter()[1];
             $searchState->map->center->lng = $geocode->getCenter()[0];
             /** @var MapboxFeature $feature */
@@ -85,13 +92,16 @@ class ListingController extends Controller {
             });
 
             $term = $feature->place_name;
+        } else if ($searchStateLoaded) {
+            $builder->where(function ($q) use ($searchState) {
+                $q->whereBetween('longitude', [$searchState->map->bounds->_sw->lng, $searchState->map->bounds->_ne->lng])
+                    ->whereBetween('latitude', [$searchState->map->bounds->_sw->lat, $searchState->map->bounds->_ne->lat]);
+            });
         }
-
 
         $builder->limit(100);
 
         $listings = $builder->get();
-
         $searchState->term = $term;
 
         $data['listings'] = $listings->toArray();

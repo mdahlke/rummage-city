@@ -59,19 +59,6 @@
         created() {
             mapboxgl.accessToken = mapbox_config.accessToken;
 
-
-            geolocation.get().then((r) => {
-                // if (!this.listings.length && this.mapMarkers.length) {
-                //     this.center_map_on(r.lat, r.lng);
-                // }
-            });
-
-            geolocation.watch((r) => {
-            });
-        },
-        mounted() {
-
-            console.log(this.mapAttributes);
             if (this.mapAttributes.center && Object.keys(this.mapAttributes.center).length !== 0) {
                 this.center = this.mapAttributes.center;
             }
@@ -85,6 +72,16 @@
                 this.bearing = this.mapAttributes.bearing;
             }
 
+            geolocation.get().then((r) => {
+                // if (!this.listings.length && this.mapMarkers.length) {
+                //     this.center_map_on(r.lat, r.lng);
+                // }
+            });
+
+            geolocation.watch((r) => {
+            });
+        },
+        mounted() {
             let config = {
                 container: 'mapbox',
                 style: mapbox_config.style,
@@ -109,12 +106,12 @@
 
         },
         methods: {
-            update_map_listings(updateUrl = false) {
+            async update_map_listings(updateUrl = false) {
                 let bounds = this.map.getBounds();
 
                 this.$emit('set_fetching', true);
 
-                this.get_listings_in_bounds(bounds).then((results) => {
+                await this.get_listings_in_bounds(bounds).then((results) => {
                     const listings = results.data.data.listings.data;
 
                     this.$refs.listingMarkers.removeAllMarkers();
@@ -196,12 +193,11 @@
                 this.map.setCenter([lat, lng]);
             },
             update_map() {
-                console.log('updating_map');
                 this.map.setZoom(this.zoom);
                 this.map.setCenter(this.center);
                 this.map.setPitch(this.pitch);
                 this.map.setBearing(this.bearing);
-                //
+                
                 return this;
             },
             highlightListing(listing) {

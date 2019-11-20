@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router';
 import pathToRegexp from 'path-to-regexp';
 
+
 const Listings = () => import('../views/Listings');
 const ListingView = () => import( '../views/ListingView');
 
@@ -11,7 +12,6 @@ const router = new VueRouter({
             path: '/listings',
             name: 'listings',
             beforeRouteUpdate(to, from, next) {
-                console.log('before route', {to, from, next});
                 this.update_map();
                 next();
             },

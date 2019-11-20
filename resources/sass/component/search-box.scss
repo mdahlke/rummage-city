@@ -33,42 +33,4 @@
     border-left: 0;
   }
 
-  .search-filters {
-    margin-right: 30px;
-    margin-bottom: 0;
-
-    li {
-      padding: 7px 20px;
-      margin: 0 8px;
-      border: 1px solid $tertiary;
-      cursor: pointer;
-
-      i {
-        color: $tertiary;
-      }
-    }
-  }
-
-
-  @media (max-width: 575px) {
-
-    .search-filters {
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      justify-content: space-evenly;
-      margin-right: 0;
-      width: 100%;
-
-      li {
-        display: block;
-        flex: 1 0 calc(33% - 5px);
-        padding: 7px 20px;
-        margin: 0 0 8px 0;
-        border: 1px solid #35495e;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-    }
-  }
 }

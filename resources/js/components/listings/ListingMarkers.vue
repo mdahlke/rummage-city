@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
     import MapMarker from './MapMarker.vue';
     import Popup from './Popup.vue';
 
@@ -32,6 +32,11 @@
                 _listings: 'get_listings',
             })
         },
+        watch: {
+            _listings(newListings, oldListings) {
+                this.redrawMarkers();
+            }
+        },
         methods: {
             add_marker(listing, marker) {
                 marker.addTo(this.map);
@@ -43,6 +48,9 @@
             remove_marker(listing) {
                 const marker = this.find(m => m.id = listing.id);
                 marker.marker.remove();
+            },
+            redrawMarkers() {
+                this.removeAllMarkers();
             },
             close_all_popups() {
                 let marker;

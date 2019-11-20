@@ -8,6 +8,7 @@
         <div id="listings">
 
             <ListingsMap ref="listingsMap"
+                         v-if="loaded"
                          :map-attributes="mapAttributes"
                          @update_listings="update_listings"
                          @push_state="push_state"
@@ -93,8 +94,10 @@
             }
         },
         created() {
+        },
+        mounted() {
             if (this.listings) {
-                this.$store.commit('listings', this.listings);
+                this.update_listings(this.listings);
             }
 
             if (this.search) {
@@ -105,17 +108,14 @@
             } else {
                 this.searchState = this.$store.getters.searchState;
             }
-        },
-        mounted() {
-            // this.$el.addEventListener("hightlightOnMap", (e) => {
-            //     console.log({e});
-            //     this.hightlightOnMap(e)
-            // });
+
             this.$el.addEventListener("zoomToOnMap", (e) => this.zoomToOnMap(e));
 
             if (!this._listings.length) {
                 // when the component is mounted then we will be fetching data
                 this.fetch_data();
+                this.loaded = true;
+            } else {
                 this.loaded = true;
             }
         },
@@ -139,56 +139,16 @@
 
                 this.fetching = false;
             },
-            map_data() {
-
-                // let searchState = false;
-                //
-                // if (this.search && this.search.query) {
-                //     searchState = this.search;
-                // } else if (this.$route.query.searchState) {
-                //     searchState = JSON.parse(this.$route.query.searchState);
-                // } else {
-                //     searchState = this.$store.state.search;
-                // }
-                //
-                // if (searchState.bounds && searchState.bounds.lat && searchState.bounds.lng) {
-                //     this.lat = searchState.bounds.lat;
-                //     this.lng = searchState.bounds.lng;
-                // }
-                //
-                // if (searchState.zoom) {
-                //     this.zoom = searchState.zoom;
-                // }
-                //
-                // if (searchState.pitch) {
-                //     this.pitch = searchState.pitch;
-                // }
-                //
-                // if (searchState.bearing) {
-                //     this.bearing = searchState.bearing;
-                // }
-                //
-                // console.log(this.)
-
-            },
             update_listings(listings) {
-                this.$store.commit('listings', listings);
+                this.$store.commit('allListings', listings);
+                this.$store.commit('setListings', listings);
                 this.scroll_to_active(0);
             },
             push_state() {
                 let route;
-                // if (this.$route.params.location || false) {
-                //     route = {
-                //         name: 'listings.location',
-                //         params: {
-                //             location: (this.$route.params.location)
-                //         },
-                //     }
-                // } else {
                 route = {
                     name: 'listings',
-                }
-                // }
+                };
 
                 let queryString = JSON.stringify(this.$store.getters.searchState.query);
                 route.query = {searchState: queryString};

@@ -7,21 +7,41 @@ Vue.use(Vuex);
 
 
 const store = new Vuex.Store({
+    // namespaced: false,
     state: {
         count: 0,
         listings: [],
+        allListings: [],
         listing: {},
-        search: {},
+        search: {
+            query: {
+                filter: [],
+                listing: {},
+                map: {},
+                term: '',
+            },
+            url: ''
+        },
     },
     getters: {
-        get_listings: state => {
-            return state.listings;
+        get_listings: (state, getters) => {
+            if (state.search.query.filter.length) {
+                if (state.search.query.filter.indexOf('saved') !== false) {
+                    return getters.saved_listings;
+                }
+            } else {
+                return state.listings;
+            }
+        },
+        getAllListings: state => {
+            return state.allListings;
         },
         get_listing_by_id: state => id => {
-            return state.listings.find(listing => listing.id === id);
+            return state.allListings.find(listing => listing.id === id);
         },
-        saved_listings: store => {
-            return store.listings.filter(listing => (listing.isSaved == "true"));
+        saved_listings: (store, getters) => {
+            const saved = getters.getAllListings.filter(listing => (isTrue(listing.isSaved)));
+            return saved;
         },
         saved_listings_count: (store, getters) => {
             return getters.saved_listings.count;
@@ -43,8 +63,11 @@ const store = new Vuex.Store({
                 );
             }
         },
-        listings(state, listings) {
+        setListings(state, listings) {
             state.listings = listings;
+        },
+        allListings(state, listings) {
+            state.allListings = listings;
         },
         set_listing(state, listing) {
             state.listing = listing;
@@ -65,6 +88,15 @@ const store = new Vuex.Store({
 
             state.commit('listings', listings);
         },
+    },
+    actions: {
+        filterListings({commit, state, getters}) {
+            //     if (!state.search.query.filter.length) {
+            //         commit('setListings', getters.getAllListings);
+            //     } else if (state.search.query.filter.indexOf('saved') !== false) {
+            //         commit('setListings', getters.saved_listings);
+            //     }
+        }
     }
 });
 

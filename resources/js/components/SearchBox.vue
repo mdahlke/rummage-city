@@ -1,11 +1,10 @@
 <template>
     <div class="search-box"
          :class="{ 'filters': showFilters }">
-        <ul v-if="showFilters" class="search-filters list-inline">
-            <li class="list-inline-item"><i class="fas fa-heart"></i> Saved only</li>
-            <li class="list-inline-item"><i class="fas fa-clock"></i> Today</li>
-            <li class="list-inline-item"><i class="fas fa-calendar"></i> This weekend</li>
-        </ul>
+        <SearchBoxFilter v-if="showFilters"
+                         @filterAdd="filterAdd"
+                         @filterRemove="filterRemove"
+        />
 
         <form class="search-form form-inline my-2 my-lg-0" :action="action">
             <div class="input-group">
@@ -29,10 +28,15 @@
 </template>
 
 <script>
-    import '../../sass/component/search-box.scss';
+    import {mapGetters, mapMutations} from 'vuex';
+    import _ from 'underscore';
+    import SearchBoxFilter from './SearchBoxFilter';
 
     export default {
-        name: "SearchBox",
+        name: 'SearchBox',
+        components: {
+            SearchBoxFilter
+        },
         data() {
             return {
                 q: '',
@@ -47,6 +51,11 @@
                 default: true,
             }
         },
+        computed: {
+            ...mapGetters([
+                'searchState'
+            ])
+        },
         mounted() {
             if (this.query) {
                 this.q = this.query;
@@ -56,9 +65,29 @@
             }
         },
         methods: {
-            search(query) {
-                console.log({query});
+            filterAdd(val) {
+                const state = this.searchState;
+
+                if (state.query.filter.indexOf(val) !== false) {
+                    state.query.filter.push(val);
+                    this.$store.commit('search', state);
+                }
+            },
+            filterRemove(val) {
+                const state = this.searchState;
+
+                if (!state.query.filter) {
+                    state.query.filter = [];
+                }
+
+                state.query.filter = _.without(state.query.filter, val);
+                this.$store.commit('search', state);
+
             }
         }
     }
 </script>
+
+<style lang="scss">
+    @import '../../sass/component/search-box.scss';
+</style>
