@@ -1,3 +1,5 @@
+import moment from "moment";
+
 /**
  * Add JavaScript files to the <head>
  * @param urls
@@ -76,3 +78,130 @@ export const isTrue = val => {
 export const is_false = val => {
     return !isTrue(val);
 };
+
+/**
+ * Checks if a listing is happening today
+ *
+ * @param listingDates Expects listing dates object from the Laravel model
+ */
+export const isListingToday = (...listingDates) => {
+    const today = new moment();
+    let date;
+    let isToday = false;
+
+    listingDates.some(listingDate => {
+        date = new moment(listingDate.start);
+        isToday = today.isSame(date, 'd');
+        return isToday;
+    });
+
+    return isToday;
+};
+
+/**
+ * Checks if a given date is on the weekend (including Friday)
+ * @param date Moment()
+ * @returns {boolean}
+ */
+const isWeekend = function (date) {
+    if ([5, 6, 7].includes(date.day())) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Checks if a listing is happening (inclusively) this weekend
+ * If the current day is a Friday, Saturday, or Sunday then this
+ * will return true for the closest date that is today or in the future
+ * and within that same weekend
+ *
+ * Example:
+ * Current Date: Friday Oct 7
+ *  Dates:
+ *      Friday Oct 7 - true
+ *      Saturday Oct 8 - true
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - true
+ *
+ * Current Date: Saturday Oct 8
+ *  Dates:
+ *      Friday Oct 7 - false
+ *      Saturday Oct 8 - true
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - false
+ *
+ *
+ * Current Date: Sunday Oct 9
+ *  Dates:
+ *      Friday Oct 7 - false
+ *      Saturday Oct 8 - false
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - false
+ *
+ * @param listingDates Expects listing dates object from the Laravel model
+ */
+export const isListingThisWeekend = (...listingDates) => {
+    let date;
+    let isThisWeekend = false;
+
+    listingDates.some(listingDate => {
+        date = new moment(listingDate.start);
+        if (isWeekend(date)) {
+            const upcomingWeekend = getUpcomingWeekend();
+
+            if (date.isBetween(upcomingWeekend[0], upcomingWeekend[2])) {
+                isThisWeekend = true;
+                return isThisWeekend;
+            }
+        }
+    });
+
+    return isThisWeekend;
+};
+
+// globally stores the upcoming weekend to prevent recalculating many times
+let thisWeekend = [];
+
+const getUpcomingWeekend = (today = null) => {
+    if (!thisWeekend.length) {
+        const fridayDayNumber = 5;
+        let friday = new moment();
+        let saturday;
+        let sunday;
+        // if current day is in the week
+        let daysToWeekend = 0;
+        // if current day is in the weekend
+        let daysFromFriday = 0;
+
+        if (!today) {
+            today = new moment().startOf('day');
+        }
+
+        if (!isWeekend(today)) {
+            daysToWeekend = fridayDayNumber - today.day();
+            friday = today;
+            friday.add(daysToWeekend, 'd');
+        } else {
+            daysFromFriday = today.day() - fridayDayNumber;
+            friday = today;
+            friday.subtract(daysFromFriday, 'd');
+        }
+
+        saturday = (new moment(friday)).add(1, 'd');
+        sunday = (new moment(friday)).add(2, 'd');
+
+        thisWeekend = [friday, saturday, sunday];
+    }
+
+    return thisWeekend
+}

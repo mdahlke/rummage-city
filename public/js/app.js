@@ -105074,34 +105074,34 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('VueCtkDateTimePicker', vue
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listings', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(8), __webpack_require__.e(7), __webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(4), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ./views/Listings.vue */ "./resources/js/views/Listings.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(8), __webpack_require__.e(7), __webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(4), __webpack_require__.e(10), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! ./views/Listings.vue */ "./resources/js/views/Listings.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, /*! ./views/ListingView.vue */ "./resources/js/views/ListingView.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(9), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, /*! ./views/ListingView.vue */ "./resources/js/views/ListingView.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-dates-input', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(16), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingDatesInput.vue */ "./resources/js/components/listings/ListingDatesInput.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(13), __webpack_require__.e(22)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingDatesInput.vue */ "./resources/js/components/listings/ListingDatesInput.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-image-input', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(18), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingImageInput.vue */ "./resources/js/components/listings/ListingImageInput.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(14), __webpack_require__.e(23)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingImageInput.vue */ "./resources/js/components/listings/ListingImageInput.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listings-map', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(7), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingsMap.vue */ "./resources/js/components/listings/ListingsMap.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(8), __webpack_require__.e(0), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingsMap.vue */ "./resources/js/components/listings/ListingsMap.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listings-list', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(0), __webpack_require__.e(5), __webpack_require__.e(17)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingsList.vue */ "./resources/js/components/listings/ListingsList.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(8), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(25)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingsList.vue */ "./resources/js/components/listings/ListingsList.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-dates', function () {
-  return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./components/listings/ListingDates.vue */ "./resources/js/components/listings/ListingDates.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingDates.vue */ "./resources/js/components/listings/ListingDates.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('listing-images', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(15)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingImages.vue */ "./resources/js/components/listings/ListingImages.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(9), __webpack_require__.e(24)]).then(__webpack_require__.bind(null, /*! ./components/listings/ListingImages.vue */ "./resources/js/components/listings/ListingImages.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('map-geocode', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(11), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ./components/Map/Geocode.vue */ "./resources/js/components/Map/Geocode.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(12), __webpack_require__.e(21)]).then(__webpack_require__.bind(null, /*! ./components/Map/Geocode.vue */ "./resources/js/components/Map/Geocode.vue"));
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('search-box', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(8), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./components/SearchBox.vue */ "./resources/js/components/SearchBox.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(7), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ./components/SearchBox.vue */ "./resources/js/components/SearchBox.vue"));
 });
 
 
@@ -105199,11 +105199,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Listings = function Listings() {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(8), __webpack_require__.e(7), __webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(4), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ../views/Listings */ "./resources/js/views/Listings.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(1), __webpack_require__.e(8), __webpack_require__.e(7), __webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(4), __webpack_require__.e(10), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! ../views/Listings */ "./resources/js/views/Listings.vue"));
 };
 
 var ListingView = function ListingView() {
-  return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(9)]).then(__webpack_require__.bind(null, /*! ../views/ListingView */ "./resources/js/views/ListingView.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(9), __webpack_require__.e(19)]).then(__webpack_require__.bind(null, /*! ../views/ListingView */ "./resources/js/views/ListingView.vue"));
 };
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -105237,14 +105237,27 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 
 /***/ }),
 
-/***/ "./resources/js/config/store/getters.js":
-/*!**********************************************!*\
-  !*** ./resources/js/config/store/getters.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./resources/js/config/store/mutations.js":
+/*!************************************************!*\
+  !*** ./resources/js/config/store/mutations.js ***!
+  \************************************************/
+/*! exports provided: INITIALISE_STORE, SET_LISTINGS, ALL_LISTINGS, SET_LISTING, LISTING, SEARCH */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INITIALISE_STORE", function() { return INITIALISE_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_LISTINGS", function() { return SET_LISTINGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ALL_LISTINGS", function() { return ALL_LISTINGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_LISTING", function() { return SET_LISTING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LISTING", function() { return LISTING; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SEARCH", function() { return SEARCH; });
+var INITIALISE_STORE = 'INITIALISE_STORE';
+var SET_LISTINGS = 'SET_LISTINGS';
+var ALL_LISTINGS = 'ALL_LISTINGS';
+var SET_LISTING = 'SET_LISTING';
+var LISTING = 'LISTING';
+var SEARCH = 'SEARCH';
 
 /***/ }),
 
@@ -105260,14 +105273,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getters */ "./resources/js/config/store/getters.js");
-/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_getters__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mutations */ "./resources/js/config/store/mutations.js");
+var _mutations;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_0__["default"]);
+Object.defineProperty(Array.prototype, 'unique', {
+  enumerable: false,
+  configurable: false,
+  writable: false,
+  value: function value() {
+    var a = this.concat();
+
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = i + 1; j < a.length; ++j) {
+        if (a[i] === a[j]) a.splice(j--, 1);
+      }
+    }
+
+    return a;
+  }
+});
 var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
   // namespaced: false,
   state: {
@@ -105291,8 +105331,38 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       var listings = state.allListings;
 
       if (state.search.query.filter.length > 0) {
-        if (state.search.query.filter.indexOf('saved') >= 0) {
-          return getters.savedListings;
+        var filterListings = listings;
+        var savedListings = [];
+        var todayListings = [];
+        var weekendListings = [];
+        var today = false;
+        var weekend = false;
+
+        if (state.search.query.filter.includes('saved')) {
+          savedListings = listings.filter(function (listing) {
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["isTrue"])(listing.isSaved);
+          });
+          filterListings = savedListings;
+        }
+
+        if (state.search.query.filter.includes('today')) {
+          today = true;
+          todayListings = filterListings.filter(function (listing) {
+            return _helpers__WEBPACK_IMPORTED_MODULE_2__["isListingToday"].apply(void 0, _toConsumableArray(listing.active_date));
+          });
+        }
+
+        if (state.search.query.filter.includes('weekend')) {
+          weekend = true;
+          weekendListings = filterListings.filter(function (listing) {
+            return _helpers__WEBPACK_IMPORTED_MODULE_2__["isListingThisWeekend"].apply(void 0, _toConsumableArray(listing.active_date));
+          });
+        }
+
+        if (today || weekend) {
+          listings = todayListings.concat(weekendListings).unique();
+        } else {
+          listings = filterListings;
         }
       }
 
@@ -105310,7 +105380,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     },
     savedListings: function savedListings(state, getters) {
       return getters.getAllListings.filter(function (listing) {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["isTrue"])(listing.isSaved);
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["isTrue"])(listing.isSaved);
+      });
+    },
+    listingsToday: function listingsToday(state, getters) {
+      return getters.getAllListings.filter(function (listing) {
+        return _helpers__WEBPACK_IMPORTED_MODULE_2__["isListingToday"].apply(void 0, _toConsumableArray(listing.active_date));
       });
     },
     saved_listings_count: function saved_listings_count(state, getters) {
@@ -105320,33 +105395,23 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
       return state.search.query.filter;
     }
   },
-  mutations: {
-    set_count: function set_count(state, count) {
-      this.count = count;
-    },
-    initialise_store: function initialise_store(state) {
-      // Check if the ID exists
-      if (localStorage.getItem('store')) {
-        // Replace the state object with the stored item
-        this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))));
-      }
-    },
-    setListings: function setListings(state, listings) {
-      state.listings = listings;
-    },
-    allListings: function allListings(state, listings) {
-      state.allListings = listings;
-    },
-    set_listing: function set_listing(state, listing) {
-      state.listing = listing;
-    },
-    listing: function listing(state, _listing) {
-      state.listing = _listing;
-    },
-    search: function search(state, _search) {
-      state.search = _search;
+  mutations: (_mutations = {}, _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["INITIALISE_STORE"], function (state) {
+    // Check if the ID exists
+    if (localStorage.getItem('store')) {
+      // Replace the state object with the stored item
+      this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))));
     }
-  },
+  }), _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["SET_LISTINGS"], function (state, listings) {
+    state.listings = listings;
+  }), _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["ALL_LISTINGS"], function (state, listings) {
+    state.allListings = listings;
+  }), _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["SET_LISTING"], function (state, listing) {
+    state.listing = listing;
+  }), _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["LISTING"], function (state, listing) {
+    state.listing = listing;
+  }), _defineProperty(_mutations, _mutations__WEBPACK_IMPORTED_MODULE_3__["SEARCH"], function (state, search) {
+    state.search = search;
+  }), _mutations),
   actions: {
     update_listing: function update_listing(_ref, listing) {
       var commit = _ref.commit,
@@ -105384,10 +105449,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_0__["default"].Store({
     },
     filterRemove: function filterRemove(_ref4, filter) {
       var commit = _ref4.commit,
-          state = _ref4.state;
+          state = _ref4.state,
+          getters = _ref4.getters;
       var search = state.search;
 
-      var updatedFilter = _.without(_getters__WEBPACK_IMPORTED_MODULE_2___default.a.searchFilters, filter);
+      var updatedFilter = _.without(getters.searchFilters, filter);
 
       search.query.filter = updatedFilter;
       commit('search', search);
@@ -105406,7 +105472,7 @@ store.subscribe(function (mutation, state) {
 /*!*********************************!*\
   !*** ./resources/js/helpers.js ***!
   \*********************************/
-/*! exports provided: script2Head, empty, mapboxLatLng, setPage, updateQueryStringParameter, axiosOne, createElementFromHtml, isTrue, is_false */
+/*! exports provided: script2Head, empty, mapboxLatLng, setPage, updateQueryStringParameter, axiosOne, createElementFromHtml, isTrue, is_false, isListingToday, isListingThisWeekend */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105420,10 +105486,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createElementFromHtml", function() { return createElementFromHtml; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isTrue", function() { return isTrue; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "is_false", function() { return is_false; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isListingToday", function() { return isListingToday; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isListingThisWeekend", function() { return isListingThisWeekend; });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+
 /**
  * Add JavaScript files to the <head>
  * @param urls
  */
+
 var script2Head = function script2Head(urls) {
   var script;
 
@@ -105494,6 +105566,142 @@ var isTrue = function isTrue(val) {
 };
 var is_false = function is_false(val) {
   return !isTrue(val);
+};
+/**
+ * Checks if a listing is happening today
+ *
+ * @param listingDates Expects listing dates object from the Laravel model
+ */
+
+var isListingToday = function isListingToday() {
+  var today = new moment__WEBPACK_IMPORTED_MODULE_0___default.a();
+  var date;
+  var isToday = false;
+
+  for (var _len = arguments.length, listingDates = new Array(_len), _key = 0; _key < _len; _key++) {
+    listingDates[_key] = arguments[_key];
+  }
+
+  listingDates.some(function (listingDate) {
+    date = new moment__WEBPACK_IMPORTED_MODULE_0___default.a(listingDate.start);
+    isToday = today.isSame(date, 'd');
+    return isToday;
+  });
+  return isToday;
+};
+/**
+ * Checks if a given date is on the weekend (including Friday)
+ * @param date Moment()
+ * @returns {boolean}
+ */
+
+var isWeekend = function isWeekend(date) {
+  if ([5, 6, 7].includes(date.day())) {
+    return true;
+  }
+
+  return false;
+};
+/**
+ * Checks if a listing is happening (inclusively) this weekend
+ * If the current day is a Friday, Saturday, or Sunday then this
+ * will return true for the closest date that is today or in the future
+ * and within that same weekend
+ *
+ * Example:
+ * Current Date: Friday Oct 7
+ *  Dates:
+ *      Friday Oct 7 - true
+ *      Saturday Oct 8 - true
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - true
+ *
+ * Current Date: Saturday Oct 8
+ *  Dates:
+ *      Friday Oct 7 - false
+ *      Saturday Oct 8 - true
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - false
+ *
+ *
+ * Current Date: Sunday Oct 9
+ *  Dates:
+ *      Friday Oct 7 - false
+ *      Saturday Oct 8 - false
+ *      Sunday Oct 9 - true
+ *
+ *      Friday Oct 14 - false
+ *      Saturday Oct 15 - false
+ *      Sunday Oct 16 - false
+ *
+ * @param listingDates Expects listing dates object from the Laravel model
+ */
+
+
+var isListingThisWeekend = function isListingThisWeekend() {
+  var date;
+  var isThisWeekend = false;
+
+  for (var _len2 = arguments.length, listingDates = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    listingDates[_key2] = arguments[_key2];
+  }
+
+  listingDates.some(function (listingDate) {
+    date = new moment__WEBPACK_IMPORTED_MODULE_0___default.a(listingDate.start);
+
+    if (isWeekend(date)) {
+      var upcomingWeekend = getUpcomingWeekend();
+
+      if (date.isBetween(upcomingWeekend[0], upcomingWeekend[2])) {
+        isThisWeekend = true;
+        return isThisWeekend;
+      }
+    }
+  });
+  return isThisWeekend;
+}; // globally stores the upcoming weekend to prevent recalculating many times
+
+var thisWeekend = [];
+
+var getUpcomingWeekend = function getUpcomingWeekend() {
+  var today = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+  if (!thisWeekend.length) {
+    var fridayDayNumber = 5;
+    var friday = new moment__WEBPACK_IMPORTED_MODULE_0___default.a();
+    var saturday;
+    var sunday; // if current day is in the week
+
+    var daysToWeekend = 0; // if current day is in the weekend
+
+    var daysFromFriday = 0;
+
+    if (!today) {
+      today = new moment__WEBPACK_IMPORTED_MODULE_0___default.a().startOf('day');
+    }
+
+    if (!isWeekend(today)) {
+      daysToWeekend = fridayDayNumber - today.day();
+      friday = today;
+      friday.add(daysToWeekend, 'd');
+    } else {
+      daysFromFriday = today.day() - fridayDayNumber;
+      friday = today;
+      friday.subtract(daysFromFriday, 'd');
+    }
+
+    saturday = new moment__WEBPACK_IMPORTED_MODULE_0___default.a(friday).add(1, 'd');
+    sunday = new moment__WEBPACK_IMPORTED_MODULE_0___default.a(friday).add(2, 'd');
+    thisWeekend = [friday, saturday, sunday];
+  }
+
+  return thisWeekend;
 };
 
 /***/ }),

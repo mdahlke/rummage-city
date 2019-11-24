@@ -1,9 +1,26 @@
 import Vuex from "vuex";
 import Vue from 'vue';
-import getters from './getters';
-import {isTrue} from '../../helpers';
+import {isTrue, isListingToday, isListingThisWeekend} from '../../helpers';
+import {INITIALISE_STORE, SET_LISTINGS, ALL_LISTINGS, SET_LISTING, LISTING, SEARCH} from './mutations';
 
 Vue.use(Vuex);
+
+Object.defineProperty(Array.prototype, 'unique', {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function () {
+        var a = this.concat();
+        for (var i = 0; i < a.length; ++i) {
+            for (var j = i + 1; j < a.length; ++j) {
+                if (a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+
+        return a;
+    }
+});
 
 
 const store = new Vuex.Store({
@@ -29,8 +46,30 @@ const store = new Vuex.Store({
             let listings = state.allListings;
 
             if (state.search.query.filter.length > 0) {
-                if (state.search.query.filter.indexOf('saved') >= 0) {
-                    return getters.savedListings;
+                let filterListings = listings;
+                let savedListings = [];
+                let todayListings = [];
+                let weekendListings = [];
+                let today = false;
+                let weekend = false;
+
+                if (state.search.query.filter.includes('saved')) {
+                    savedListings = listings.filter(listing => (isTrue(listing.isSaved)));
+                    filterListings = savedListings;
+                }
+                if (state.search.query.filter.includes('today')) {
+                    today = true;
+                    todayListings = filterListings.filter(listing => isListingToday(...listing.active_date));
+                }
+                if (state.search.query.filter.includes('weekend')) {
+                    weekend = true;
+                    weekendListings = filterListings.filter(listing => isListingThisWeekend(...listing.active_date));
+                }
+
+                if (today || weekend) {
+                    listings = todayListings.concat(weekendListings).unique();
+                } else {
+                    listings = filterListings;
                 }
             }
 
@@ -45,6 +84,9 @@ const store = new Vuex.Store({
         savedListings: (state, getters) => {
             return getters.getAllListings.filter(listing => (isTrue(listing.isSaved)));
         },
+        listingsToday: (state, getters) => {
+            return getters.getAllListings.filter(listing => isListingToday(...listing.active_date));
+        },
         saved_listings_count: (state, getters) => {
             return getters.savedListings.count;
         },
@@ -53,10 +95,7 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-        set_count(state, count) {
-            this.count = count;
-        },
-        initialise_store(state) {
+        [INITIALISE_STORE](state) {
             // Check if the ID exists
             if (localStorage.getItem('store')) {
                 // Replace the state object with the stored item
@@ -65,19 +104,19 @@ const store = new Vuex.Store({
                 );
             }
         },
-        setListings(state, listings) {
+        [SET_LISTINGS](state, listings) {
             state.listings = listings;
         },
-        allListings(state, listings) {
+        [ALL_LISTINGS](state, listings) {
             state.allListings = listings;
         },
-        set_listing(state, listing) {
+        [SET_LISTING](state, listing) {
             state.listing = listing;
         },
-        listing(state, listing) {
+        [LISTING](state, listing) {
             state.listing = listing;
         },
-        search(state, search) {
+        [SEARCH](state, search) {
             state.search = search;
         },
     },
@@ -108,7 +147,7 @@ const store = new Vuex.Store({
                 commit('search', search);
             }
         },
-        filterRemove({commit, state}, filter) {
+        filterRemove({commit, state, getters}, filter) {
             let search = state.search;
             const updatedFilter = _.without(getters.searchFilters, filter);
             search.query.filter = updatedFilter;
