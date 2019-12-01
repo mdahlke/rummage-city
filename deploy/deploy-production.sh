@@ -32,11 +32,21 @@ if [[ $ping_result == *"ping: cannot resolve"* ]]; then
   echo 'Could not connect to host'
   exit 1
 else
+  echo -e "\nBranch:  ${BRANCH}"
+  echo "Git Tag: ${git_tag}"
+  echo "Current Working Directory:  ${CWD}"
+  echo "IP Address:  ${ip}"
+  echo "Deploy User: ${deployUser}"
+  echo "Directory Owner: ${user}"
+  echo "Branch Release: ${test_branch}"
+  echo "Deploy Directory: ${deploy_dir}"
+  echo -e "Destination Directory: ${destination}\n"
+
   echo "Server pinged successfully"
   echo "Finding Server..."
-  ssh -q $deployUser@$ip exit
+  ssh -q ${deployUser}@${ip} exit
 
-  ssh_connection=$(ssh -o BatchMode=yes -o ConnectTimeout=5 $deployUser@$ip echo ok 2>&1)
+  ssh_connection=$(ssh -o BatchMode=yes -o ConnectTimeout=5 ${deployUser}@${ip} echo ok 2>&1)
   git_tag=$(git describe --abbrev=0 --tags 2>&1)
 
   echo "Server Found: ${ssh_connection}"
@@ -44,16 +54,6 @@ else
   test_branch=$git_tag
 
   if [[ $ssh_connection == ok ]]; then
-    echo -e "\nBranch:  ${BRANCH}"
-    echo "Git Tag: ${git_tag}"
-    echo "Current Working Directory:  ${CWD}"
-    echo "IP Address:  ${ip}"
-    echo "Deploy User: ${deployUser}"
-    echo "Directory Owner: ${user}"
-    echo "Branch Release: ${test_branch}"
-    echo "Deploy Directory: ${deploy_dir}"
-    echo -e "Destination Directory: ${destination}\n"
-
     echo "Connection Successful"
     echo "Preparing files for deployment"
 
