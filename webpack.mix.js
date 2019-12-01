@@ -17,7 +17,7 @@ const devtool = production ? false : 'source-map';
 mix.webpackConfig({
     devtool,
     output: {
-        chunkFilename: 'js/chunks/[name].js'
+        chunkFilename: 'js/chunks/[chunkhash].js'
     }
 });
 

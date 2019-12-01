@@ -8,6 +8,7 @@ use App\GraphQL\Query\ListingDatesQuery;
 use App\GraphQL\Query\ListingImagesQuery;
 use App\GraphQL\Query\ListingsQuery;
 use App\GraphQL\Query\ListingsSearchQuery;
+use App\GraphQL\Query\RelatedListingsQuery;
 use App\GraphQL\Query\SavedListingsQuery;
 use App\GraphQL\Query\UsersQuery;
 use App\GraphQL\Types\ListingDatesType;
@@ -118,6 +119,7 @@ return [
         'default' => [
             'query' => [
                 'listings' => ListingsQuery::class,
+                'relatedListings' => RelatedListingsQuery::class,
                 'listingsSearch' => ListingsSearchQuery::class,
                 'savedListings' => SavedListingsQuery::class,
                 'listingDates' => ListingDatesQuery::class,

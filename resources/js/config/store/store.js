@@ -1,6 +1,6 @@
-import Vuex from "vuex";
+import Vuex from 'vuex';
 import Vue from 'vue';
-import {isTrue, isListingToday, isListingThisWeekend} from '../../helpers';
+import {isTrue, isListingToday, isListingThisWeekend, axiosOne} from '../../helpers';
 import {INITIALISE_STORE, SET_LISTINGS, ALL_LISTINGS, SET_LISTING, LISTING, SEARCH} from './mutations';
 
 Vue.use(Vuex);
@@ -121,6 +121,58 @@ const store = new Vuex.Store({
         },
     },
     actions: {
+        getListingsInBounds: ({commit}, bounds) => {
+            const query = JSON.stringify(JSON.stringify({
+                sw: bounds._sw,
+                ne: bounds._ne
+            }));
+
+            return axiosOne({
+                url: '/graphql',
+                type: 'get',
+                params: {
+                    query: `
+							query FetchListingsInBounds {
+							  listings(bounds: ` + query + `, limit: 150) {
+							    data {
+							      id
+							      title
+							      description
+							      address
+							      latitude
+							      longitude
+							      isSaved
+							      saveUrl
+							      removeSavedUrl
+							      active_date {
+							        start
+							        end
+							      }
+							      image {
+							        name
+							        url
+							      }
+							    }
+							  }
+							}
+					`
+                },
+            }, 'listings').catch(function (thrown) {
+                if (axios.isCancel(thrown)) {
+                    console.log('Request canceled', thrown.message);
+                } else {
+                    // handle error
+                }
+            }).then(results => {
+                const listings = results.data.data.listings.data || false;
+
+                console.log({listings});
+                if (listings) {
+                    commit(ALL_LISTINGS, listings);
+                    commit(SET_LISTINGS, listings);
+                }
+            });
+        },
         update_listing: ({commit, getters, state}, listing) => {
             let l = getters.get_listing_by_id(listing.id);
             let index = state.allListings.findIndex(el => l.id === el.id);
@@ -130,13 +182,13 @@ const store = new Vuex.Store({
             listings[index] = listing;
 
 
-            commit('allListings', listings);
+            commit(ALL_LISTINGS, listings);
         },
         filterListings({commit, state, getters}) {
             if (!getters.searchFilters.length) {
-                commit('setListings', getters.getAllListings);
+                commit(SET_LISTINGS, getters.getAllListings);
             } else if (getters.searchFilters.indexOf('saved') !== false) {
-                commit('setListings', getters.saved_listings);
+                commit(SET_LISTINGS, getters.saved_listings);
             }
         },
         filterAdd({commit, state}, filter) {
@@ -144,14 +196,14 @@ const store = new Vuex.Store({
 
             if (search.query.filter.indexOf(filter) < 0) {
                 search.query.filter.push(filter);
-                commit('search', search);
+                commit(SEARCH, search);
             }
         },
         filterRemove({commit, state, getters}, filter) {
             let search = state.search;
             const updatedFilter = _.without(getters.searchFilters, filter);
             search.query.filter = updatedFilter;
-            commit('search', search);
+            commit(SEARCH, search);
         }
     }
 });

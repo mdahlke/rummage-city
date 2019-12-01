@@ -36,7 +36,6 @@
                                 <section class="listing__description">
                                     {{ sale.description }}
                                 </section>
-
                             </div>
                         </section>
 
@@ -47,21 +46,28 @@
                     </div>
                 </section>
             </div>
+
+            <RelatedListings :listing="sale"/>
+
         </article>
     </section>
-
 </template>
 
 <script>
     import axios from 'axios';
     import ListingImages from '../components/listings/ListingImages';
+    import RelatedListings from '../components/RelatedListings';
     import '../../sass/component/listings-popup-view.scss';
-    import {listing_mixin} from "../components/listings/shared";
+    import {listing_mixin} from '../components/listings/shared';
     import {isTrue} from '../helpers';
+    import {SET_LISTING} from '../config/store/mutations';
 
     export default {
         name: 'ListingView',
-        components: {ListingImages},
+        components: {
+            ListingImages,
+            RelatedListings
+        },
         mixins: [listing_mixin],
         data() {
             return {
@@ -85,18 +91,18 @@
             } else if (preloaded) {
                 this.loading = false;
                 this.sale = preloaded;
-                this.fetch_data();
+                this.fetchData();
             } else {
-                this.fetch_data();
+                this.fetchData();
             }
 
-            this.$store.commit('set_listing', this.sale);
+            this.$store.commit(SET_LISTING, this.sale);
         },
         methods: {
             isSaved(val) {
                 return isTrue(val);
             },
-            fetch_data() {
+            fetchData() {
                 const id = this.$route.params.id;
 
                 axios({
@@ -131,7 +137,7 @@
                     },
                 }).then((results) => {
                     this.sale = results.data.data.listings.data[0];
-                    this.$store.commit('set_listing', this.sale);
+                    this.$store.commit(SET_LISTING, this.sale);
                     this.loading = false;
                 });
             },

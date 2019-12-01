@@ -11,6 +11,7 @@ class ListingObserver {
         if (!Auth::guest()) {
             /** @var User $user */
             $user = Auth::user();
+
             $listing->setSaveUrl(route('user.listing.saveListing', [
                 'listing' => $listing->id,
             ]));

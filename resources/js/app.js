@@ -69,6 +69,7 @@ import router from './config/router';
  */
 
 import store from './config/store/store';
+import {INITIALISE_STORE} from "./config/store/mutations";
 
 const app = new Vue({
     el: '#app',
@@ -76,7 +77,7 @@ const app = new Vue({
     store,
     router,
     beforeCreate() {
-        this.$store.commit('initialise_store');
+        this.$store.commit(INITIALISE_STORE);
     },
 }).$mount('#app');
 
@@ -87,3 +88,10 @@ require('./listings-map');
 require('./saved-listings');
 require('./listing-edit');
 require('./service-worker');
+
+
+import speedTest from './speed-test';
+
+speedTest(30).then(result => {
+    console.log({result});
+});

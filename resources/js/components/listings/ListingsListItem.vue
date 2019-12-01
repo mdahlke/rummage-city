@@ -5,25 +5,7 @@
 
         <div class="listing-wrap">
 
-            <div class="listing__main-info"
-                 :class="{ 'has-image': listing.image.length}"
-                 @click="view_listing( listing)"
-            >
-                <div v-if="listing.image.length"
-                     class="listing__featured-image"
-                >
-                    <div class="featured-image__blur lazy-background"
-                         v-lazy:background-image="listing.image[0].url"
-                    ></div>
-                    <div class="featured-image__image lazy-background"
-                         v-lazy:background-image="listing.image[0].url"
-                    ></div>
-                </div>
-                <div class="listing__content">
-                    <h1 class="listing__title">{{ listing.title }}</h1>
-                    <h3 class="listing__address">{{ listing.address }}</h3>
-                </div>
-            </div>
+            <ListingListItemMainInfo :listing="listing"/>
 
             <div class="listing__content">
                 <!--                <a @click="view_listing( listing)">View</a>-->
@@ -40,7 +22,7 @@
                                             <i class="far fa-star"> Save</i></span>
                         </li>
                         <li class="list-inline-item listing__action">
-                                        <span class="cursor-pointer" @click="emitHightlightOnMap()">
+                                        <span class="cursor-pointer" @click="emitHighlightOnMap()">
                                             <i class="fas fa-map"></i> Show on Map</span>
                         </li>
                         <li class="list-inline-item listing__action">
@@ -55,20 +37,24 @@
 </template>
 
 <script>
-    import ListingDates from "./ListingDates";
-    import {listing_mixin} from "./shared";
+    import ListingListItemMainInfo from './ListingListItemMainInfo';
+    import ListingDates from './ListingDates';
+    import {listing_mixin} from './shared';
     import {isTrue} from '../../helpers';
 
     export default {
         name: 'ListingsListItem',
         mixins: [listing_mixin],
-        components: {ListingDates},
+        components: {
+            ListingDates,
+            ListingListItemMainInfo
+        },
         props: {
             listing: Object
         },
         computed: {},
         methods: {
-            emitHightlightOnMap() {
+            emitHighlightOnMap() {
                 console.log(this.listing.title);
                 this.$emit('highlight-on-map', this.listing);
             },

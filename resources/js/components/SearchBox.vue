@@ -70,10 +70,12 @@
             },
             filterRemove(val) {
                 this.$store.dispatch('filterRemove', val);
-
+            },
+            search() {
+                return;
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss">

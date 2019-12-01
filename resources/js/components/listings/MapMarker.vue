@@ -1,7 +1,9 @@
 <template>
-    <div class="marker">
+    <div :id="listing.id"
+         class="marker"
+    >
 
-        <template v-if="!isSaved">
+        <template v-if="!saved">
             <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg">
                 <title>{{ title }}</title>
                 <g>
@@ -66,33 +68,34 @@
                 marker: {},
                 height: 15,
                 width: 15,
-            }
+            };
         },
         props: {
             listing: Object,
             map: Object,
         },
         computed: {
-            isSaved: {
-                get: function () {
-                    return isTrue(this.listing.isSaved);
-                },
-                set: function (val) {
-                    //
-                }
+            saved() {
+                return isTrue(this.listing.isSaved);
             }
         },
-        watch: {
-            isSaved: function (val, old) {
-                this.recreate_marker();
-            }
+        // watch: {
+        //     'isSaved': {
+        //         set: function (val, old) {
+        //             if (val != old) {
+        //                 this.recreateMarker();
+        //             }
+        //         }
+        //     }
+        // },
+        created() {
         },
         mounted() {
             if (this.listing) {
                 this.add_marker_to_map(this.listing);
             }
         },
-        beforeDestroy(){
+        beforeDestroy() {
             this.$emit('removeMarker', this.listing);
         },
         methods: {
@@ -117,7 +120,7 @@
                     this.ellipsisStrokeColor = '#fff';
                 }
 
-                if (this.isSaved) {
+                if (this.saved) {
                     this.color = '#ff444e';
                     this.ellipsisColor = '#ff444e';
                     this.ellipsisStrokeColor = '#ff444e';
@@ -177,8 +180,8 @@
             add_popup(listing) {
                 return new mapboxgl.Popup({className: 'listing__popup'})
                     .setLngLat(mapboxLatLng(listing))
-                    .setHTML("<h1>" + listing.title + "</h1>")
-                    .setMaxwidth("300px")
+                    .setHTML('<h1>' + listing.title + '</h1>')
+                    .setMaxwidth('300px')
                     .addTo(this.map);
             },
             create_popup(listing) {
@@ -192,13 +195,13 @@
                     'bottom-right': [-linearOffset, (height - markerRadius + linearOffset) * -1],
                     'left': [markerRadius, (height - markerRadius) * -1],
                     'right': [-markerRadius, (height - markerRadius) * -1]
-                }
+                };
                 const popup = new mapboxgl.Popup({
                     className: 'listing__popup',
                     offset: popupOffsets,
                 })
                     .setHTML(`<strong>` + listing.title + ` </strong>`)
-                    .setMaxWidth("300px");
+                    .setMaxWidth('300px');
 
                 popup.on('open', (e, d) => {
                     // this.$emit('set_active_listing', listing);
@@ -214,8 +217,8 @@
 
                 return popup;
             },
-            recreate_marker() {
-                this.marker.remove();
+            recreateMarker() {
+                this.$emit('removeMarker', this.listing);
                 this.$forceUpdate();
                 this.add_marker_to_map(this.listing);
             }

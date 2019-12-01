@@ -4,7 +4,6 @@
         <ListingMarkers
                 ref="listingMarkers"
                 v-if="isMounted"
-                :listings="listings"
                 :map="map"/>
     </section>
 </template>
@@ -13,10 +12,10 @@
     import {mapState, mapGetters} from 'vuex';
     import mapbox_config from './mapbox.config.js';
     import geolocation from '../../geolocation';
-    import {axiosOne, createElementFromHtml} from '../../helpers';
     import ListingMarkers from './ListingMarkers.vue';
     import MapMarker from './MapMarker.vue';
     import Popup from './Popup.vue';
+    import {SEARCH} from '../../config/store/mutations';
 
     const mapboxgl = require('mapbox-gl');
 
@@ -43,9 +42,6 @@
             },
         },
         computed: {
-            ...mapGetters({
-                listings: 'getListings',
-            }),
             ...mapState({
                 searchState: 'search'
             })
@@ -101,42 +97,34 @@
             // Add zoom and rotation controls to the map.
             this.map.addControl(new mapboxgl.NavigationControl());
 
-            this.map.on('dragend', this.update_map_listings);
-            this.map.on('zoomend', this.update_map_listings);
+            this.map.on('dragend', this.updateMapListings);
+            this.map.on('zoomend', this.updateMapListings);
 
             this.isMounted = true;
         },
         methods: {
-            async update_map_listings(updateUrl = false) {
+            async updateMapListings(updateUrl = false) {
                 let bounds = this.map.getBounds();
 
                 this.$emit('set_fetching', true);
 
-                await this.get_listings_in_bounds(bounds).then((results) => {
-                    const listings = results.data.data.listings.data || false;
+                await this.$store.dispatch('getListingsInBounds', bounds);
 
-                    if (!listings) {
-                        return this;
-                    }
+                this.searchState.query.map.center = this.map.getCenter();
+                this.searchState.query.map.zoom = this.map.getZoom();
+                this.searchState.query.map.pitch = this.map.getPitch();
+                this.searchState.query.map.bearing = this.map.getBearing();
+                this.searchState.query.map.bounds = this.map.getBounds();
 
-                    this.$refs.listingMarkers.removeAllMarkers();
-                    this.$emit('update_listings', listings);
+                this.$store.commit(SEARCH, this.searchState);
 
-                    this.searchState.query.map.center = this.map.getCenter();
-                    this.searchState.query.map.zoom = this.map.getZoom();
-                    this.searchState.query.map.pitch = this.map.getPitch();
-                    this.searchState.query.map.bearing = this.map.getBearing();
-                    this.searchState.query.map.bounds = this.map.getBounds();
+                if (updateUrl) {
+                    this.$emit('push_state');
+                }
 
-                    this.$store.commit('search', this.searchState);
+                this.$emit('set_fetching', false);
 
-                    if (updateUrl) {
-                        this.$emit('push_state');
-                    }
-
-                    this.$emit('set_fetching', false);
-
-                });
+                // });
                 return this;
             },
             add_marker(listing, marker) {
@@ -150,48 +138,7 @@
                 });
             },
             get_listings_in_bounds(bounds) {
-                const query = JSON.stringify(JSON.stringify({
-                    sw: bounds._sw,
-                    ne: bounds._ne
-                }));
 
-                return axiosOne({
-                    url: '/graphql',
-                    type: 'get',
-                    params: {
-                        query: `
-							query FetchListingsInBounds {
-							  listings(bounds: ` + query + `, limit: 150) {
-							    data {
-							      id
-							      title
-							      description
-							      address
-							      latitude
-							      longitude
-							      isSaved
-							      saveUrl
-							      removeSavedUrl
-							      active_date {
-							        start
-							        end
-							      }
-							      image {
-							        name
-							        url
-							      }
-							    }
-							  }
-							}
-					`
-                    },
-                }, 'listings').catch(function (thrown) {
-                    if (axios.isCancel(thrown)) {
-                        console.log('Request canceled', thrown.message);
-                    } else {
-                        // handle error
-                    }
-                });
             },
             center_map_on(lat, lng) {
                 this.map.setCenter([lat, lng]);

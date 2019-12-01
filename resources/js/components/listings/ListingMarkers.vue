@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <div v-for="(listing, index) in _listings">
+        <div v-for="(listing, index) in listings">
             <MapMarker :key="'marker-' + listing.id"
                        :listing="listing"
                        :map="map"
@@ -24,19 +24,18 @@
         data() {
             return {
                 markers: [],
-            }
+            };
         },
         props: {
-            listings: Array,
             map: Object,
         },
         computed: {
             ...mapGetters({
-                _listings: 'getListings',
+                listings: 'getListings',
             })
         },
         watch: {
-            _listings(newListings, oldListings) {
+            listings(newListings, oldListings) {
                 this.redrawMarkers();
             }
         },
@@ -51,7 +50,6 @@
             removeMarker(listing) {
                 const marker = this.markers.find(m => m.id = listing.id);
                 if (typeof marker !== 'undefined') {
-
                     marker.marker.remove();
                 }
             },
@@ -61,7 +59,7 @@
             close_all_popups() {
                 let marker;
                 this.markers.forEach(marker => {
-                    marker.marker.getPopup().remove()
+                    marker.marker.getPopup().remove();
                 });
             },
             /**
@@ -70,14 +68,14 @@
             removeMarkers(markers = []) {
                 markers.forEach(marker => {
                     marker.marker.remove();
-                })
+                });
 
             },
             removeAllMarkers() {
                 if (this.markers !== null) {
                     this.markers.forEach(marker => {
                         marker.marker.remove();
-                    })
+                    });
 
                     this.markers = [];
                     this.listing_ids = [];
