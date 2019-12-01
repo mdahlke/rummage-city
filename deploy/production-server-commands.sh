@@ -11,14 +11,14 @@ unzip -oq ${deploy_dir}${test_branch}-release.zip -d ${deploy_dir}${test_branch}
 echo "Fixing permissions"
 chown -R $deployUser:$user $destination ${deploy_dir}${test_branch}-release
 
-chgrp -R www-data storage bootstrap/cache
-chmod -R ug+rwx storage bootstrap/cache
+chgrp -R www-data ${destination}storage ${destination}bootstrap/cache
+chmod -R ug+rwx ${destination}storage ${destination}bootstrap/cache
 
 echo "Copying files to deployment directory (${deploy_dir})"
-rsync -av --progress ${deploy_dir}${test_branch}-release/. $destination/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
+rsync -av --progress ${deploy_dir}${test_branch}-release/. ${destination}/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
 
 echo "Removing unneeded files from production"
-rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${destination}/.package* ${destination}/phpunit.xml ${destination}/webpack.mix.js
+rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${destination}/package* ${destination}/phpunit.xml ${destination}/webpack.mix.js
 
 echo "Cleaning up"
 rm -rf ${deploy_dir}${test_branch}-release.zip ${deploy_dir}${test_branch}-release
