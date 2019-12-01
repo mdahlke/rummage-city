@@ -54,6 +54,13 @@ pipelines:
             - apt-get update && apt-get install -y unzip ssh iputils-ping zip rsync git
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install
+            - composer dump-autoload -o
+            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
+            - apt-get install nodejs -y
+            - npm install
+            - npm run production
+            - npm run copy-fontawesome
+            - bash ./deploy/build-commit-info.sh
             - bash ./deploy/deploy-production.sh
 
 definitions:
