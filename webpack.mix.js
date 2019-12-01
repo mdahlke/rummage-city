@@ -24,3 +24,8 @@ mix.webpackConfig({
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/sw/sw.js', 'public/sw.js')
     .sass('resources/sass/app.scss', 'public/css');
+
+if (production) {
+    mix.minify(['public/js/app.js', 'public/css/app.css']);
+    mix.version();
+}
