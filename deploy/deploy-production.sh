@@ -1,6 +1,6 @@
 #!/bin/bash
 user=www-data
-deployUser=mdahlke
+deployUser=rummagecity
 ip=159.203.101.203
 echo 'Beginning deployment'
 echo 'Pinging server'
@@ -74,7 +74,7 @@ else
     ## test_branch=$2
     ## user=$3
     ## destination=$4
-    ssh -t ${deployUser}@${ip} 'bash -s' $deploy_dir $test_branch $user $destination <${DIR}/production-server-commands.sh
+    ssh -t ${deployUser}@${ip} 'bash -s' $deploy_dir $test_branch $deployUser $user $destination <${DIR}/production-server-commands.sh
 
     echo "Deployment complete. Production is on ${git_tag}"
 
