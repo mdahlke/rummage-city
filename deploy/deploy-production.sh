@@ -1,7 +1,7 @@
 #!/bin/bash
 user=www-data
 deployUser=mdahlke
-ip=167.99.119.100
+ip=159.203.101.203
 echo 'Beginning deployment'
 echo 'Pinging server'
 ping_result=$(ping -c 1 $ip)
