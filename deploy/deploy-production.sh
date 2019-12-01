@@ -72,8 +72,9 @@ else
     # this allows use to execute multiple SSH commands while avoiding rate limiting
     ## deploy_dir=$1
     ## test_branch=$2
-    ## user=$3
-    ## destination=$4
+    ## deployUser=$3
+    ## user=$4
+    ## destination=$5
     ssh -t ${deployUser}@${ip} 'bash -s' $deploy_dir $test_branch $deployUser $user $destination <${DIR}/production-server-commands.sh
 
     echo "Deployment complete. Production is on ${git_tag}"

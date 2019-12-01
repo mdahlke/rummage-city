@@ -12,7 +12,7 @@ echo "Fixing permissions"
 chown -R $deployUser:$user $destination ${deploy_dir}${test_branch}-release
 
 echo "Copying files to deployment directory (${deploy_dir})"
-cp -pr ${deploy_dir}${test_branch}-release/. $destination/
+rsync -av --progress ${deploy_dir}${test_branch}-release/. $destination/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
 
 echo "Cleaning up"
 rm -rf ${deploy_dir}${test_branch}-release.zip ${deploy_dir}${test_branch}-release
