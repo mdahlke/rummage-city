@@ -63,7 +63,7 @@ else
     git archive -o ${test_branch}-release.zip HEAD
 
     echo "Adding commit.json, node_modules/, and vendor/ to archive"
-    zip -urq ${test_branch}-release.zip node_modules vendor commit.json public/css/app.min.css public/css/fontawesome.css public/js/app.min.js public/sw.min.js
+    zip -urq ${test_branch}-release.zip node_modules vendor commit.json public/css/ public/css/ public/js/ public/sw.min.js
 
     echo "Sending archive to production server"
     rsync -aP ${test_branch}-release.zip $deployUser@$ip:$deploy_dir

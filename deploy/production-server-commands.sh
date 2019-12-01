@@ -15,7 +15,7 @@ chgrp -R www-data ${destination}storage ${destination}bootstrap/cache
 chmod -R ug+rwx ${destination}storage ${destination}bootstrap/cache
 
 echo "Copying files to deployment directory (${deploy_dir})"
-rsync -av --progress ${deploy_dir}${test_branch}-release/. ${destination}/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
+rsync -av ${deploy_dir}${test_branch}-release/. ${destination}/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
 
 echo "Removing unneeded files from production"
 rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${destination}/package* ${destination}/phpunit.xml ${destination}/webpack.mix.js
