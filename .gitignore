@@ -4,21 +4,21 @@
 
 # compiled files, manifests, and maps
 /public/js/chunks
-/public/css
-/public/js
+/public/css/*
+/public/js/*
 /public/sw.js*
 /public/manifest.js*
 /public/vendor.js*
 /public/mix-manifest.json
 
+!.gitkeep
+
 /storage/*.key
 /vendor
 /.idea
-/.vagrant
-Homestead.json
-Homestead.yaml
 npm-debug.log
 yarn-error.log
 .env
 *.zip
 *.map
+
