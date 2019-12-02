@@ -10,7 +10,9 @@
     "watch-poll": "npm run watch -- --watch-poll",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production-js": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production-css": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --env.mixfile=webpack.css.js --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "npm run production-js & npm run production-css",
     "lint": "./node_modules/.bin/eslint ./src/js",
     "add-public": "git add public/",
     "copy-fontawesome": "cp ./node_modules/@fortawesome/fontawesome-pro/css/all.css ./public/css/fontawesome.css && cp -R ./node_modules/@fortawesome/fontawesome-pro/webfonts/ ./public/webfonts"

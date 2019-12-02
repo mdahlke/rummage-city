@@ -14,6 +14,9 @@ mix.options({
 mix.sass('resources/sass/app.scss', 'public/css')
     .mergeManifest();
 
+mix.copy('node_modules/@fortawesome/fontawesome-pro/css/all.css', 'public/css/fontawesome.css');
+mix.copyDirectory('node_modules/@fortawesome/fontawesome-pro/webfonts', 'public/webfonts');
+
 if (production) {
     mix.version();
 }

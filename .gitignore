@@ -10,6 +10,7 @@
 /public/manifest.js*
 /public/vendor.js*
 /public/mix-manifest.json
+/public/webfonts
 
 !.gitkeep
 
