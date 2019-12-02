@@ -11,7 +11,9 @@
 </template>
 
 <script>
-    import SearchBoxFilterItem from './SearchBoxFilterItem';
+    const SearchBoxFilterItem = () => import('./SearchBoxFilterItem'/* webpackChunkName: "js/chunks/search-box-filter-item" */);
+
+    console.log({SearchBoxFilterItem});
 
     export default {
         name: 'SearchBoxFilter',
@@ -37,10 +39,10 @@
                         icon: 'fas fa-calendar',
                     }
                 ]
-            }
+            };
         },
         methods: {}
-    }
+    };
 </script>
 
 <style lang="scss">

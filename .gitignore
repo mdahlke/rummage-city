@@ -1,10 +1,16 @@
 /node_modules
 /public/hot
 /public/storage
+
+# compiled files, manifests, and maps
 /public/js/chunks
 /public/css
 /public/js
 /public/sw.js*
+/public/manifest.js*
+/public/vendor.js*
+/public/mix-manifest.json
+
 /storage/*.key
 /vendor
 /.idea

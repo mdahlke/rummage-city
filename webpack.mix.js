@@ -1,4 +1,19 @@
+/**
+ *
+ *
+ * !!!! READ ME !!!!!
+ *
+ *
+ * Why do we have two webpack.*.js files?
+ * Because there are some bugs with JS chunking and the .extract() method
+ * in Laravel's mix and webpack that haven't been worked out
+ *
+ * @see https://github.com/JeffreyWay/laravel-mix/issues/1914
+ */
+
+require('laravel-mix-merge-manifest');
 const mix = require('laravel-mix');
+const ChunkRenamePlugin = require('webpack-chunk-rename-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -17,13 +32,29 @@ const devtool = production ? false : 'source-map';
 mix.webpackConfig({
     devtool,
     output: {
-        chunkFilename: 'js/chunks/[chunkhash].js'
-    }
+        publicPath: '/',
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+    },
+    plugins: [
+        new ChunkRenamePlugin({
+            initialChunksWithEntry: true,
+            '/js/vendor': '/vendor.js',
+            '/js/manifest': '/manifest.js'
+        }),
+    ],
 });
 
-mix.js('resources/js/app.js', 'public/js')
-    .js('resources/js/sw/sw.js', 'public/sw.js')
-    .sass('resources/sass/app.scss', 'public/css');
+mix.options({
+    processCssUrls: true,
+    postCss: [require('autoprefixer')],
+    extractVueStyles: false
+});
 
-mix.minify(['public/js/app.js', 'public/css/app.css', 'public/sw.js']);
-mix.version();
+mix.js('resources/js/app.js', 'public/js').extract();
+// mix.js('resources/js/sw/sw.js', 'public/sw.js')
+mix.mergeManifest();
+
+if (production) {
+    mix.version();
+}

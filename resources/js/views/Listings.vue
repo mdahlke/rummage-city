@@ -24,21 +24,18 @@
                 />
             </aside>
 
-            <transition name="fade" mode="out-in">
-                <router-view></router-view>
-            </transition>
+            <router-view></router-view>
         </div>
     </section>
 </template>
 
 <script>
-    import SearchBox from '../components/SearchBox.vue';
-    import ListingsMap from '../components/listings/ListingsMap.vue';
-    import ListingsList from '../components/listings/ListingsList.vue';
-    import {updateQueryStringParameter} from '../helpers';
     import {mapState} from 'vuex';
     import {ALL_LISTINGS, LISTING, SEARCH, SET_LISTINGS} from '../config/store/mutations';
 
+    const SearchBox = () => import('../components/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */);
+    const ListingsMap = () => import('../components/listings/ListingsMap.vue'/* webpackChunkName: "js/chunks/listings-map" */);
+    const ListingsList = () => import('../components/listings/ListingsList.vue'/* webpackChunkName: "js/chunks/listings-list" */);
     const VueScrollTo = require('vue-scrollto');
 
     export default {
@@ -173,5 +170,39 @@
 </script>
 
 <style lang="scss">
-    @import '../../sass/component/listings.scss';
+    @import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
+    @import '../../sass/variables';
+
+    #listings {
+        display: flex;
+        height: calc(100vh - #{$main-header-height});
+        overflow: hidden;
+
+        #listings__sidebar {
+            display: none;
+            flex: 0 0 100%;
+            overflow: auto;
+        }
+
+        #listings__map {
+            flex: 0 0 100%;
+        }
+
+        @include media-breakpoint-up(md) {
+            #listings__sidebar {
+                display: block;
+                flex: 0 0 $sidebar-width;
+            }
+            #listings__map {
+
+                flex: 0 0 calc(100vw - #{$sidebar-width});
+            }
+        }
+
+        .listing__action {
+            cursor: pointer;
+        }
+
+    }
+
 </style>

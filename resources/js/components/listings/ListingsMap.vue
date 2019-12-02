@@ -179,6 +179,42 @@
 </script>
 
 <style lang="scss">
-    @import '../../../sass/component/listings-map.scss';
     @import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+    @import '../../../sass/colors';
+    @import '../../../sass/variables';
+
+
+    #listings__map {
+
+        .mapbox {
+            height: 100%;
+        }
+        .listing__popup {
+            max-height: 300px;
+
+            h1 {
+                font-size: .8rem;
+            }
+        }
+
+        .popup__images {
+            display: flex;
+            flex-wrap: wrap;
+
+            .popup__image {
+                flex: 0 0 33.33333%;
+                padding: 5px;
+            }
+
+            img {
+                max-width: 100%;
+            }
+        }
+
+        .mapboxgl-canvas-container,
+        .mapboxgl-canvas {
+            height: 100%;
+        }
+    }
+
 </style>

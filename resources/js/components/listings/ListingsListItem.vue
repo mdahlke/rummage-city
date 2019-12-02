@@ -70,6 +70,6 @@
 </script>
 
 <style lang="scss">
-    @import '../../../sass/component/listings-list.scss';
-    @import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+    /*@import '../../../sass/component/listings-list.scss';*/
+    /*@import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';*/
 </style>

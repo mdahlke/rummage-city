@@ -29,8 +29,7 @@
 
 <script>
     import {mapGetters, mapMutations} from 'vuex';
-    import _ from 'underscore';
-    import SearchBoxFilter from './SearchBoxFilter';
+    const SearchBoxFilter = () => import('./SearchBoxFilter'/* webpackChunkName: "js/chunks/search-box-filter" */);
 
     export default {
         name: 'SearchBox',
@@ -79,5 +78,40 @@
 </script>
 
 <style lang="scss">
-    @import '../../sass/component/search-box.scss';
+    @import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
+    @import '../../sass/_colors.scss';
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+
+        &.filters {
+            justify-content: flex-end;
+        }
+
+        .search-input {
+            border-color: $tertiary;
+            border-right: 0;
+            min-width: 300px;
+
+            &:active,
+            &:focus {
+                outline: 0;
+                box-shadow: none;
+            }
+        }
+
+        .input-group {
+            flex-wrap: nowrap;
+        }
+
+        #search-button {
+            border-color: $tertiary;
+            border-left: 0;
+        }
+
+    }
 </style>
