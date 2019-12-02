@@ -14,30 +14,30 @@ window.addEventListener('beforeinstallprompt', function (e) {
 	e.prompt();
 });
 
-window.addEventListener('appinstalled', (evt) => {
+window.addEventListener('appinstalled', () => {
 	console.log('a2hs installed');
 });
 
 
 // Detects if device is on iOS
-const isIos = () => {
-	const userAgent = window.navigator.userAgent.toLowerCase();
-	return /iphone|ipad|ipod/.test(userAgent);
-};
+// const isIos = () => {
+// 	const userAgent = window.navigator.userAgent.toLowerCase();
+// 	return /iphone|ipad|ipod/.test(userAgent);
+// };
 // Detects if device is in standalone mode
-const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+// const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
 // Checks if should display install popup notification:
-if (false && isIos() && !isInStandaloneMode()) {
-	(function ($) {
-		if ($('#ios-add-to-homescreen').length) {
-			$('#ios-add-to-homescreen').show();
-			
-			$('.js-close-a2h').on('click', function () {
-				$('#ios-add-to-homescreen').remove();
-			});
-		}
-	})(jQuery);
-}
+// if (false && isIos() && !isInStandaloneMode()) {
+// 	(function ($) {
+// 		if ($('#ios-add-to-homescreen').length) {
+// 			$('#ios-add-to-homescreen').show();
+//
+// 			$('.js-close-a2h').on('click', function () {
+// 				$('#ios-add-to-homescreen').remove();
+// 			});
+// 		}
+// 	})(jQuery);
+// }
 
 

@@ -1,5 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import axios from 'axios';
+import _ from 'lodash';
 import {isTrue, isListingToday, isListingThisWeekend, axiosOne} from '../../helpers';
 import {INITIALISE_STORE, SET_LISTINGS, ALL_LISTINGS, SET_LISTING, LISTING, SEARCH} from './mutations';
 
@@ -42,7 +44,7 @@ const store = new Vuex.Store({
         },
     },
     getters: {
-        getListings: (state, getters) => {
+        getListings: (state) => {
             let listings = state.allListings;
 
             if (state.search.query.filter.length > 0) {
@@ -184,7 +186,7 @@ const store = new Vuex.Store({
 
             commit(ALL_LISTINGS, listings);
         },
-        filterListings({commit, state, getters}) {
+        filterListings({commit, getters}) {
             if (!getters.searchFilters.length) {
                 commit(SET_LISTINGS, getters.getAllListings);
             } else if (getters.searchFilters.indexOf('saved') !== false) {

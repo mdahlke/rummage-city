@@ -58,7 +58,7 @@ import router from './config/router';
 import store from './config/store/store';
 import {INITIALISE_STORE} from './config/store/mutations';
 
-const app = new Vue({
+new Vue({
     el: '#app',
     components: {App},
     store,

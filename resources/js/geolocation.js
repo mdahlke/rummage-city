@@ -7,8 +7,7 @@ class GeoLocation {
 	}
 
 	get() {
-		return new Promise(function (resolve, reject) {
-
+		return new Promise(function (resolve) {
 			navigator.geolocation.getCurrentPosition(function (r) {
 				resolve(r);
 			});
@@ -22,7 +21,7 @@ class GeoLocation {
 	watch(success, err = function(){}) {
 		navigator.geolocation.watchPosition(success, err);
 	}
-};
+}
 
 const g = new GeoLocation();
 g.requestPermission();

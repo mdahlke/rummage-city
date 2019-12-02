@@ -1,11 +1,10 @@
-let arrTimes = [];
 let testImage = '/images/transparent.png'; // small image in your server
 let images = [];
 
 export default async function speedTest(timesToTest = 5) {
     const tThreshold = 150; //ms
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
         for (let i = 0; i < timesToTest - 1; i++) {
             images.push(testImage);

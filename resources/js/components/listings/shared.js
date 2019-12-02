@@ -1,5 +1,6 @@
+import axios from 'axios';
 import slugify from 'slugify';
-import {isTrue} from "../../helpers";
+import {isTrue} from '../../helpers';
 
 export const listing_mixin = {
     methods: {
@@ -14,11 +15,11 @@ export const listing_mixin = {
                     id: listing.id,
                     address: slugify(listing.address)
                 }
-            })
+            });
         },
         save_listing(listing) {
             if (!isTrue(listing.isSaved)) {
-                axios.post(listing.saveUrl).then((e) => {
+                axios.post(listing.saveUrl).then(() => {
                     listing.isSaved = true;
                     this.$store.dispatch('update_listing', listing);
                 });
@@ -26,7 +27,7 @@ export const listing_mixin = {
         },
         remove_saved_listing(listing) {
             if (isTrue(listing.isSaved)) {
-                axios.delete(listing.removeSavedUrl).then((e) => {
+                axios.delete(listing.removeSavedUrl).then(() => {
                     listing.isSaved = false;
                     this.$store.dispatch('update_listing', listing);
                 });
@@ -36,36 +37,34 @@ export const listing_mixin = {
             let popup;
 
             for (let i in this.popups) {
-                if (this.popups.hasOwnProperty(i)) {
-                    popup = this.popups[i];
-                    popup.popup.remove();
+                popup = this.popups[i];
+                popup.popup.remove();
 
-                    if (popup.id === listing.id) {
-                        popup.popup.addTo(this.map);
-                        this.map.flyTo({
-                            center: popup.popup._lngLat
-                        });
-                    }
+                if (popup.id === listing.id) {
+                    popup.popup.addTo(this.map);
+                    this.map.flyTo({
+                        center: popup.popup._lngLat
+                    });
                 }
             }
         },
-        zoom_to_on_map: () => {
-            let popup;
-
-            for (let i in this.popups) {
-                if (this.popups.hasOwnProperty(i)) {
-                    popup = this.popups[i];
-                    popup.popup.remove();
-
-                    if (popup.id === listing.id) {
-                        popup.popup.addTo(this.map);
-                        this.map.flyTo({
-                            center: popup.popup._lngLat,
-                            zoom: 18
-                        });
-                    }
-                }
-            }
-        },
+        // zoom_to_on_map: () => {
+        //     let popup;
+        //
+        //     for (let i in this.popups) {
+        //         if (this.popups.hasOwnProperty(i)) {
+        //             popup = this.popups[i];
+        //             popup.popup.remove();
+        //
+        //             if (popup.id === listing.id) {
+        //                 popup.popup.addTo(this.map);
+        //                 this.map.flyTo({
+        //                     center: popup.popup._lngLat,
+        //                     zoom: 18
+        //                 });
+        //             }
+        //         }
+        //     }
+        // },
     }
 };

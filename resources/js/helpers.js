@@ -1,4 +1,6 @@
-import moment from "moment";
+import moment from 'moment';
+import axios from 'axios';
+import _ from 'lodash';
 
 /**
  * Add JavaScript files to the <head>
@@ -33,8 +35,8 @@ export const mapboxLatLng = function (listing) {
     return {
         lat: listing.latitude,
         lng: listing.longitude
-    }
-}
+    };
+};
 
 export function setPage(url, title, state) {
     let data = _.extend({
@@ -44,19 +46,19 @@ export function setPage(url, title, state) {
 }
 
 export function updateQueryStringParameter(uri, key, value) {
-    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
+    var separator = uri.indexOf('?') !== -1 ? '&' : '?';
     if (uri.match(re)) {
-        return uri.replace(re, '$1' + key + "=" + value + '$2');
+        return uri.replace(re, '$1' + key + '=' + value + '$2');
     } else {
-        return uri + separator + key + "=" + value;
+        return uri + separator + key + '=' + value;
     }
 }
 
 let call = {};
 export const axiosOne = (config = {}, requestType = 'unnamed') => {
     if (call[requestType]) {
-        call[requestType].cancel("Only one request allowed at a time. Cancelling first.");
+        call[requestType].cancel('Only one request allowed at a time. Cancelling first.');
     }
     call[requestType] = axios.CancelToken.source();
     config.cancelToken = call[requestType].token;
@@ -108,7 +110,7 @@ const isWeekend = function (date) {
         return true;
     }
     return false;
-}
+};
 
 /**
  * Checks if a listing is happening (inclusively) this weekend
@@ -203,5 +205,5 @@ const getUpcomingWeekend = (today = null) => {
         thisWeekend = [friday, saturday, sunday];
     }
 
-    return thisWeekend
-}
+    return thisWeekend;
+};

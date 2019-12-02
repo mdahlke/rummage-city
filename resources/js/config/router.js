@@ -1,5 +1,5 @@
 import VueRouter from 'vue-router';
-import pathToRegexp from 'path-to-regexp';
+require('path-to-regexp');
 
 
 const Listings = () => import('../views/Listings');

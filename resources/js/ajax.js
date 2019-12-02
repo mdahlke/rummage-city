@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
-import {empty, setPage} from './helpers';
-import {getTargetFromInitiator, confirmDialog} from './ajax-helpers';
+import {empty} from './helpers';
 
 export const axios = require('axios');
 
@@ -18,7 +17,7 @@ const rc = {
 	 * @returns {*}
 	 */
 	getProp: function (key, def = null) {
-		if (this._property.hasOwnProperty(key)) {
+		if (this._property[key] !== undefined) {
 			return this._property[key];
 		}
 
@@ -46,24 +45,6 @@ export const ajaxAction = function ($target, data) {
 	$.each(data, function (key, val) {
 		formData.append(key, val);
 	});
-
-	let that = this;
-	confirmDialog($target).then(function () {
-			let method = null;
-			let url = ($target.attr('data-href') ? $target.attr('data-href') : '');
-			if ($form.is('form,.ajax-form')) {
-				if (empty(method)) method = $form.find('input[name="_method"]').val() ? $form.find('input[name="_method"]').val() : 'POST';
-				if (empty(url)) url = $form.attr('action');
-			} else {
-				if (empty(method)) method = $target.attr('data-method') ? $target.attr('data-method') : 'GET';
-				if (empty(url)) url = $target.attr('href');
-			}
-			$target.addClass('ajax-in-progress');
-		},
-		function () {
-			throw 'Request not sent';
-		});
-
 
 };
 

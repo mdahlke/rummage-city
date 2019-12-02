@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export const getTargetFromInitiator = function ($initiator) {
 	let $target = null;
 	if ($initiator.data('target')) $target = $($initiator.data('target'));
@@ -5,10 +7,10 @@ export const getTargetFromInitiator = function ($initiator) {
 	if (!$target) $target = $initiator.closest('.ajax-target');
 	if (!$target) $target = $initiator;
 	return $target;
-	
+
 };
 
-export const confirmDialog = function ($initiator) {
+export const confirmDialog = function () {
 	return new Promise(function (resolve) {
 		resolve();
 	});
