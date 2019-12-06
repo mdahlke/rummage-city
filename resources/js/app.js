@@ -77,8 +77,8 @@ require('./listing-edit');
 require('./service-worker');
 
 
-import speedTest from './speed-test';
-
-speedTest(30).then(result => {
-    console.log({result});
-});
+// import speedTest from './speed-test';
+//
+// speedTest(30).then(result => {
+//     console.log({result});
+// });
