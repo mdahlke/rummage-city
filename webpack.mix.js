@@ -57,4 +57,6 @@ mix.mergeManifest();
 
 if (production) {
     mix.version();
+} else {
+    mix.sourceMaps(true, 'hidden-source-map');
 }

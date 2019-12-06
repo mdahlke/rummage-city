@@ -11,7 +11,7 @@ mix.options({
     extractVueStyles: false
 });
 
-mix.sass('resources/sass/app.scss', 'public/css')
+mix.sass('resources/sass/app.scss', 'public/css');
 
 mix.copy('node_modules/@fortawesome/fontawesome-pro/css/all.css', 'public/css/fontawesome.css');
 mix.copyDirectory('node_modules/@fortawesome/fontawesome-pro/webfonts', 'public/webfonts');
@@ -20,4 +20,7 @@ mix.mergeManifest();
 
 if (production) {
     mix.version();
+} else {
+    mix.sourceMaps(true, 'hidden-source-map');
 }
+
