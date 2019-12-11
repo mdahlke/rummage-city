@@ -28,6 +28,16 @@
                 </a>
             @endforeach
         </div>
+
+        <h4>Inactive Listings</h4>
+        <div class="card-body">
+            @foreach($inactiveListings as $listing)
+                <a href="{{ route('user.listing.edit', ['listing' => $listing->id]) }}">
+                    <h3><i class="fad fa-warehouse-alt"></i> {{ $listing->title }}
+                    </h3>
+                </a>
+            @endforeach
+        </div>
     </div>
 
     <div class="card">

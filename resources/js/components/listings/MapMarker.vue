@@ -1,5 +1,5 @@
 <template>
-    <div :id="listing.id"
+    <div :id="'marker-' + listing.id"
          class="marker"
     >
 
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-    import {mapboxLatLng, isTrue, createElementFromHtml} from '../../helpers';
+    import {mapboxLatLng, isTrue, createElementFromHtml, isListingToday} from '../../helpers';
     import Popup from './Popup.vue';
     import moment from 'moment';
     import mapboxgl from 'mapbox-gl';
@@ -79,32 +79,24 @@
                 return isTrue(this.listing.isSaved);
             }
         },
-        // watch: {
-        //     'isSaved': {
-        //         set: function (val, old) {
-        //             if (val != old) {
-        //                 this.recreateMarker();
-        //             }
-        //         }
-        //     }
-        // },
-        created() {
-        },
         mounted() {
             if (this.listing) {
-                this.add_marker_to_map(this.listing);
+                this.addMarkerToMap(this.listing);
             }
         },
         beforeDestroy() {
             this.$emit('removeMarker', this.listing);
         },
         methods: {
-            add_marker_to_map(listing) {
+            addMarkerToMap(listing) {
+
+                if (!listing) {
+                    return;
+                }
+
                 let popup;
                 let marker;
-                let el;
-                let ldate = new moment(listing.active_date[0].start);
-                let duration = moment.duration(ldate.diff(moment()));
+                const isToday = isListingToday(...listing.active_date);
 
                 this.$emit('removeMarker', this.listing);
 
@@ -113,7 +105,7 @@
                 // reset the marker
                 Object.assign(this.$data, this.$options.data());
 
-                if (duration.as('days') < 1) {
+                if (isToday) {
                     this.color = '#42b883';
                     this.strokeColor = '#fff';
                     this.ellipsisColor = '#35495e';
@@ -121,22 +113,22 @@
                 }
 
                 if (this.saved) {
-                    this.color = '#ff444e';
-                    this.ellipsisColor = '#ff444e';
-                    this.ellipsisStrokeColor = '#ff444e';
                     this.height = 20;
                     this.width = 20;
+
+                    if (!isToday) {
+                        this.color = '#ff444e';
+                        this.ellipsisColor = '#ff444e';
+                        this.ellipsisStrokeColor = '#ff444e';
+                    }
                 }
 
-                if (!listing) {
-                    return;
-                }
                 popup = null;
                 marker = null;
 
                 if (listing.id) {
-                    popup = this.create_popup(listing);
-                    marker = this.create_marker(listing);
+                    popup = this.createPopup(listing);
+                    marker = this.createMarker(listing);
 
                     ((l, m) => {
                         m.getElement().addEventListener('click', () => {
@@ -164,7 +156,7 @@
                 // send to the parent to handle the additions
                 this.$emit('add_marker', listing, marker);
             },
-            create_marker(listing = null, popup = null) {
+            createMarker(listing = null, popup = null) {
                 const coords = mapboxLatLng(listing);
 
                 if (!coords.lat || !coords.lng) {
@@ -177,14 +169,14 @@
 
                 return this.marker;
             },
-            add_popup(listing) {
+            addPopup(listing) {
                 return new mapboxgl.Popup({className: 'listing__popup'})
                     .setLngLat(mapboxLatLng(listing))
                     .setHTML('<h1>' + listing.title + '</h1>')
                     .setMaxwidth('300px')
                     .addTo(this.map);
             },
-            create_popup(listing) {
+            createPopup(listing) {
                 let height = 12, markerRadius = 10, linearOffset = 25;
                 let popupOffsets = {
                     'top': [0, 0],
@@ -203,24 +195,13 @@
                     .setHTML(`<strong>` + listing.title + ` </strong>`)
                     .setMaxWidth('300px');
 
-                popup.on('open', (e, d) => {
-                    // this.$emit('set_active_listing', listing);
-                    // this.active_listing_id = listing.id;
-                });
-                popup.on('close', (e, d) => {
-                    // we only send the update event if the listing id matches the active_listing_id
-                    // this allows other markers to be clicked without this event firing
-                    // if (listing.id === this.active_listing_id) {
-                    // this.$emit('set_active_listing', {});
-                    // }
-                });
-
                 return popup;
             },
             recreateMarker() {
+                console.log('recreateMarker');
                 this.$emit('removeMarker', this.listing);
-                this.$forceUpdate();
-                this.add_marker_to_map(this.listing);
+                // this.$forceUpdate();
+                this.addMarkerToMap(this.listing);
             }
         }
     };

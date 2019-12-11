@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller {
@@ -21,11 +22,12 @@ class DashboardController extends Controller {
      */
     public function index() {
         $data = [];
-        $user = \Auth::user();
+        $user = Auth::user();
 
         $saved = $user->savedListing;
-        
+
         $data['activeListings'] = $user->activeListing ?? [];
+        $data['inactiveListings'] = $user->inactiveListings ?? [];
         $data['savedListings'] = $saved;
 
         return view('dashboard.home', $data);

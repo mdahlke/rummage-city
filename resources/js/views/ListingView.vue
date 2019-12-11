@@ -56,6 +56,7 @@
 <script>
     import axios from 'axios';
     import ListingImages from '../components/listings/ListingImages';
+    import ListingDates from '../components/listings/ListingDates';
     import RelatedListings from '../components/RelatedListings';
     import '../../sass/component/listings-popup-view.scss';
     import {listing_mixin} from '../components/listings/shared';
@@ -66,6 +67,7 @@
         name: 'ListingView',
         components: {
             ListingImages,
+            ListingDates,
             RelatedListings
         },
         mixins: [listing_mixin],

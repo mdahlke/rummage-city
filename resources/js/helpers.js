@@ -88,12 +88,21 @@ export const is_false = val => {
  */
 export const isListingToday = (...listingDates) => {
     const today = new moment();
-    let date;
+    let start;
+    let end;
     let isToday = false;
 
     listingDates.some(listingDate => {
-        date = new moment(listingDate.start);
-        isToday = today.isSame(date, 'd');
+
+        start = new moment(listingDate.start);
+        end = new moment(listingDate.end);
+
+        if (!start.isSame(end, 'd')) {
+            isToday = today.isBetween(start, end);
+        } else {
+            isToday = today.isSame(start, 'd');
+        }
+
         return isToday;
     });
 
@@ -153,19 +162,26 @@ const isWeekend = function (date) {
  * @param listingDates Expects listing dates object from the Laravel model
  */
 export const isListingThisWeekend = (...listingDates) => {
-    let date;
+    let start;
+    let end;
     let isThisWeekend = false;
+    const today = new moment();
 
     listingDates.some(listingDate => {
-        date = new moment(listingDate.start);
-        if (isWeekend(date)) {
+        start = new moment(listingDate.start);
+        end = new moment(listingDate.end);
+
+        if (!start.isSame(end, 'd')) {
+            isThisWeekend = today.isBetween(start, end);
+        } else if (isWeekend(start)) {
             const upcomingWeekend = getUpcomingWeekend();
 
-            if (date.isBetween(upcomingWeekend[0], upcomingWeekend[2])) {
+            if (today.isBetween(upcomingWeekend[0], upcomingWeekend[2])) {
                 isThisWeekend = true;
-                return isThisWeekend;
             }
         }
+
+        return isThisWeekend;
     });
 
     return isThisWeekend;

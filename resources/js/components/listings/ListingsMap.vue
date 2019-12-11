@@ -4,7 +4,9 @@
         <ListingMarkers
                 ref="listingMarkers"
                 v-if="isMounted"
-                :map="map"/>
+                :map="map"
+                @addLayer="addLayer"
+        />
     </section>
 </template>
 
@@ -103,6 +105,12 @@
             this.isMounted = true;
         },
         methods: {
+            addLayer(layer) {
+                console.log({layer});
+                this.map.on('load', _ => {
+                    this.map.addLayer(layer);
+                });
+            },
             async updateMapListings(updateUrl = false) {
                 let bounds = this.map.getBounds();
 
@@ -189,6 +197,7 @@
         .mapbox {
             height: 100%;
         }
+
         .listing__popup {
             max-height: 300px;
 

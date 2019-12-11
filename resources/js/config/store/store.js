@@ -161,14 +161,13 @@ const store = new Vuex.Store({
                 },
             }, 'listings').catch(function (thrown) {
                 if (axios.isCancel(thrown)) {
-                    console.log('Request canceled', thrown.message);
+                    // console.log('Request canceled', thrown.message);
                 } else {
                     // handle error
                 }
             }).then(results => {
                 const listings = results.data.data.listings.data || false;
 
-                console.log({listings});
                 if (listings) {
                     commit(ALL_LISTINGS, listings);
                     commit(SET_LISTINGS, listings);
