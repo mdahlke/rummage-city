@@ -46,7 +46,7 @@
 </script>
 
 <style lang="scss">
-    @import '../../sass/colors';
+    @import '../../../sass/colors';
 
     .search-filters {
         margin-right: 30px;

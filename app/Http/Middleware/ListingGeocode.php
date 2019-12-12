@@ -16,7 +16,7 @@ class ListingGeocode {
      */
     public function handle(Request $request, Closure $next) {
         if ($location = $request->query('q')) {
-            $geocode = MapboxService::reverseGeocode($location);
+            $geocode = MapboxService::forwardGeocode($location);
 
             if ($geocode) {
                 $route = route('listings.browse', ['location' => str_slug($geocode->feature()->getAttribute('place_name'), '-')]);
@@ -24,7 +24,7 @@ class ListingGeocode {
             }
 
         } else if ($location = $request->route('location')) {
-            $geocode = MapboxService::reverseGeocode($location);
+            $geocode = MapboxService::forwardGeocode($location);
 
             $request->request->add(['geocode' => $geocode]);
         }

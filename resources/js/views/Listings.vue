@@ -33,7 +33,7 @@
     import {mapState} from 'vuex';
     import {ALL_LISTINGS, LISTING, SEARCH, SET_LISTINGS} from '../config/store/mutations';
 
-    const SearchBox = () => import('../components/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */);
+    const SearchBox = () => import('../components/SearchBox/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */);
     const ListingsMap = () => import('../components/listings/ListingsMap.vue'/* webpackChunkName: "js/chunks/listings-map" */);
     const ListingsList = () => import('../components/listings/ListingsList.vue'/* webpackChunkName: "js/chunks/listings-list" */);
     const VueScrollTo = require('vue-scrollto');

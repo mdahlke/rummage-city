@@ -42,7 +42,7 @@ Vue.component('listing', () => import('./views/ListingView.vue'/* webpackChunkNa
 Vue.component('listing-dates-input', () => import('./components/listings/ListingDatesInput.vue'/* webpackChunkName: "js/chunks/listing-dates-input" */));
 Vue.component('listing-image-input', () => import('./components/listings/ListingImageInput.vue'/* webpackChunkName: "js/chunks/listing-images-input" */));
 Vue.component('map-geocode', () => import('./components/Map/Geocode.vue'/* webpackChunkName: "js/chunks/map-geocode" */));
-Vue.component('search-box', () => import('./components/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */));
+Vue.component('search-box', () => import('./components/SearchBox/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */));
 
 
 import App from './views/App';
