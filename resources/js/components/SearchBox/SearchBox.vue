@@ -24,6 +24,13 @@
                         <i class="far fa-search"></i>
                     </button>
                 </div>
+
+                <input type="hidden" name="place_id" v-model="place_id"/>
+                <input type="hidden" name="place_name" v-model="place_name"/>
+                <input type="hidden" name="matching_place_name" v-model="matching_place_name"/>
+                <input type="hidden" name="bbox" v-model="bbox"/>
+                <input type="hidden" name="center" v-model="center"/>
+                <input type="hidden" name="geometry" v-model="geometry"/>
             </div>
             <SearchBoxGeocodeResults :results="results"
                                      :isSearching="isSearching"
@@ -33,7 +40,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex';
+    import {mapGetters} from 'vuex';
     import _ from 'lodash';
 
     const SearchBoxFilter = () => import('./SearchBoxFilter'/* webpackChunkName: "js/chunks/search-box-filter" */);
@@ -48,6 +55,12 @@
         data() {
             return {
                 q: '',
+                place_id: '',
+                place_name: '',
+                matching_place_name: '',
+                bbox: '',
+                center: '',
+                geometry: '',
                 action: '',
                 results: [],
                 isSearching: false,
@@ -101,11 +114,24 @@
                 this.search();
             }, 300),
             triggerSearchFromResult: function (result) {
+                // we set all of this information to pass to
+                // our controller so we don't have to perform
+                // another geocode request and possibly
+                // end up with a diferent result
                 this.q = result.place_name;
+                this.place_id = result.id;
+                this.place_name = result.place_name;
+                this.matching_place_name = result.matching_place_name;
+                this.bbox = JSON.stringify(result.bbox);
+                this.center = JSON.stringify(result.center);
+                this.geometry = JSON.stringify(result.geometry);
 
-                console.log(result, this.q);
-
-                document.getElementById('search-button').click();
+                /**
+                 * @TODO figure out why I need a timeout for the correct result ot populate
+                 */
+                setTimeout(function () {
+                    document.getElementById('geocode-form').submit();
+                }, 100);
             },
         }
     };

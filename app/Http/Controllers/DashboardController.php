@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class DashboardController extends Controller {
     /**
@@ -24,11 +26,21 @@ class DashboardController extends Controller {
         $data = [];
         $user = Auth::user();
 
-        $saved = $user->savedListing;
+        $activeListings = Cache::remember('user:listings:active', 60, function () use ($user) {
+            return $user->activeListing ?? [];
+        });
 
-        $data['activeListings'] = $user->activeListing ?? [];
-        $data['inactiveListings'] = $user->inactiveListings ?? [];
-        $data['savedListings'] = $saved;
+        $inactiveListings = Cache::remember('user:listings:inactive', 60, function () use ($user) {
+            return $user->inactiveListings ?? [];
+        });
+
+        $savedListings = Cache::remember('user:listings:saved', 60, function () use ($user) {
+            return $user->savedListing ?? [];
+        });
+
+        $data['activeListings'] = $activeListings;
+        $data['inactiveListings'] = $inactiveListings;
+        $data['savedListings'] = $savedListings;
 
         return view('dashboard.home', $data);
     }

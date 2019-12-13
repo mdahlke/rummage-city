@@ -27,7 +27,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -51,16 +53,13 @@ class ListingController extends Controller {
         } else {
             $searchState = (object)[
                 'map' => (object)[
-                    'center' => (object)[
-//                        'lat' => false,
-//                        'lng' => false,
-                    ],
+                    'center' => (object)[],
                     'zoom' => false,
                     'pitch' => false,
                     'bearing' => false,
                 ],
                 'listing' => false,
-                'searchedTerm' => false,
+                'term' => false,
                 'filter' => []
             ];
         }
@@ -99,12 +98,18 @@ class ListingController extends Controller {
             });
         }
 
-        $builder->limit(100);
+        $builder->limit(100000);
 
-        $listings = $builder->get();
+        $queryHash = md5($builder->toSql());
+
+
+        $listings = Cache::remember('listings:query', 60, function () use ($builder) {
+            return $builder->get()->toArray();
+        });
+
         $searchState->term = $term;
 
-        $data['listings'] = $listings->toArray();
+        $data['listings'] = $listings;
         $data['searchState'] = json_encode([
             'url' => route('listings.browse'),
             'query' => $searchState,

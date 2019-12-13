@@ -77,9 +77,7 @@ const store = new Vuex.Store({
 
             return listings;
         },
-        getAllListings: state => {
-            return state.allListings;
-        },
+        getAllListings: state => state.allListings,
         get_listing_by_id: state => id => {
             return state.allListings.find(listing => listing.id === id);
         },
@@ -92,9 +90,8 @@ const store = new Vuex.Store({
         saved_listings_count: (state, getters) => {
             return getters.savedListings.count;
         },
-        searchFilters: state => {
-            return state.search.query.filter;
-        }
+        searchFilters: state => state.search.query.filter,
+        searchState: state => start.search,
     },
     mutations: {
         [INITIALISE_STORE](state) {

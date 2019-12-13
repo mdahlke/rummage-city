@@ -13,8 +13,6 @@ class MapboxService {
     public static $baseUrl = 'https://api.mapbox.com/geocoding/v5';
 
     public static function forwardGeocode($location): Geocode {
-        $listing = new Listing();
-
         $geocode = new Geocode();
         $client = new Client();
         $url = self::$baseUrl . '/mapbox.places/' . urlencode($location) . '.json?access_token=' . config('mapbox.access_token');
@@ -25,7 +23,6 @@ class MapboxService {
         $geocode->setDirection('reverse');
 
         $feature = $response->features[0] ?? false;
-
 
         if ($feature) {
 
