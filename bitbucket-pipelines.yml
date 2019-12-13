@@ -69,7 +69,7 @@ pipelines:
           script:
             - composer show -p
             - composer install --no-interaction --no-progress --prefer-dist
-            - composer dump-autoload -o
+            - composer dump-autoload -o --no-dev
             - npm install
             - npm run production
             - npm run copy-fontawesome
