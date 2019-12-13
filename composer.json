@@ -15,6 +15,9 @@
     "jenssegers/model": "^1.2",
     "laravel/framework": "^6.0",
     "laravel/helpers": "^1.1",
+    "laravel/horizon": "^3.4",
+    "laravel/slack-notification-channel": "^2.0",
+    "laravel/telescope": "^2.1",
     "laravel/tinker": "~1.0",
     "predis/predis": "^1.1",
     "rebing/graphql-laravel": "^3.0",
@@ -23,7 +26,6 @@
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.2",
-    "filp/whoops": "~2.0",
     "laravel/ui": "^1.1",
     "mockery/mockery": "~1.2",
     "phpunit/phpunit": "~6.5",
@@ -67,12 +69,14 @@
       "@php artisan package:discover"
     ],
     "post-update-cmd": [
-      "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-      "@php artisan ide-helper:generate",
-      "@php artisan ide-helper:meta"
+      "Illuminate\\Foundation\\ComposerScripts::postUpdate"
     ]
   },
   "config": {
+    "platform": {
+      "ext-pcntl": "7.2",
+      "ext-posix": "7.2"
+    },
     "preferred-install": "dist",
     "sort-packages": true,
     "optimize-autoloader": true

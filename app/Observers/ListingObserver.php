@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Listing;
+use App\Notifications\ListingCreated;
+use App\Notifications\ListingUpdated;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +36,8 @@ class ListingObserver {
      * @return void
      */
     public function created(Listing $listing) {
-        //
+        $for = now()->addMinutes(10);
+        $listing->user->notify((new ListingCreated($listing))->delay($for));
     }
 
     /**
@@ -44,7 +47,8 @@ class ListingObserver {
      * @return void
      */
     public function updated(Listing $listing) {
-        //
+        $for = now()->addMinutes(1);
+        $listing->user->notify((new ListingUpdated($listing))->delay($for));
     }
 
     /**

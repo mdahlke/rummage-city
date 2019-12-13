@@ -87,4 +87,8 @@ class User extends Authenticatable {
 
         return in_array($id, $this->savedListingsIds);
     }
+
+    public function routeNotificationForSlack() {
+        return "https://hooks.slack.com/services/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";
+    }
 }

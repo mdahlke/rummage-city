@@ -16,6 +16,7 @@ use App\Listing;
 use App\ListingDate;
 use App\ListingImage;
 use App\MapboxFeature;
+use App\Notifications\ListingCreated;
 use App\Providers\MapboxProvider;
 use App\User;
 use Exception;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -166,6 +168,7 @@ class ListingController extends Controller {
      */
     public function edit(Request $request, Listing $listing) {
         $user = Auth::user();
+
         $route = '';
         if ($listing->exists) {
             $route = route('user.listing.edit', ['listing' => $listing->id]);
@@ -235,9 +238,8 @@ class ListingController extends Controller {
                 }
 
                 // remove any images that were selected for removal
-                $removeImages = $request->input('remove_images');
                 $removeImages = json_decode($request->input('remove_images'));
-//				dd($removeImages);
+
                 foreach ($removeImages as $remove) {
                     $image = ListingImage::query()->where('id', $remove)->first();
 
