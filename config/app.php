@@ -167,7 +167,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Barryvdh\Debugbar\ServiceProvider::class,
         Rebing\GraphQL\GraphQLServiceProvider::class,
 
         /*

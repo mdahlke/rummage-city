@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/', function () {
+//Route::get('/', function () {
     Route::middleware('auth:api')->group(function () {
         //	Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 //	Route::get('graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
@@ -25,4 +25,4 @@ Route::get('/', function () {
         Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 
     });
-});
+//});

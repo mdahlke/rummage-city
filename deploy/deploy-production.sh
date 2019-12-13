@@ -77,6 +77,8 @@ else
 
     echo "Deployment complete. Production is on ${git_tag}"
 
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Production deployment ran: "}' https://hooks.slack.com/services/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
+
   elif
     [[ $status == "Permission denied"* ]]
   then
