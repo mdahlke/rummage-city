@@ -7,15 +7,13 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\TelescopeApplicationServiceProvider;
 
-class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
-{
+class TelescopeServiceProvider extends TelescopeApplicationServiceProvider {
     /**
      * Register any application services.
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         // Telescope::night();
 
         $this->hideSensitiveRequestDetails();
@@ -26,10 +24,10 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
             }
 
             return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag();
+                $entry->isFailedRequest() ||
+                $entry->isFailedJob() ||
+                $entry->isScheduledTask() ||
+                $entry->hasMonitoredTag();
         });
     }
 
@@ -38,8 +36,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      *
      * @return void
      */
-    protected function hideSensitiveRequestDetails()
-    {
+    protected function hideSensitiveRequestDetails() {
         if ($this->app->isLocal()) {
             return;
         }
@@ -60,11 +57,10 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      *
      * @return void
      */
-    protected function gate()
-    {
+    protected function gate() {
         Gate::define('viewTelescope', function ($user) {
             return in_array($user->email, [
-                //
+                'mdahlke@wisnet.com',
             ]);
         });
     }
