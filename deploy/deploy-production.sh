@@ -57,8 +57,6 @@ else
     echo "Connection Successful"
     echo "Preparing files for deployment"
 
-    ls -alh public/ public/css public/js
-
     echo "Creating Archive"
     git archive -o ${test_branch}-release.zip HEAD
 

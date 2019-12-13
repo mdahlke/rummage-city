@@ -23,12 +23,12 @@ rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${
 echo "Cleaning up"
 rm -rf ${deploy_dir}${branch}-release.zip ${deploy_dir}${branch}-release
 
-cd /home/${deployUser}/app/ && \
- php artisan config:clear --no-interaction && \
- php artisan cache:clear --no-interaction && \
- php artisan config:cache --no-interaction && \
- php artisan route:cache --no-interaction && \
- php artisan migrate --no-interaction
+cd /home/${deployUser}/app/ &&
+  php artisan config:clear --no-interaction &&
+  php artisan cache:clear --no-interaction &&
+  php artisan config:cache --no-interaction &&
+  php artisan route:cache --no-interaction &&
+  php artisan migrate --no-interaction
 
 #echo "Restarting Lsyncd to ensure files transfer"
 #sudo service lsyncd restart & > /dev/null 2>&1
