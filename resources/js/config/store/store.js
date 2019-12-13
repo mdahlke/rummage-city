@@ -91,7 +91,7 @@ const store = new Vuex.Store({
             return getters.savedListings.count;
         },
         searchFilters: state => state.search.query.filter,
-        searchState: state => start.search,
+        searchState: state => state.search,
     },
     mutations: {
         [INITIALISE_STORE](state) {
