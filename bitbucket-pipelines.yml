@@ -5,7 +5,7 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 
 image:
-  name: mdahlke/php72
+  name: 'mdahlke/php72'
   username: $DOCKER_USERNAME
   password: $DOCKER_PASSWORD
   email: $DOCKER_EMAIL
