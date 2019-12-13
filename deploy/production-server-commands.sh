@@ -15,7 +15,7 @@ chgrp -R www-data ${destination}storage ${destination}bootstrap/cache
 chmod -R ug+rwx ${destination}storage ${destination}bootstrap/cache
 
 echo "Copying files to deployment directory (${deploy_dir})"
-rsync -aP ${deploy_dir}${test_branch}-release/. ${destination}/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
+rsync -a ${deploy_dir}${test_branch}-release/. ${destination}/ --exclude ${deploy_dir}${test_branch}-release/node_modules/.cache
 
 echo "Removing unneeded files from production"
 rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${destination}/package* ${destination}/phpunit.xml ${destination}/webpack.mix.js
@@ -23,7 +23,7 @@ rm -rf ${destination}/deploy ${destination}/.env.example ${destination}/.git* ${
 echo "Cleaning up"
 rm -rf ${deploy_dir}${test_branch}-release.zip ${deploy_dir}${test_branch}-release
 
-cd /home/${deployUser}/app/ && php artisan configg:clear && php artisan cache:clear && php artisan migrate
+cd /home/${deployUser}/app/ && php artisan config:clear && php artisan cache:clear && php artisan migrate
 
 #echo "Restarting Lsyncd to ensure files transfer"
 #sudo service lsyncd restart & > /dev/null 2>&1
