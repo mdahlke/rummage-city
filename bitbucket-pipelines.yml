@@ -3,9 +3,25 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: php:7.2.1
+
+image:
+  name: $DOCKER_IMAGE
+  username: $DOCKER_USERNAME
+  password: $DOCKER_PASSWORD
+  email: $DOCKER_EMAIL
 
 pipelines:
+  default:
+    - step:
+        script:
+          - ln -f -s .env.pipelines .env
+          - php artisan migrate
+          - php artisan serve &
+          - sleep 5
+          - ./vendor/bin/phpunit
+          - curl -vk http://localhost:8000
+        services:
+          - mysql
   branches:
     feature/*:
       - step:
@@ -51,21 +67,25 @@ pipelines:
             - composer-vendor
             - node-modules
           script:
-            - apt-get update && apt-get install -y unzip ssh iputils-ping zip rsync git
-            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer show -p
             - composer install --no-interaction --no-progress --prefer-dist
             - composer dump-autoload -o
-            - curl -sL https://deb.nodesource.com/setup_10.x | bash -
-            - apt-get install nodejs -y
             - npm install
             - npm run production
             - npm run copy-fontawesome
             - bash ./deploy/build-commit-info.sh
             - bash ./deploy/deploy-production.sh
 
+
 definitions:
   caches:
     composer-vendor: vendor/
     node-modules: node_modules/
-
+  services:
+    mysql:
+      image: mysql:5.7
+      environment:
+        MYSQL_DATABASE: 'homestead'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: 'homestead'
+        MYSQL_PASSWORD: 'secret'
