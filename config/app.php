@@ -168,6 +168,7 @@ return [
          * Package Service Providers...
          */
         Rebing\GraphQL\GraphQLServiceProvider::class,
+        Laravel\Telescope\TelescopeServiceProvider::class,
 
         /*
          * Application Service Providers...

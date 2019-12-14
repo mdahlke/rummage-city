@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider {
         $this->app->register(TelescopeServiceProvider::class);
 
         if ($this->app->isLocal()) {
-            $this->app->register(Barryvdh\Debugbar\ServiceProvider::class);
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         }
     }
 }
