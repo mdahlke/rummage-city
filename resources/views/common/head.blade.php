@@ -4,15 +4,21 @@
 
 <title>@yield('title') | Rummage City</title>
 
+<link rel="dns-prefetch" href="//ajax.googleapis.com" />
+<link rel="dns-prefetch" href="//api.mapbox.com" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+
 <link rel="icon" type="image/png" href="/favicon.png"/>
 
 {{--<link rel="manifest" href="/manifest.webmanifest">--}}
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Raleway:100,600|Dosis:400,600|Indie+Flower|Josefin+Sans:400,600&display=swap"
-      rel="stylesheet" type="text/css">
+{{--<link href="https://fonts.googleapis.com/css?family=Raleway:100,600|Dosis:400,600|Indie+Flower|Josefin+Sans:400,600&display=swap"--}}
+{{--      rel="stylesheet" type="text/css">--}}
 
 <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('css/fontawesome.css') }}">
+
 
 
 <!-- Styles -->
