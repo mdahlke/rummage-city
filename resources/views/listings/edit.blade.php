@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container mt-5 mb-5">
 
         <div class="row">
             <div class="col-12">
@@ -49,8 +49,10 @@
                     <listing-image-input :images="{{ $listing->image }}" :max_file_size="10"></listing-image-input>
 
                 </form>
-                <button type="button" id="submit-listing" class="btn btn-primary btn-xs">Post</button>
 
+                <div class="text-right">
+                    <button type="button" id="submit-listing" class="btn btn-primary">Add Listing</button>
+                </div>
             </div>
         </div>
     </div>
