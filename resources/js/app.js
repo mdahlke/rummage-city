@@ -37,8 +37,11 @@ Vue.component('VueCtkDateTimePicker', () => import('vue-ctk-date-time-picker'/* 
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
+Vue.component('example', () => import('./components/ExampleComponent.vue'/* webpackChunkName: "js/chunks/example" */));
+Vue.component('examples', () => import('./components/ExampleComponents.vue'/* webpackChunkName: "js/chunks/examples" */));
 Vue.component('listings', () => import('./views/Listings.vue'/* webpackChunkName: "js/chunks/listings" */));
 Vue.component('listing', () => import('./views/ListingView.vue'/* webpackChunkName: "js/chunks/listings-view" */));
+Vue.component('listings-recent', () => import('./components/listings/ListingsRecent.vue'/* webpackChunkName: "js/chunks/listings-recent" */));
 Vue.component('listing-dates-input', () => import('./components/listings/ListingDatesInput.vue'/* webpackChunkName: "js/chunks/listing-dates-input" */));
 Vue.component('listing-image-input', () => import('./components/listings/ListingImageInput.vue'/* webpackChunkName: "js/chunks/listing-images-input" */));
 Vue.component('map-geocode', () => import('./components/Map/Geocode.vue'/* webpackChunkName: "js/chunks/map-geocode" */));

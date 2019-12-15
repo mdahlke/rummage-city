@@ -175,6 +175,7 @@
         #search-button {
             border-color: $tertiary;
             border-left: 0;
+            background-color: $white;
         }
 
     }

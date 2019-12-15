@@ -1,5 +1,4 @@
 <template>
-
     <section class="listings-component">
         <section class="search-bar sub-nav">
             <SearchBox :query="searchedTerm"/>

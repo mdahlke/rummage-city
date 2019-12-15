@@ -42,8 +42,6 @@ class ListingController extends Controller {
 
     public function index(Request $request, $location = null) {
         $data = [];
-        $listings = [];
-        $searchState = (object)[];
         $geocode = $request->get('geocode');
         $searchState = $request->query('searchState');
         $searchStateLoaded = false;
@@ -77,7 +75,6 @@ class ListingController extends Controller {
         $builder->with('activeDate')
             ->with('image')
             ->whereHas('activeDate');
-
 
         if (!$searchStateLoaded && $geocode) {
             $searchState->map->center->lat = $geocode->getCenter()[1];

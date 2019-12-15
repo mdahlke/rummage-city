@@ -33,7 +33,7 @@ class Listing extends Model {
 
     protected $keyType = 'string';
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $appends = ['saveUrl', 'removeSavedUrl', 'isSaved'];
+    protected $appends = ['viewUrl', 'saveUrl', 'removeSavedUrl', 'isSaved'];
     public $incrementing = false;
     public $fillable = [
         'title',
@@ -49,6 +49,7 @@ class Listing extends Model {
         'longitude',
         'ip_address'
     ];
+    public $viewUrl = '';
     public $saveUrl = '';
     public $removeSavedUrl = '';
     public $isSaved = false;
@@ -81,16 +82,48 @@ class Listing extends Model {
         return $this->hasMany(ListingImage::class);
     }
 
+    /*
+     * Add $viewUrl to attributes list
+     */
+    public function getViewUrlAttribute() {
+        return $this->viewUrl;
+    }
+
+    /*
+     * Add $saveUrl to attributes list
+     */
     public function getSaveUrlAttribute() {
         return $this->saveUrl;
     }
 
+    /*
+     * Add $removeSavedUrl to attributes list
+     */
     public function getRemoveSavedUrlAttribute() {
         return $this->removeSavedUrl;
     }
 
+    /*
+     * Add $isSaved to attributes list
+     */
     public function getIsSavedAttribute() {
         return $this->isSaved();
+    }
+
+    /**
+     * @return string
+     */
+    public function getViewUrl(): string {
+        return $this->viewUrl;
+    }
+
+    /**
+     * @param string $viewUrl
+     * @return Listing
+     */
+    public function setViewUrl(string $viewUrl): Listing {
+        $this->viewUrl = $viewUrl;
+        return $this;
     }
 
     /**

@@ -52,7 +52,7 @@ mix.options({
 });
 
 mix.js('resources/js/app.js', 'public/js').extract();
-// mix.js('resources/js/sw/sw.js', 'public/sw.js')
+// mix.js('resources/js/sw/sw.js', 'public/sw.js');
 mix.mergeManifest();
 
 if (production) {

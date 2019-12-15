@@ -13,6 +13,9 @@
 */
 
 use App\Http\Middleware\ListingGeocode;
+use App\Listing;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +45,19 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 Route::middleware('web')->group(function () {
     Route::get('/', function () {
-        return view('home.welcome');
+
+        /** @var Builder $listings */
+        $builder = Listing::query()
+            ->with(['activeDate' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
+            ->with('image')
+            ->whereHas('activeDate')
+            ->limit(4);
+
+        $listings = $builder->get();
+
+        return view('home.home', ['recentListings' => $listings]);
     })->name('home');
 
     Route::prefix('listings')->group(function () {

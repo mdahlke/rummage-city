@@ -1,11 +1,10 @@
-@import 'colors';
+@import '../colors';
 
-body.page-home main {
-  position: relative;
-  height: 50vh;
+body.page-home {
 
-  .content {
-    height: 100%;
+  .search-banner {
+    position: relative;
+    height: 50vh;
   }
 
   .background-helper {
@@ -30,7 +29,15 @@ body.page-home main {
   }
 
   .title {
+    margin-bottom: 20px;
     color: $white;
   }
 
+  .search-box {
+    [name="q"] {
+      padding: 25px 30px;
+      font-size: 20px;
+      width: 500px;
+    }
+  }
 }

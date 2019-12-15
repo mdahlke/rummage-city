@@ -104,7 +104,6 @@ class RelatedListingsQuery extends Query {
         $builder = Listing::query()
             ->select($select)
             // this allows ONLY still alive listings to appear.
-            // @TODO ask Mark for the correct way of doing this
             ->selectRaw('(SELECT `start` FROM listing_dates WHERE listings.id = listing_dates.listing_id AND `end` >= "' . Carbon::now() . '"
 	ORDER BY `start` LIMIT 1 ) as sort')
             ->with(array_keys($fields()->getRelations()))

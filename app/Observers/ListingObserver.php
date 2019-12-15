@@ -28,6 +28,12 @@ class ListingObserver {
             $listing->setSaveUrl(route('login'));
             $listing->setRemoveSavedUrl(route('login'));
         }
+
+        $listing->setViewUrl(route('listings.view', [
+            'address' => str_slug($listing->address),
+            'listing' => $listing->id,
+        ]));
+
     }
 
     /**
@@ -40,8 +46,8 @@ class ListingObserver {
         $for = now()->addMinutes(10);
         $listing->user->notify((new ListingCreated($listing))->delay($for));
 
-        Cache::forget('user:listings:active:'. $listing->user->id);
-        Cache::forget('user:listings:inactive:'. $listing->user->id);
+        Cache::forget('user:listings:active:' . $listing->user->id);
+        Cache::forget('user:listings:inactive:' . $listing->user->id);
     }
 
     /**
@@ -54,8 +60,8 @@ class ListingObserver {
         $for = now()->addMinutes(1);
         $listing->user->notify((new ListingUpdated($listing))->delay($for));
 
-        Cache::forget('user:listings:active:'. $listing->user->id);
-        Cache::forget('user:listings:inactive:'. $listing->user->id);
+        Cache::forget('user:listings:active:' . $listing->user->id);
+        Cache::forget('user:listings:inactive:' . $listing->user->id);
     }
 
     /**
