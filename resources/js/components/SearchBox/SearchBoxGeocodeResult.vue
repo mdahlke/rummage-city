@@ -17,7 +17,6 @@
         },
         methods: {
             trigger: function () {
-                console.log(this.result.text);
                 this.$emit('triggerSearch', this.result);
             }
         }

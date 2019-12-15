@@ -39,7 +39,6 @@
         },
         methods: {
             triggerSearchChild: function (result) {
-                console.log(result.place_name);
                 this.$emit('geocodeResultSearch', result);
             }
         }
