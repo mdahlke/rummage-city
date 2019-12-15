@@ -7,6 +7,7 @@ use App\Notifications\ListingCreated;
 use App\Notifications\ListingUpdated;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ListingObserver {
     public function retrieved(Listing $listing) {
@@ -38,6 +39,9 @@ class ListingObserver {
     public function created(Listing $listing) {
         $for = now()->addMinutes(10);
         $listing->user->notify((new ListingCreated($listing))->delay($for));
+
+        Cache::forget('user:listings:active:'. $listing->user->id);
+        Cache::forget('user:listings:inactive:'. $listing->user->id);
     }
 
     /**
@@ -49,6 +53,9 @@ class ListingObserver {
     public function updated(Listing $listing) {
         $for = now()->addMinutes(1);
         $listing->user->notify((new ListingUpdated($listing))->delay($for));
+
+        Cache::forget('user:listings:active:'. $listing->user->id);
+        Cache::forget('user:listings:inactive:'. $listing->user->id);
     }
 
     /**

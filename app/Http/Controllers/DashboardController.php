@@ -26,15 +26,15 @@ class DashboardController extends Controller {
         $data = [];
         $user = Auth::user();
 
-        $activeListings = Cache::remember('user:listings:active', 3600, function () use ($user) {
+        $activeListings = Cache::remember('user:listings:active:' . $user->id, 3600, function () use ($user) {
             return $user->activeListing ?? [];
         });
 
-        $inactiveListings = Cache::remember('user:listings:inactive', 3600, function () use ($user) {
+        $inactiveListings = Cache::remember('user:listings:inactive:' . $user->id, 3600, function () use ($user) {
             return $user->inactiveListings ?? [];
         });
 
-        $savedListings = Cache::remember('user:listings:saved', 3600, function () use ($user) {
+        $savedListings = Cache::remember('user:listings:saved:' . $user->id, 3600, function () use ($user) {
             return $user->savedListing ?? [];
         });
 
