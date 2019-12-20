@@ -6,7 +6,7 @@
 
         <div class="background-helper"></div>
 
-        <div class="container">
+        <div class="container h-100">
             <div class="row align-items-center h-100">
                 <div class="col-12">
                     <div class="content text-center">

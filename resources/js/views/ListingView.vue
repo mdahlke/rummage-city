@@ -3,7 +3,7 @@
         <article class="listing-wrap">
 
             <router-link :to="{ name: 'listings'}" class="close-listing"><i class="fas fa-times"></i></router-link>
-<!--            <a @click="backToMap" class="close-listing"><i class="fas fa-times"></i></a>-->
+            <!--            <a @click="backToMap" class="close-listing"><i class="fas fa-times"></i></a>-->
 
             <div class="single-listing__content">
                 <section v-if="loading" class="listing__loading">
@@ -154,17 +154,43 @@
 </script>
 
 <style lang="scss">
+    @import 'bootstrap/scss/_functions';
+    @import 'bootstrap/scss/_variables';
+    @import 'bootstrap/scss/mixins/_breakpoints';
     @import '../../sass/colors';
 
     .close-listing {
         position: absolute;
-        top: 0;
-        right: 0;
-        padding: 20px 20px;
-        color: white !important;
-        background-color: transparentize($tertiary, .4);
-        font-size: 28px;
-        transform: translateX(100%);
+        left: 0;
+        bottom: 0;
+        padding: 10px 10px;
+        background: $tertiary;
+        color: $white;
+        font-size: 14px;
+        text-align: center;
+        width: 100%;
+        transform: translateY(100%);
+
+        &::after {
+            content: "Close";
+            padding-left: 10px;
+        }
+
+        @include media-breakpoint-up(xl) {
+            top: 0;
+            right: 0;
+            bottom: unset;
+            left: unset;
+            padding: 20px 20px;
+            background-color: transparentize($tertiary, .2);
+            font-size: 28px;
+            width: auto;
+            transform: translate(100%, 0);
+
+            &:after {
+                display: none;
+            }
+        }
     }
 
     #listing-popup-view {
@@ -199,10 +225,22 @@
         }
 
         .single-listing__content {
-            padding: 30px;
+            padding: 30px 0;
             width: 100%;
             height: 100%;
             overflow: auto;
+
+            .related-listings {
+                padding: 0 30px;
+            }
+
+            @include media-breakpoint-up(md) {
+                padding: 30px;
+
+                .related-listings {
+                    padding: 0;
+                }
+            }
         }
 
         .listing__main-content {
