@@ -1,6 +1,7 @@
 <template>
-    <section class="recent-listings">
-        <ListingsRecentListing v-for="listing in listings"
+    <section v-if="recentListings.length"
+             class="recent-listings">
+        <ListingsRecentListing v-for="listing in recentListings"
                                :key="'listings-recent-' + listing.id"
                                :listing="listing"
         />
@@ -15,21 +16,33 @@
         components: {
             ListingsRecentListing
         },
+        data() {
+            return {
+                recentListings: [],
+            };
+        },
         props: {
             listings: {
                 type: Array,
                 required: false,
+                default: () => []
             }
         },
         created() {
-            if (!this.listings) {
-
+            if (!this.listings.length) {
+                this.fetchListings();
+            } else {
+                this.recentListings = this.listings;
             }
-            console.log(this.listings);
+            console.log(this.recentListings);
         },
         methods: {
             fetchListings() {
                 // fetch most recent listings
+                axios.get('/api/listings/recent')
+                    .then(res => {
+                        this.recentListings = res.data.listings;
+                    });
             }
         }
     };

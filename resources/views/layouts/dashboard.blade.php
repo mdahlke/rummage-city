@@ -46,6 +46,9 @@
 
             <div class="col-xs col-sm-12 col-md">
                 <main class="main">
+{{--                    <passport-clients></passport-clients>--}}
+{{--                    <passport-authorized-clients></passport-authorized-clients>--}}
+{{--                    <passport-personal-access-tokens></passport-personal-access-tokens>--}}
                     @yield('content')
                 </main>
             </div>

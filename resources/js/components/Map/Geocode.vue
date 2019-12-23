@@ -107,9 +107,6 @@
 
         },
         mounted() {
-            if (this.listings) {
-                this.visible_listings = this.listings;
-            }
 
             mapboxgl.accessToken = mapbox_config.accessToken;
             let config = {
@@ -217,6 +214,8 @@
                 this.lat = r.center[1];
                 this.lng = r.center[0];
                 this.marker.setLngLat([this.lng, this.lat]);
+
+                this.$emit('geocode', this.$data);
             },
             center_map_on(lat, lng) {
                 this.map.setCenter([lng, lat]);

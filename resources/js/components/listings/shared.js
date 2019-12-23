@@ -1,6 +1,7 @@
 import axios from 'axios';
 import slugify from 'slugify';
 import {isTrue} from '../../helpers';
+import bootbox from 'bootbox';
 
 export const listing_mixin = {
     methods: {
@@ -19,10 +20,18 @@ export const listing_mixin = {
         },
         save_listing(listing) {
             if (!isTrue(listing.isSaved)) {
-                axios.post(listing.saveUrl).then(() => {
-                    listing.isSaved = true;
-                    this.$store.dispatch('update_listing', listing);
-                });
+                if (this.$store.accessToken) {
+                    axios.post(listing.saveUrl).then(() => {
+                        listing.isSaved = true;
+                        this.$store.dispatch('update_listing', listing);
+                    });
+                } else {
+                    axios.get(listing.saveUrl).then((e) => {
+                        bootbox.dialog({
+                            message: e.data
+                        });
+                    });
+                }
             }
         },
         remove_saved_listing(listing) {

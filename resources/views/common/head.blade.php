@@ -4,10 +4,10 @@
 
 <title>@yield('title') | Rummage City</title>
 
-<link rel="dns-prefetch" href="//ajax.googleapis.com" />
-<link rel="dns-prefetch" href="//api.mapbox.com" />
-<link rel="dns-prefetch" href="//fonts.googleapis.com" />
-<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="dns-prefetch" href="//ajax.googleapis.com"/>
+<link rel="dns-prefetch" href="//api.mapbox.com"/>
+<link rel="dns-prefetch" href="//fonts.googleapis.com"/>
+<link rel="dns-prefetch" href="//fonts.gstatic.com"/>
 
 <link rel="icon" type="image/png" href="/favicon.png"/>
 
@@ -18,7 +18,6 @@
 
 <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('css/fontawesome.css') }}">
-
 
 
 <!-- Styles -->
@@ -34,7 +33,8 @@
 </style>
 
 <script type="text/javascript">
-    window.csrf_token = "{{ csrf_token() }}"
+    window.csrf_token = "{{ csrf_token() }}";
+    window.is_user_authenticated = {{ \Illuminate\Support\Facades\Auth::guest() ? 0 : 1 }}
 </script>
 
 {{-- Vue DevTools --}}

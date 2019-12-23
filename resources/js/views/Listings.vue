@@ -23,8 +23,11 @@
                 />
             </aside>
 
-            <router-view></router-view>
+            <transition name="fade" mode="out-in">
+                <router-view></router-view>
+            </transition>
         </div>
+
     </section>
 </template>
 
@@ -84,13 +87,13 @@
         watch: {
             // call again the method if the route changes
             $route() {
-                this.fetch_data();
+                this.fetchData();
                 // this.map_data();
                 // this.$refs.listingsMap.update_map(false)
             }
         },
         created() {
-            // this.fetch_data();
+            // this.fetchData();
         },
         mounted() {
             if (this.listings) {
@@ -110,7 +113,7 @@
 
             if (!this._listings.length) {
                 // when the component is mounted then we will be fetching data
-                this.fetch_data();
+                // this.fetchData();
                 this.loaded = true;
             } else {
                 this.loaded = true;
@@ -120,11 +123,10 @@
             set_fetching(is = true) {
                 this.fetching = is;
             },
-            fetch_data() {
-                let updateUrl = false;
-                if (this.$route.name === 'listings') {
-                    updateUrl = true;
-                }
+            fetchData() {
+                this.fetching = true;
+
+                // this.$store.dispatch('getListingsInBounds');
 
                 this.fetching = false;
             },
@@ -168,9 +170,13 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
     @import '../../sass/variables';
+
+    #footer {
+        display: none;
+    }
 
     #listings {
         display: flex;

@@ -44,4 +44,24 @@ class DashboardController extends Controller {
 
         return view('dashboard.home', $data);
     }
+
+    public function userListings(Request $request) {
+        $user = $request->user();
+
+        $listings = Cache::remember('user:listings:active:' . $user->id, 3600, function () use ($user) {
+            return $user->activeListing ?? [];
+        });
+
+        return response()->json($listings);
+    }
+
+    public function savedListings(Request $request) {
+        $user = $request->user();
+
+        $listings = Cache::remember('user:listings:saved:' . $user->id, 3600, function () use ($user) {
+            return $user->savedListing ?? [];
+        });
+
+        return response()->json($listings);
+    }
 }
