@@ -115,6 +115,7 @@ const store = new Vuex.Store({
             return 'Guest';
         },
         getUserListing: state => id => {
+            console.log({id}, state.userListings);
             return state.userListings.find(listing => listing.id === id);
         }
     },

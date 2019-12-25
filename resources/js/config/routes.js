@@ -44,10 +44,7 @@ const listingEdit = {
     component: ListingEdit,
     props: {
         isNew: false,
-        listing:
-            () => {
-                return {};
-            }
+        userListing: {}
     }
 };
 
@@ -57,10 +54,7 @@ const listingNew = {
     component: ListingEdit,
     props: {
         isNew: true,
-        listing:
-            () => {
-                return {};
-            }
+        userListing: {}
     }
 };
 

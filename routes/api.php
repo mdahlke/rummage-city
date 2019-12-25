@@ -24,21 +24,19 @@ Route::post('signup', 'AuthController@signup');
 Route::middleware('auth:api')->group(function () {
     Route::get('logout', 'AuthController@logout');
     Route::get('user', 'AuthController@user');
-});
 
-Route::middleware('auth:api')->group(function () {
     //	Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 //	Route::get('graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 //    Route::post('login', 'Auth\LoginController@login');
 //    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-    Route::get('/user', function (Request $request) {
+    Route::get('user', function (Request $request) {
         return $request->user();
     });
 
     Route::get('user/listings', 'DashboardController@userListings');
     Route::get('user/listings/saved', 'DashboardController@savedListings');
-//    Route::post('/login', 'LoginController@savedListings');
+    Route::get('listing/:listing/edit', 'ListingController@edit');
 });
 
 

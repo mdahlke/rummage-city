@@ -59,7 +59,13 @@
                                     class="list-group list-group-flush">
                                     <li v-for="listing in userListings"
                                         :key="'user-listing-' +listing.id">
-                                        <router-link :to="{ name: 'listing.edit', params: { id: listing.id }}">
+                                        <router-link :to="{
+                                            name: 'listing.edit',
+                                            params: {
+                                                id: listing.id,
+                                                userListing: listing
+                                            }
+                                        }">
                                             <i class="fad fa-warehouse-alt"></i> {{ listing.title }}
                                         </router-link>
                                     </li>

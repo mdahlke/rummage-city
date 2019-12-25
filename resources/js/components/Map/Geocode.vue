@@ -54,8 +54,8 @@
                 location_state: '',
                 location_postcode: '',
                 location_country: '',
-                lat: '37.7397',
-                lng: '-121.4252',
+                lat: 37.7397,
+                lng: -121.4252,
                 zoom: 10,
                 icon: null
             };
@@ -68,8 +68,8 @@
             state: String,
             postcode: String,
             country: String,
-            latitude: String,
-            longitude: String,
+            latitude: Number,
+            longitude: Number,
             mapZoom: Number,
             svg: {
                 type: String,

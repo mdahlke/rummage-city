@@ -114,7 +114,7 @@ class ListingController extends Controller {
             'query' => $searchState,
         ]);
 
-        return view('listings.index', $data);
+        return response()->json($data);
     }
 
     public function geo() {
@@ -153,6 +153,10 @@ class ListingController extends Controller {
         $data['listing'] = $listing;
 
         return view('listings.view', $data);
+    }
+
+    public function find(Request $request, Listing $listing) {
+        dd($listing);
     }
 
     /**
