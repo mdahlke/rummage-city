@@ -190,7 +190,7 @@ export const isListingThisWeekend = (...listingDates) => {
 // globally stores the upcoming weekend to prevent recalculating many times
 let thisWeekend = [];
 
-const getUpcomingWeekend = (today = null) => {
+export const getUpcomingWeekend = (today = null) => {
     if (!thisWeekend.length) {
         const fridayDayNumber = 5;
         let friday = new moment();
@@ -222,4 +222,41 @@ const getUpcomingWeekend = (today = null) => {
     }
 
     return thisWeekend;
+};
+
+export const serializeArray = (form) => {
+
+    // Setup our serialized data
+    let serialized = [];
+
+    // Loop through each field in the form
+    for (let i = 0, len = form.elements.length; i < len; i++) {
+
+        var field = form.elements[i];
+
+        // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+        if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
+
+        // If a multi-select, get all selections
+        if (field.type === 'select-multiple') {
+            for (var n = 0, optsLen = field.options.length; n < optsLen; n++) {
+                if (!field.options[n].selected) continue;
+                serialized.push({
+                    name: field.name,
+                    value: field.options[n].value
+                });
+            }
+        }
+
+        // Convert field data to a query string
+        else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
+            serialized.push({
+                name: field.name,
+                value: field.value
+            });
+        }
+    }
+
+    return serialized;
+
 };

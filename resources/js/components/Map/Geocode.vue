@@ -1,5 +1,10 @@
 <template>
     <div class="geocode-input">
+        da fuck
+        {{ house }}
+        <br/>
+        {{ location_house }}
+        <label v-if="label">{{ label }}</label>
         <input type="hidden"
                name="latitude"
                :value="lat">
@@ -74,9 +79,16 @@
             svg: {
                 type: String,
                 default: null
+            },
+            label: {
+                type: String,
+                required: false,
             }
         },
         created() {
+
+            console.log('Geocode', this.house, this.$props);
+
             if (this.latitude) {
                 this.lat = this.latitude;
             }
@@ -86,6 +98,7 @@
             if (this.address) {
                 this.location_address = this.address;
             }
+            console.log('city', this.city);
             if (this.city) {
                 this.location_city = this.city;
             }
@@ -109,6 +122,7 @@
         mounted() {
 
             mapboxgl.accessToken = mapbox_config.accessToken;
+
             let config = {
                 container: 'listings__map',
                 style: mapbox_config.style,
@@ -204,6 +218,7 @@
              */
             geocode_result(result) {
                 const r = result.result;
+                console.log({r});
                 this.location_address = r.place_name;
                 this.location_house = r.address;
                 this.location_street = r.text;

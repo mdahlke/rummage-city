@@ -4,42 +4,30 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuex from 'vuex';
 import 'es6-promise/auto';
 import VueLazyload from 'vue-lazyload';
+import VueNotification from '@kugatsu/vuenotification';
 
+
+import router from './config/router';
+import store from './config/store/store';
+import {INITIALISE_STORE} from './config/store/mutations';
 
 const moment = require('moment');
 
 Vue.use(require('vue-scrollto'));
-Vue.use(VueRouter);
-Vue.use(Vuex);
 Vue.use(require('vue-moment'), {
     moment
 });
 Vue.use(VueLazyload);
+Vue.use(VueNotification, {
+    timer: 20
+});
 
 window.Vue = Vue;
 window.axios = require('axios');
 
-// Add a request interceptor
-axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    return config;
-}, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-});
-
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-    // Do something with response data
-    return response;
-}, function (error) {
-    // Do something with response error
-    return Promise.reject(error);
-});
+require('./axios-interceptors');
 
 Vue.component('VueCtkDateTimePicker', () => import('vue-ctk-date-time-picker'/* webpackChunkName: "js/chunks/vue-ctk-date-time-picker" */));
 
@@ -60,10 +48,6 @@ Vue.component('search-box', () => import('./components/SearchBox/SearchBox.vue'/
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
-
-import router from './config/router';
-import store from './config/store/store';
-import {INITIALISE_STORE} from './config/store/mutations';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

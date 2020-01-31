@@ -10,13 +10,15 @@
 
         <div class="row">
             <div class="col-12">
-
-                <form @prevent.submit
-                      id="listing-edit-dropzone"
-                      class="form dropzone"
-                      action="/listings/edit"
+                <!-- we prevent the submit on the form because of DropzoneJS -->
+                <form @submit="submitForm"
+                      id="listing-edit"
+                      class="form"
                       method="post"
+                      :action="(isNew && listing ? '/api/listings' : '/api/listings/' + listing.id)"
                 >
+                    <input type="hidden" name="_method" :value="(isNew ? 'post' : 'patch')"/>
+
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input id="title" class="form-control" type="text" name="title" v-model="title">
@@ -29,8 +31,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <MapGeocode @geocode="geocode_result"
+                        <MapGeocode v-if="loaded"
+                                    @geocode="geocode_result"
                                     :address="address"
                                     :house="house_number"
                                     :street="street_name"
@@ -39,24 +41,27 @@
                                     :postcode="postcode"
                                     :country="country"
                                     :latitude="latitude"
-                                    :longitude="longitude"/>
+                                    :longitude="longitude"
+                                    label="Address"/>
                     </div>
 
                     <template v-if="loaded">
-                        <ListingDatesInput :dates="dates" @update="updateDates"></ListingDatesInput>
-                        <ListingImageInput :images="images" :max_file_size="10"></ListingImageInput>
+                        <ListingDatesInput :dates="dates"
+                                           @update="updateDates"
+                        />
                     </template>
 
-                </form>
+                    <div class="text-right">
+                        <button id="submit-listing"
+                                type="submit"
+                                class="btn btn-primary">
+                            <strong>Next</strong>
+                            <br/>
+                            <small>Add Images</small>
+                        </button>
+                    </div>
 
-                <div class="text-right">
-                    <button @click="submitForm"
-                            id="submit-listing"
-                            type="button"
-                            class="btn btn-primary">
-                        {{ isNew ? 'Add Listing' : 'Update Listing' }}
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -64,7 +69,8 @@
 </template>
 
 <script>
-    import {axiosOne} from '../helpers';
+    import {axiosOne, serializeArray} from '../helpers';
+    import {ajaxForm} from '../form-helper';
 
     const ListingDatesInput = () => import('../components/listings/ListingDatesInput.vue'/* webpackChunkName: "js/chunks/listing-dates-input" */);
     const ListingImageInput = () => import('../components/listings/ListingImageInput.vue'/* webpackChunkName: "js/chunks/listing-images-input" */);
@@ -103,40 +109,17 @@
                 required: false
             }
         },
-        computed: {
-            // address() {
-            //     return {
-            //         fullAddress: this.listing.address,
-            //         street: this.listing.street_name,
-            //         city: this.listing.city,
-            //         postcode: this.listing.postcode,
-            //         country: this.listing.country,
-            //         latitude: this.listing.latitude,
-            //         longitude: this.listing.longitude,
-            //     };
-            // }
-        },
         created() {
-            if ((this.$route.params.id || false)) {
-                this.loadListing().then(res => {
-                    this.listing = res.data.data.listings.data[0];
+            console.log('this.$route.params.id', this.$route.params.id);
+            if ((this.$route.params.id)) {
+                this.loadListing(this.$route.params.id).then(res => {
+                    if (typeof res.data.errors !== 'undefined') {
+                        return;
+                    }
 
-                    this.title = this.listing.title;
-                    this.description = this.listing.description;
-                    this.address = this.listing.address;
-                    this.house_number = this.listing.number;
-                    this.street_name = this.listing.name;
-                    this.city = this.listing.city;
-                    this.state = this.listing.state;
-                    this.postcode = this.listing.postcode;
-                    this.country = this.listing.country;
-                    this.latitude = this.listing.latitude;
-                    this.longitude = this.listing.longitude;
-                    this.dates = this.listing.date;
-                    this.images = this.listing.image;
-                    this.description = this.listing.description;
+                    this.listing = res.data.data.userListings;
 
-                    console.log(this.listing, this.dates);
+                    this.mapData(this.listing);
 
                     this.loaded = true;
                 });
@@ -144,43 +127,31 @@
                 this.listing = this.userListing;
 
                 if (this.listing) {
-                    this.title = this.listing.title;
-                    this.description = this.listing.description;
-                    this.address = this.listing.address;
-                    this.house_number = this.listing.number;
-                    this.street_name = this.listing.name;
-                    this.city = this.listing.city;
-                    this.state = this.listing.state;
-                    this.postcode = this.listing.postcode;
-                    this.country = this.listing.country;
-                    this.latitude = this.listing.latitude * 1;
-                    this.longitude = this.listing.longitude * 1;
-                    this.dates = this.listing.date;
-                    this.images = this.listing.image;
-                    this.description = this.listing.description;
-                    this.loaded = true;
+                    this.mapData(this.data);
                 }
             }
         },
         methods: {
-            loadListing() {
+            loadListing(id) {
                 return axiosOne({
                     url: '/graphql',
                     type: 'get',
                     params: {
                         query: `
 							query FetchListing {
-							  listings(id: "` + this.$route.params.id + `", limit: 1) {
-							    data {
+							  userListings(id: "` + id + `") {
 							      id
 							      title
 							      description
 							      address
+							      house_number
+							      street_name
+							      city
+							      state
+							      postcode
+							      country_code
 							      latitude
 							      longitude
-							      isSaved
-							      saveUrl
-							      removeSavedUrl
 							      date {
 							        start
 							        end
@@ -191,28 +162,61 @@
 							      }
 							    }
 							  }
-							}
 					`
                     }
                 });
             },
-            updateDates(val) {
-                console.log({val});
-                this.dates = val;
+            mapData(listing) {
+                this.title = listing.title;
+                this.description = listing.description;
+                this.address = listing.address;
+                this.house_number = listing.house_number;
+                this.street_name = listing.street_name;
+                this.city = listing.city;
+                this.state = listing.state;
+                this.postcode = listing.postcode;
+                this.country = listing.country_code;
+                this.latitude = listing.latitude;
+                this.longitude = listing.longitude;
+                this.dates = listing.date;
+                this.images = listing.image;
+                this.description = listing.description;
             },
-            submitForm() {
-                console.log(this.$data);
+            updateDates(dates) {
+                this.dates = dates;
+            },
+            updateImages(images) {
+                this.images = images;
+            },
+            submitForm(e) {
+                e.preventDefault();
+
+                // Gets triggered when the form is actually being sent.
+                const form = document.getElementById('listing-edit');
+
+                ajaxForm(form).then(res => {
+                    console.log({res});
+
+                    if (res.data.status) {
+                        this.$notification.success('Listing saved!', {
+                            message: 'Your listing information has been saved.',
+                            timer: 5
+                        });
+                    }
+
+                    this.$router.push({name: 'listing.edit.images', params: {id: res.data.id}});
+                });
+
             },
             geocode_result(address) {
-                console.log({address});
-                this.address = address.address;
-                this.house_number = address.house_number;
-                this.street_name = address.street_name;
-                this.city = address.city;
-                this.postcode = address.postcode;
-                this.country = address.country;
-                this.latitude = address.latitude;
-                this.longitude = address.longitude;
+                // this.address = address.address;
+                // this.house_number = address.house_number;
+                // this.street_name = address.street_name;
+                // this.city = address.city;
+                // this.postcode = address.postcode;
+                // this.country = address.country;
+                // this.latitude = address.latitude;
+                // this.longitude = address.longitude;
             }
         }
     };

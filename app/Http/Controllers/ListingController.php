@@ -117,37 +117,13 @@ class ListingController extends Controller {
         return response()->json($data);
     }
 
-    public function geo() {
-        $nw = [
-            'lat' => 44.24770009175438,
-            'lng' => -88.94442805641779,
-        ];
-        $se = [
-            'lat' => 43.247745933091565,
-            'lng' => -87.95291194335938,
-        ];
-
-        dd(json_encode(['nw' => $nw, 'se' => $se]));
-        /** @var Builder $listings */
-        DB::enableQueryLog();
-        $listings = Listing::query()
-            ->where('latitude', '>', $se['latitude'])
-            ->where('latitude', '<', $nw['latitude'])
-            ->where('longitude', '<', $se['longitude'])
-            ->where('longitude', '>', $nw['longitude'])
-            //			->toSql();
-            ->get();
-
-        dd(DB::getQueryLog(), $listings);
-    }
-
     /**
      * @param Request $request
      * @param string $address
      * @param Listing $listing
      * @return Factory|View
      */
-    public function view(Request $request, $address = '', Listing $listing) {
+    public function show(Request $request, $address = '', Listing $listing) {
         $data = [];
 
         $data['listing'] = $listing;
@@ -170,43 +146,86 @@ class ListingController extends Controller {
     public function edit(Request $request, Listing $listing) {
         $user = Auth::user();
 
+//        if ($listing->exists) {
+//            $route = route('user.listing.edit', ['listing' => $listing->id]);
+//        } else {
+//            $route = route('user.listing.new');
+//        }
+
+        return view('listings.edit', ['listing' => $listing, 'route' => $route]);
+
+    }
+
+    public function store(Request $request) {
+        $user = Auth::user();
+        $listing = new Listing();
+
+        $listing->title = '';
+        $listing->description = '';
+        $listing->address = '';
+        $listing->house_number = '';
+        $listing->street_name = '';
+        $listing->city = '';
+        $listing->state = '';
+        $listing->postcode = '';
+        $listing->country_code = '';
+        $listing->latitude = 0;
+        $listing->longitude = 0;
+        $listing->ip_address = $_SERVER['REMOTE_ADDR'];
+
+        $user->listing()->save($listing);
+
+        return response()->json([
+            'id' => $listing->id
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Listing $listing
+     * @return \Illuminate\Http\Response
+     * @throws Exception
+     */
+    public function update(Request $request, Listing $listing) {
+        $user = Auth::user();
         $route = '';
-        if ($listing->exists) {
-            $route = route('user.listing.edit', ['listing' => $listing->id]);
-        } else {
-            $route = route('user.listing.new');
+
+        if ($listing->exists && ($user->id != $listing->user->id)) {
+            return response()->json([
+                'status' => false,
+                'code' => 403,
+            ]);
+//            return view('error.403');
         }
 
-        if ($listing->exists && $user->id != $listing->user->id) {
-            return view('error.403');
-        }
+        $listing->fill($request->only($listing->fillable));
+        $listing->ip_address = $_SERVER['REMOTE_ADDR'];
 
-        if ($request->isMethod('post')) {
-            $listing->fill($request->only($listing->fillable));
-            $listing->ip_address = $_SERVER['REMOTE_ADDR'];
+        $saved = $listing->save();
 
-            $saved = $user->listing()->save($listing);
+        if ($saved) {
+            $starts = $request->input('start') ?: [];
+            $ends = $request->input('end') ?: [];
 
-            if ($saved) {
-                $starts = $request->input('start');
-                $ends = $request->input('end');
+            // prepare the listing dates
+            $dates = [];
+            foreach ($starts as $i => $start) {
+                if ($start) {
+                    $end = $ends[$i];
 
-                // prepare the listing dates
-                $dates = [];
-                foreach ($starts as $i => $start) {
-                    if ($start) {
-                        $end = $ends[$i];
+                    $s = new Carbon($start);
+                    $e = new Carbon($end);
 
-                        $s = new Carbon($start);
-                        $e = new Carbon($end);
-
-                        $dates[] = [
-                            'start' => $s,
-                            'end' => $e,
-                        ];
-                    }
+                    $dates[] = [
+                        'start' => $s,
+                        'end' => $e,
+                    ];
                 }
+            }
 
+            if ($dates) {
                 // remove all existing dates
                 ListingDate::where('listing_id', '=', $listing->id)->delete();
                 $listingDates = [];
@@ -218,42 +237,44 @@ class ListingController extends Controller {
                     ]);
                 }
 
+
                 // save all of the dates from the request
                 $listing->date()->saveMany($listingDates);
-
-                // upload new images
-                if ($request->hasFile('file')) {
-                    $images = $request->file('file');
-                    $listingImages = [];
-
-                    /** @var UploadedFile $image */
-                    foreach ($images as $image) {
-                        $path = $image->store(User::storagePath());
-
-                        $listingImages[] = new ListingImage([
-                            'path' => $path,
-                            'name' => $image->getClientOriginalName(),
-                        ]);
-                    }
-                    $listing->image()->saveMany($listingImages);
-                }
-
-                // remove any images that were selected for removal
-                $removeImages = json_decode($request->input('remove_images'));
-
-                foreach ($removeImages as $remove) {
-                    $image = ListingImage::query()->where('id', $remove)->first();
-
-                    if ($image->exists) {
-                        $image->delete();
-                    }
-                }
             }
 
-            return redirect(route('dashboard'));
+            // upload new images
+            if ($request->hasFile('file')) {
+                $images = $request->file('file');
+                $listingImages = [];
+
+                /** @var UploadedFile $image */
+                foreach ($images as $image) {
+                    $path = $image->store(User::storagePath());
+
+                    $listingImages[] = new ListingImage([
+                        'path' => $path,
+                        'name' => $image->getClientOriginalName(),
+                    ]);
+                }
+                $listing->image()->saveMany($listingImages);
+            }
+
+            // remove any images that were selected for removal
+            $removeImages = json_decode($request->input('remove_images'));
+
+            foreach ($removeImages ?: [] as $remove) {
+                $image = ListingImage::query()->where('id', $remove)->first();
+
+                if ($image->exists) {
+                    $image->delete();
+                }
+            }
         }
 
-        return view('listings.edit', ['listing' => $listing, 'route' => $route]);
+        return response()->json([
+            'status' => true,
+            'id' => $listing->id,
+        ]);
     }
 
 }

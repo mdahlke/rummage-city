@@ -156,6 +156,11 @@ const store = new Vuex.Store({
         }
     },
     actions: {
+        renewCSRF: () => {
+            axios.get('/api/renew-csrf').then((res) => {
+                window.csrf_token = res.data;
+            });
+        },
         login: ({commit, dispatch}, {user, token}) => {
             commit(USER, user);
             commit(ACCESS_TOKEN, token);
@@ -167,12 +172,10 @@ const store = new Vuex.Store({
         logout: ({commit}) => {
             localStorage.setItem('accessToken', null);
 
-            axios.post('/logout').then(res => {
-                if (res.data.status) {
-                    commit(ACCESS_TOKEN, null);
-                    commit(USER_LISTINGS, []);
-                    commit(USER, {});
-                }
+            axios.post('/api/logout').then(() => {
+                commit(ACCESS_TOKEN, null);
+                commit(USER_LISTINGS, []);
+                commit(USER, {});
             }).then(() => {
                 router.push({name: 'login'});
             });

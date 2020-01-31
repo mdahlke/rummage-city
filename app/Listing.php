@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property string created_at
  * @property string updated_at
  * @property string deleted_at
+ * @property bool active
  */
 class Listing extends Model {
     use Uuids;

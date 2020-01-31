@@ -1,3 +1,5 @@
+import ListingEditImages from '../views/ListingEditImages';
+
 const Home = () => import('../views/Home' /* webpackChunkName: 'js/chunks/home' */);
 const Listings = () => import('../views/Listings' /* webpackChunkName: 'js/chunks/listings' */);
 const ListingView = () => import( '../views/ListingView' /* webpackChunkName: 'js/chunks/listing-view' */);
@@ -45,7 +47,13 @@ const listingEdit = {
     props: {
         isNew: false,
         userListing: {}
-    }
+    },
+};
+
+const listingEditImage = {
+    path: '/dashboard/listings/:id/images/edit',
+    name: 'listing.edit.images',
+    component: ListingEditImages
 };
 
 const listingNew = {
@@ -55,7 +63,14 @@ const listingNew = {
     props: {
         isNew: true,
         userListing: {}
-    }
+    },
+    // beforeEnter: function (to, from, next) {
+    //     console.log('new listing before route');
+    //     axios.post('/api/listings').then(res => {
+    //         console.log(res);
+    //         next({name: 'listing.edit', params: {id: res.data.id}});
+    //     });
+    // }
 };
 
 
@@ -86,6 +101,7 @@ const routes = [
     listingsLocation,
     dashboard,
     listingEdit,
+    listingEditImage,
     listingNew,
     account,
     login,

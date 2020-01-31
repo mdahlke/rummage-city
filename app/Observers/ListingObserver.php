@@ -11,24 +11,24 @@ use Illuminate\Support\Facades\Cache;
 
 class ListingObserver {
     public function retrieved(Listing $listing) {
-//        if (!Auth::guest()) {
-//            /** @var User $user */
-//            $user = Auth::user();
-//
-//            $listing->setSaveUrl(route('user.listing.saveListing', [
-//                'listing' => $listing->id,
-//            ]));
-//
-//            $listing->setRemoveSavedUrl(route('user.listing.removeSavedListing', [
-//                'listing' => $listing->id,
-//            ]));
-//
-//            $listing->setIsSaved($user->hasSavedListing($listing->id));
-//        } else {
+        if (!Auth::guest()) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            $listing->setSaveUrl(route('saveListing', [
+                'listing' => $listing->id,
+            ]));
+
+            $listing->setRemoveSavedUrl(route('removeSavedListing', [
+                'listing' => $listing->id,
+            ]));
+
+            $listing->setIsSaved($user->hasSavedListing($listing->id));
+        } else {
 //            $listing->setSaveUrl(route('login.form'));
 //            $listing->setRemoveSavedUrl(route('login.form'));
-//        }
-//
+        }
+
 //        $listing->setViewUrl(route('listings.view', [
 //            'address' => str_slug($listing->address),
 //            'listing' => $listing->id,

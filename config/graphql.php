@@ -10,6 +10,7 @@ use App\GraphQL\Query\ListingsQuery;
 use App\GraphQL\Query\ListingsSearchQuery;
 use App\GraphQL\Query\RelatedListingsQuery;
 use App\GraphQL\Query\SavedListingsQuery;
+use App\GraphQL\Query\UserListingsQuery;
 use App\GraphQL\Query\UsersQuery;
 use App\GraphQL\Types\ListingDatesType;
 use App\GraphQL\Types\ListingImagesType;
@@ -125,6 +126,7 @@ return [
                 'listingDates' => ListingDatesQuery::class,
                 'listingImages' => ListingImagesQuery::class,
                 'users' => UsersQuery::class,
+                'userListings' => UserListingsQuery::class,
             ],
             'mutation' => [
             ],
