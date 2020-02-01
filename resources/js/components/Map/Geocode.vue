@@ -28,15 +28,14 @@
         <input type="hidden"
                name="country_code"
                :value="location_country">
+
+        <div id="geocoder-input"></div>
         <div id="listings__map"></div>
     </div>
 </template>
 <script>
     import mapbox_config from './../listings/mapbox.config.js';
     import geolocation from '../../geolocation';
-    import '../../../sass/component/listings-map.scss';
-    import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
-    import '../../../../node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';
 
     const mapboxgl = require('mapbox-gl');
     const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder');
@@ -136,12 +135,9 @@
                 mapboxgl: mapboxgl,
                 marker: false,
             });
-            this.map.addControl(new mapboxgl.NavigationControl());
 
             this.geocoder.on('results', this.geocode_results);
             this.geocoder.on('result', this.geocode_result);
-
-            this.map.addControl(this.geocoder);
 
             this.add_marker(this.lat, this.lng);
 
@@ -157,6 +153,12 @@
 
             geolocation.watch((r) => {
             });
+
+            document.getElementById('geocoder-input')
+                .appendChild(this.geocoder.onAdd(this.map));
+
+            // this.map.addControl(this.geocoder);
+            this.map.addControl(new mapboxgl.NavigationControl());
 
         },
         methods: {
@@ -213,20 +215,21 @@
              * @param result
              */
             geocode_result(result) {
-                const r = result.result;
-                console.log({r});
-                this.location_address = r.place_name;
-                this.location_house = r.address;
-                this.location_street = r.text;
-                this.location_city = r.context[1].text;
-                this.location_state = r.context[2].text;
-                this.location_postcode = r.context[0].text;
-                this.location_country = r.context[3].short_code;
-                this.lat = r.center[1];
-                this.lng = r.center[0];
-                this.marker.setLngLat([this.lng, this.lat]);
+                if (result && result.result) {
+                    const r = result.result;
+                    this.location_address = r.place_name;
+                    this.location_house = r.address;
+                    this.location_street = r.text;
+                    this.location_city = r.context[1].text;
+                    this.location_state = r.context[2].text;
+                    this.location_postcode = r.context[0].text;
+                    this.location_country = r.context[3].short_code;
+                    this.lat = r.center[1];
+                    this.lng = r.center[0];
+                    this.marker.setLngLat([this.lng, this.lat]);
 
-                this.$emit('geocode', this.$data);
+                    this.$emit('geocode', this.$data);
+                }
             },
             center_map_on(lat, lng) {
                 this.map.setCenter([lng, lat]);
@@ -248,8 +251,45 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '../../../sass/component/listings-map.scss';
+
     #listings__map {
         height: 300px;
+    }
+</style>
+
+<style lang="scss">
+    @import '../../../sass/component/listings-map.scss';
+    @import '../../../../node_modules/mapbox-gl/dist/mapbox-gl.css';
+    @import '../../../../node_modules/@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';
+
+
+    #geocoder-input {
+        .mapboxgl-ctrl-geocoder {
+            width: 100%;
+            max-width: none;
+        }
+
+        .mapboxgl-ctrl-geocoder--input {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-bottom: 0;
+        }
+
+        .suggestions {
+            border: 1px solid #ced4da;
+            border-top: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            top: 100%;
+        }
+    }
+
+    #listings__map {
+        .mapboxgl-canvas {
+            border: 1px solid #ced4da;
+            border-top: 0;
+        }
     }
 </style>

@@ -2,7 +2,6 @@
     <section id="listing-dates__form">
         <div class="form-group d-flex">
             <div v-for="(day, index) in days" class="listing-dates__date-wrap">
-                <h3>Date {{(index+1)}}</h3>
                 <DateInput :key="day.id"
                            :day="day"
                            :start_date="day.start"
@@ -115,8 +114,9 @@
 
     .listing-dates__date-wrap,
     .listing-dates__add-date {
-        flex: 0 0 calc(50% - 40px);
-        margin: 20px;
+        flex: 0 0 50%;
+        /*flex: 0 0 calc(50% - 40px);*/
+        /*margin: 20px;*/
     }
 
     .listing-dates__add-date {

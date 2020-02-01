@@ -143,7 +143,7 @@
             }
         },
         created() {
-            console.log('this.$route.params.id', this.$route.params.id);
+            // if there is a listing then we retrieve it so the user can edit
             if ((this.$route.params.id)) {
                 this.loadListing(this.$route.params.id).then(res => {
                     if (typeof res.data.errors !== 'undefined') {
@@ -157,11 +157,14 @@
                     this.loaded = true;
                 });
             } else {
+                // this is a new listing
                 this.listing = this.userListing;
 
                 if (this.listing) {
                     this.mapData(this.data);
                 }
+
+                this.loaded = true;
             }
         },
         methods: {
@@ -200,6 +203,9 @@
                 });
             },
             mapData(listing) {
+                if (!listing) {
+                    return;
+                }
                 this.title = listing.title;
                 this.description = listing.description;
                 this.address = listing.address;
@@ -275,7 +281,11 @@
         z-index: 9;
     }
 
-    textarea {
+</style>
+
+<style lang="scss">
+
+    .ck-editor__editable {
         min-height: 200px;
     }
 </style>
