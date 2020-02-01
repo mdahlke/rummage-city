@@ -14,8 +14,8 @@
 
 {{--<link rel="manifest" href="/manifest.webmanifest">--}}
 <!-- Fonts -->
-    {{--<link href="https://fonts.googleapis.com/css?family=Raleway:100,600|Dosis:400,600|Indie+Flower|Josefin+Sans:400,600&display=swap"--}}
-    {{--      rel="stylesheet" type="text/css">--}}
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700,900|Dosis:400,600|Indie+Flower|Josefin+Sans:400,600&display=swap"
+          rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/fontawesome.css') }}">

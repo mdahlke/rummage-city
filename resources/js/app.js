@@ -8,7 +8,6 @@ import 'es6-promise/auto';
 import VueLazyload from 'vue-lazyload';
 import VueNotification from '@kugatsu/vuenotification';
 
-
 import router from './config/router';
 import store from './config/store/store';
 import {INITIALISE_STORE} from './config/store/mutations';

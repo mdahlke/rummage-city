@@ -1,9 +1,5 @@
 <template>
     <div class="geocode-input">
-        da fuck
-        {{ house }}
-        <br/>
-        {{ location_house }}
         <label v-if="label">{{ label }}</label>
         <input type="hidden"
                name="latitude"

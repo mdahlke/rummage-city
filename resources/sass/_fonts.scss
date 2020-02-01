@@ -6,3 +6,9 @@ $fontTertiary: 'Indie Flower', cursive;
 $fontDosis: $fontPrimary;
 $fontJosefin: $fontSecondary;
 $fontIndieFlower: $fontTertiary;
+
+html {
+  b, strong {
+    font-weight: bold;
+  }
+}

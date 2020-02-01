@@ -25,9 +25,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" class="form-control"
-                                  name="description">{{ description }}</textarea>
+                        <label>Description</label>
+                        <ckeditor :editor="editor"
+                                  v-model="description"
+                                  :config="editorConfig"
+                        />
+                        <input v-model="description"
+                               name="description"
+                               type="hidden"
+                        />
                     </div>
 
                     <div class="form-group">
@@ -62,6 +68,12 @@
                     </div>
 
                 </form>
+
+                <div v-if="!loaded"
+                     id="loading-form"
+                >
+                    <p>Loading your listing</p>
+                </div>
             </div>
         </div>
     </div>
@@ -71,6 +83,8 @@
 <script>
     import {axiosOne, serializeArray} from '../helpers';
     import {ajaxForm} from '../form-helper';
+    import CKEditor from '@ckeditor/ckeditor5-vue';
+    import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
     const ListingDatesInput = () => import('../components/listings/ListingDatesInput.vue'/* webpackChunkName: "js/chunks/listing-dates-input" */);
     const ListingImageInput = () => import('../components/listings/ListingImageInput.vue'/* webpackChunkName: "js/chunks/listing-images-input" */);
@@ -81,7 +95,8 @@
         components: {
             ListingDatesInput,
             ListingImageInput,
-            MapGeocode
+            MapGeocode,
+            ckeditor: CKEditor.component
         },
         data() {
             return {
@@ -100,6 +115,24 @@
                 longitude: 0,
                 dates: [],
                 images: [],
+                editor: ClassicEditor,
+                editorConfig: {
+                    // plugins: [
+                    // ],
+                    toolbar: {
+                        items: [
+                            'bold',
+                            'italic',
+                            'underline',
+                            'link',
+                            'numberedList',
+                            'bulletedList',
+                            'undo',
+                            'redo',
+                            'removeFormat'
+                        ]
+                    }
+                }
             };
         },
         props: {
@@ -222,10 +255,27 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
     .dropzone {
         border: none;
     }
 
+    #loading-form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparentize(#fff, .05);
+        font-size: 20px;
+        height: 100%;
+        width: 100%;
+        z-index: 9;
+    }
+
+    textarea {
+        min-height: 200px;
+    }
 </style>
