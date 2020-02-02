@@ -5,6 +5,9 @@ const Listings = () => import('../views/Listings' /* webpackChunkName: 'js/chunk
 const ListingView = () => import( '../views/ListingView' /* webpackChunkName: 'js/chunks/listing-view' */);
 const ListingEdit = () => import('../views/ListingEdit' /* webpackChunkName: 'js/chunks/listing-edit' */);
 const UserDashboard = () => import('../views/UserDashboard' /* webpackChunkName: 'js/chunks/user-dashboard' */);
+const Settings = () => import('../views/Settings' /* webpackChunkName: 'js/chunks/settings' */);
+const MyListings = () => import('../views/MyListings' /* webpackChunkName: 'js/chunks/my-listings' */);
+const SavedListings = () => import('../views/SavedListings' /* webpackChunkName: 'js/chunks/saved-listings' */);
 const Login = () => import('../views/Login' /* webpackChunkName: 'js/chunks/login' */);
 const Register = () => import('../views/Register' /* webpackChunkName: 'js/chunks/register' */);
 
@@ -38,6 +41,21 @@ const dashboard = {
     path: '/dashboard',
     name: 'dashboard',
     component: UserDashboard,
+};
+const myListings = {
+    path: '/dashboard/my-listings',
+    name: 'myListings',
+    component: MyListings,
+};
+const savedListings = {
+    path: '/dashboard/saved-listings',
+    name: 'savedListings',
+    component: SavedListings,
+};
+const settings = {
+    path: '/dashboard/settings',
+    name: 'settings',
+    component: Settings,
 };
 
 const listingEdit = {
@@ -100,9 +118,12 @@ const routes = [
     listings,
     listingsLocation,
     dashboard,
+    settings,
     listingEdit,
     listingEditImage,
     listingNew,
+    myListings,
+    savedListings,
     account,
     login,
     register,

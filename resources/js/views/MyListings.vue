@@ -2,35 +2,27 @@
 
     <LayoutDashboard>
         <template v-slot:main>
-            <InfoCard title="Notifications">
+            <InfoCard title="Your Listings">
                 <template v-slot:body>
-                    You have no notifications.
-                </template>
-            </InfoCard>
-
-            <InfoCard title="Saved Listings">
-                <template v-slot:body>
-                    <p>You have
-                        <router-link :to="{name: 'savedListings'}">
-                            {{ savedListings.length }} saved listings.
-                        </router-link>
-                    </p>
+                    <UserListingsList v-if="userListings.length"
+                                      :listings="userListings"
+                                      :editable="true"/>
                 </template>
             </InfoCard>
         </template>
     </LayoutDashboard>
-    
 </template>
 
 <script>
     import {mapState, mapActions} from 'vuex';
+    import DashboardNavigation from '../components/dashboard/navigation';
 
     const LayoutDashboard = () => import('./layouts/Dashboard' /* webpackChunkName: 'js/chunks/layout-dashboard' */);
     const InfoCard = () => import('../components/InfoCard' /* webpackChunkName: 'js/chunks/info-card' */);
     const UserListingsList = () => import('../components/UserListingsList' /* webpackChunkName: 'js/chunks/user-listings-list' */);
 
     export default {
-        name: 'UserDashboard',
+        name: 'MyListings',
         components: {
             LayoutDashboard,
             InfoCard,
@@ -40,7 +32,6 @@
             ...mapState([
                 'user',
                 'userListings',
-                'savedListings'
             ])
         },
         created() {
@@ -50,8 +41,7 @@
             ...mapActions(['logout']),
             loadData() {
                 this.$store.dispatch('getUserListings');
-                this.$store.dispatch('getSavedListings');
-            },
+            }
         }
     };
 </script>

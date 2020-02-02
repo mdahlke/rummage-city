@@ -116,14 +116,17 @@
     .listing-dates__add-date {
         flex: 0 0 50%;
         /*flex: 0 0 calc(50% - 40px);*/
-        /*margin: 20px;*/
+        margin: 20px 0;
     }
 
     .listing-dates__add-date {
         display: flex;
         align-items: center;
         justify-content: center;
+        flex: 0 0 calc(50% - 55px);
+        margin: 20px 5px;
         background-color: #f3f3f3;
+        min-height: 58px;
     }
 
     .listing-dates__date {

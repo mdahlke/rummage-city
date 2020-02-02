@@ -37,13 +37,13 @@
                                                 <router-link :to="{name: 'listing.edit', params: sale.id}"
                                                              v-slot="{ href, route, navigate, isActive, isExactActive }"
                                                 >
-                                                    <NavLink :active="isActive"
+                                                    <a :active="isActive"
                                                              :href="href"
                                                              @click="navigate"
                                                              class=" cursor-pointer"
                                                     >
                                                         <i class="fas fa-pencil"></i> Edit Listing
-                                                    </NavLink>
+                                                    </a>
                                                 </router-link>
                                             </li>
                                         </ul>
