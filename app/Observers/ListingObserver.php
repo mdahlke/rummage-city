@@ -15,24 +15,24 @@ class ListingObserver {
             /** @var User $user */
             $user = Auth::user();
 
-            $listing->setSaveUrl(route('user.listing.saveListing', [
+            $listing->setSaveUrl(route('saveListing', [
                 'listing' => $listing->id,
             ]));
 
-            $listing->setRemoveSavedUrl(route('user.listing.removeSavedListing', [
+            $listing->setRemoveSavedUrl(route('removeSavedListing', [
                 'listing' => $listing->id,
             ]));
 
             $listing->setIsSaved($user->hasSavedListing($listing->id));
         } else {
-            $listing->setSaveUrl(route('login'));
-            $listing->setRemoveSavedUrl(route('login'));
+//            $listing->setSaveUrl(route('login.form'));
+//            $listing->setRemoveSavedUrl(route('login.form'));
         }
 
-        $listing->setViewUrl(route('listings.view', [
-            'address' => str_slug($listing->address),
-            'listing' => $listing->id,
-        ]));
+//        $listing->setViewUrl(route('listings.view', [
+//            'address' => str_slug($listing->address),
+//            'listing' => $listing->id,
+//        ]));
 
     }
 

@@ -40,7 +40,10 @@
         props: {
             mapAttributes: {
                 type: Object,
-                require: false, // if not passed in we retrieve from the store
+                required: false, // if not passed in we retrieve from the store
+                default: () => {
+                    return {};
+                }
             },
         },
         computed: {
@@ -220,9 +223,10 @@
             }
         }
 
+        #mapbox,
         .mapboxgl-canvas-container,
         .mapboxgl-canvas {
-            height: 100%;
+            height: 100% !important;
         }
     }
 

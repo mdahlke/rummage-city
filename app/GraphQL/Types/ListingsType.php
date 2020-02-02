@@ -32,6 +32,30 @@ class ListingsType extends GraphQLType {
                 'type' => Type::string(),
                 'description' => 'The address where the listing is located',
             ],
+            'house_number' => [
+                'type' => Type::string(),
+                'description' => 'The house number where the listing is located',
+            ],
+            'street_name' => [
+                'type' => Type::string(),
+                'description' => 'The name of the street where the listing is located',
+            ],
+            'city' => [
+                'type' => Type::string(),
+                'description' => 'The city where the listing is located',
+            ],
+            'state' => [
+                'type' => Type::string(),
+                'description' => 'The state where the listing is located',
+            ],
+            'postcode' => [
+                'type' => Type::string(),
+                'description' => 'The postcode where the listing is located',
+            ],
+            'country_code' => [
+                'type' => Type::string(),
+                'description' => 'The country code where the listing is located (IE: US)',
+            ],
             'latitude' => [
                 'type' => Type::float(),
                 'description' => 'The latitude coordinates of the listing',

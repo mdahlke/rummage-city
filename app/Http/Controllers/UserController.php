@@ -19,6 +19,22 @@ class UserController {
         // parent::__construct();
     }
 
+    public function auth(Request $request) {
+        $authenticated = false;
+        $user = Auth::user();
+        $guest = Auth::guest();
+
+        if ($user) {
+            $authenticated = true;
+        }
+
+        return response()->json([
+            'user' => $user,
+            'guest' => $guest,
+            'authenticated' => $authenticated,
+        ]);
+    }
+
     public function settings(Request $request) {
 
         return view('user.settings');

@@ -10,41 +10,68 @@ use Illuminate\Support\Facades\View;
 
 class ListingImageController extends Controller {
 
-	public function index() {
-		return view('image');
-	}
+    public function index() {
+        return view('image');
+    }
 
-	public function save(Request $request) {
-		request()->validate([
+    public function save(Request $request) {
+        request()->validate([
 
-			'image' => 'required',
-			'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
-		]);
+        ]);
 
-		if ($image = $request->file('image')) {
-			foreach ($image as $files) {
-				$destinationPath = 'public/image/'; // upload path
-				$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-				$files->move($destinationPath, $profileImage);
-				$insert[]['image'] = "$profileImage";
-			}
-		}
+        if ($image = $request->file('image')) {
+            foreach ($image as $files) {
+                $destinationPath = 'public/image/'; // upload path
+                $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                $files->move($destinationPath, $profileImage);
+                $insert[]['image'] = "$profileImage";
+            }
+        }
 
-		$check = Image::insert($insert);
+        $check = Image::insert($insert);
 
-		return;
-	}
+        return;
+    }
 
-	public function remove(Request $request, ListingImage $image) {
-		$user = Auth::user();
+    public function remove(Request $request, ListingImage $image) {
+        $user = Auth::user();
 
-		if ($image->listing->user->id !== $user->id) {
-			abort(403, 'Unauthorized action.');
-		}
+        if ($image->listing->user->id !== $user->id) {
+            abort(403, 'Unauthorized action.');
+        }
 
-		$image->delete();
+        $image->delete();
 
-		return View::make('', ['status' => 'success']);
-	}
+        return View::make('', ['status' => 'success']);
+    }
+
+    public function removeBulk(Request $request) {
+        $user = Auth::user();
+
+        $images = $request->input('images');
+
+        $listingImage = new ListingImage();
+        $errors = [];
+
+        foreach ($images as $image) {
+
+            $i = $listingImage->find($image);
+
+            if ($i->listing->user->id !== $user->id) {
+                $errors[] = $i;
+            } else {
+                $i->delete();
+            }
+
+        }
+
+        return response()->json([
+            'status' => $errors ? false : true,
+            'message' => 'Images removed',
+            'errors' => $errors
+        ]);
+    }
 }

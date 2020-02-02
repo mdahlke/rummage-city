@@ -119,8 +119,6 @@ class ListingsQuery extends Query {
             ->whereHas('activeDate')
             ->orderBy('sort');
 
-//        dd(sql_with_bindings($builder));
-
         $page = ($args['page'] ?? 1);
 
         if (($args['limit'] ?? 0) > 0) {

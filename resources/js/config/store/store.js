@@ -3,7 +3,19 @@ import Vue from 'vue';
 import axios from 'axios';
 import _ from 'lodash';
 import {isTrue, isListingToday, isListingThisWeekend, axiosOne} from '../../helpers';
-import {INITIALISE_STORE, SET_LISTINGS, ALL_LISTINGS, SET_LISTING, LISTING, SEARCH} from './mutations';
+import {
+    INITIALISE_STORE,
+    SET_LISTINGS,
+    ALL_LISTINGS,
+    SET_LISTING,
+    LISTING,
+    SEARCH,
+    USER,
+    ACCESS_TOKEN,
+    USER_LISTINGS,
+    SAVED_LISTINGS,
+} from './mutations';
+import router from '../router';
 
 Vue.use(Vuex);
 
@@ -42,6 +54,9 @@ const store = new Vuex.Store({
             },
             url: ''
         },
+        user: {},
+        accessToken: null,
+        userListings: [],
     },
     getters: {
         getListings: (state) => {
@@ -92,16 +107,24 @@ const store = new Vuex.Store({
         },
         searchFilters: state => state.search.query.filter,
         searchState: state => state.search,
+        userName: state => {
+            if (state.accessToken) {
+                return state.user.name;
+            }
+
+            return 'Guest';
+        },
+        getUserListing: state => id => {
+            console.log({id}, state.userListings);
+            return state.userListings.find(listing => listing.id === id);
+        }
     },
     mutations: {
-        [INITIALISE_STORE](state) {
-            // Check if the ID exists
-            if (localStorage.getItem('store')) {
-                // Replace the state object with the stored item
-                this.replaceState(
-                    Object.assign(state, JSON.parse(localStorage.getItem('store')))
-                );
-            }
+        [INITIALISE_STORE](state, store) {
+            // Replace the state object with the stored item
+            this.replaceState(
+                Object.assign(state, store)
+            );
         },
         [SET_LISTINGS](state, listings) {
             state.listings = listings;
@@ -118,8 +141,52 @@ const store = new Vuex.Store({
         [SEARCH](state, search) {
             state.search = search;
         },
+        [USER](state, user) {
+            state.user = user;
+        },
+        [USER_LISTINGS](state, listings) {
+            state.userListings = listings;
+        },
+        [SAVED_LISTINGS](state, listings) {
+            state.savedListings = listings;
+        },
+        [ACCESS_TOKEN](state, token) {
+            localStorage.setItem('accessToken', token);
+            state.accessToken = token;
+        }
     },
     actions: {
+        renewCSRF: () => {
+            axios.get('/api/renew-csrf').then((res) => {
+                window.csrf_token = res.data;
+            });
+        },
+        login: ({commit, dispatch}, {user, token}) => {
+            commit(USER, user);
+            commit(ACCESS_TOKEN, token);
+            const userListings = dispatch('getUserListings');
+            const theUser = dispatch('getUser');
+
+            return Promise.all([userListings, theUser]);
+        },
+        logout: ({commit}) => {
+            localStorage.setItem('accessToken', null);
+
+            axios.post('/api/logout').then(() => {
+                commit(ACCESS_TOKEN, null);
+                commit(USER_LISTINGS, []);
+                commit(USER, {});
+            }).then(() => {
+                router.push({name: 'login'});
+            });
+        },
+        fetchAccessToken: ({commit}) => {
+            let token = localStorage.getItem('accessToken');
+            if (token === 'null') {
+                token = null;
+            }
+            commit(ACCESS_TOKEN, token);
+        },
         getListingsInBounds: ({commit}, bounds) => {
             const query = JSON.stringify(JSON.stringify({
                 sw: bounds._sw,
@@ -202,13 +269,34 @@ const store = new Vuex.Store({
             const updatedFilter = _.without(getters.searchFilters, filter);
             search.query.filter = updatedFilter;
             commit(SEARCH, search);
+        },
+        getUser: ({commit}) => {
+            axios.get('/api/user').then(res => {
+                commit(USER, res.data);
+            });
+        },
+        getUserListings: ({commit}) => {
+            axios.get('/api/user/listings').then(res => {
+                commit(USER_LISTINGS, res.data);
+            });
+        },
+        getSavedListings: ({commit}) => {
+            axios.get('/api/user/listings/saved').then(res => {
+                commit(SAVED_LISTINGS, res.data);
+            });
         }
     }
 });
 
 store.subscribe((mutation, state) => {
-    // Store the state object as a JSON string
-    localStorage.setItem('store', JSON.stringify(state));
+    // `accessToken` will be stored separately from the store
+    const clonedState = JSON.parse(JSON.stringify(state));
+    delete clonedState.accessToken;
+
+    if (mutation.type !== ACCESS_TOKEN) {
+        // Store the state object as a JSON string
+        localStorage.setItem('store', JSON.stringify(clonedState));
+    }
 });
 
 export default store;

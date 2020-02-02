@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\HasApiTokens;
 use mysql_xdevapi\Collection;
 
 /**
@@ -24,11 +25,14 @@ use mysql_xdevapi\Collection;
 class User extends Authenticatable {
     use Uuids;
     use Notifiable;
+    use HasApiTokens;
     protected $keyType = 'string';
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $appends = ['gravatar'];
 
     public $incrementing = false;
     public $savedListingsIds = [];
+    public $gravatar = '';
 
     /**
      * The attributes that are mass assignable.
@@ -50,6 +54,10 @@ class User extends Authenticatable {
 
     public function __toString() {
         return $this->name;
+    }
+
+    public function getGravatarAttribute() {
+        return $this->gravatar;
     }
 
     public function listing(): HasMany {

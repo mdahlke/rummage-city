@@ -8,7 +8,7 @@
 
         <form id="geocode-form"
               class="search-form form-inline my-2 my-lg-0"
-              :action="action">
+              action="/listings">
             <div class="input-group">
                 <input class="form-control search-input"
                        name="q"

@@ -32,11 +32,24 @@
                                                     <i class="far fa-star"> Save</i>
                                                 </a>
                                             </li>
+                                            <li v-if="isOwner"
+                                                class="list-inline-item">
+                                                <router-link :to="{name: 'listing.edit', params: sale.id}"
+                                                             v-slot="{ href, route, navigate, isActive, isExactActive }"
+                                                >
+                                                    <NavLink :active="isActive"
+                                                             :href="href"
+                                                             @click="navigate"
+                                                             class=" cursor-pointer"
+                                                    >
+                                                        <i class="fas fa-pencil"></i> Edit Listing
+                                                    </NavLink>
+                                                </router-link>
+                                            </li>
                                         </ul>
                                     </section>
 
-                                    <section class="listing__description">
-                                        {{ sale.description }}
+                                    <section class="listing__description" v-html="sale.description">
                                     </section>
                                 </div>
                             </section>
@@ -105,6 +118,10 @@
         methods: {
             backToMap() {
                 $router.go(-1);
+            },
+            isOwner() {
+
+                return this.listing.user.id === this.$store.data.user.id;
             },
             isSaved(val) {
                 return isTrue(val);
@@ -252,6 +269,10 @@
 
         .listing__dates {
             max-width: 500px;
+        }
+
+        .slick-track {
+            height: 100%;
         }
 
     }

@@ -11,6 +11,7 @@ use App\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 use Laravel\Telescope\TelescopeServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -26,6 +27,8 @@ class AppServiceProvider extends ServiceProvider {
         User::observe(UserObserver::class);
         Listing::observe(ListingObserver::class);
         ListingImage::observe(ImageObserver::class);
+
+        Passport::ignoreMigrations();
     }
 
     /**

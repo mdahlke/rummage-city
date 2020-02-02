@@ -1,17 +1,22 @@
 <template>
-	<div>
-		<h1>Vue Router Demo App</h1>
-		
-		<p>
-			<router-link :to="{ name: 'home' }">Home</router-link> |
-			<router-link :to="{ name: 'hello' }">Hello World</router-link>
-		</p>
-		
-		<div class="container">
-			<router-view></router-view>
-		</div>
-	</div>
+    <div>
+        <HeaderNavigation/>
+
+        <transition name="fade" mode="out-in">
+            <router-view></router-view>
+        </transition>
+
+        <SiteFooter/>
+    </div>
 </template>
 <script>
-	export default {}
+    import HeaderNavigation from '../components/HeaderNavigation';
+    import SiteFooter from '../components/SiteFooter';
+
+    export default {
+        components: {
+            HeaderNavigation,
+            SiteFooter
+        }
+    };
 </script>

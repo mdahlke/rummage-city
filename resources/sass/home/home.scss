@@ -2,42 +2,4 @@
 
 body.page-home {
 
-  .search-banner {
-    position: relative;
-    height: 50vh;
-  }
-
-  .background-helper {
-    background-image: url(/images/clothes-in-street-optimized.jpg);
-    background-size: cover;
-    background-position: center;
-
-    &,
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-
-    &::before {
-      background-color: transparentize($black, .4);
-    }
-  }
-
-  .title {
-    margin-bottom: 20px;
-    color: $white;
-  }
-
-  .search-box {
-    [name="q"] {
-      padding: 25px 30px;
-      font-size: 20px;
-      width: 500px;
-    }
-  }
 }

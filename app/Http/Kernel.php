@@ -21,7 +21,7 @@ class Kernel extends HttpKernel {
     ];
 
     /**
-     * The application's route middleware groups.
+     * The application's route middleware groups.bootstrap.js
      *
      * @var array
      */
@@ -35,6 +35,7 @@ class Kernel extends HttpKernel {
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\Cors::class,
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
         ],
 
         'api' => [

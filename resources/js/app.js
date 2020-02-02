@@ -4,28 +4,29 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuex from 'vuex';
 import 'es6-promise/auto';
 import VueLazyload from 'vue-lazyload';
+import VueNotification from '@kugatsu/vuenotification';
+
+import router from './config/router';
+import store from './config/store/store';
+import {INITIALISE_STORE} from './config/store/mutations';
 
 const moment = require('moment');
 
 Vue.use(require('vue-scrollto'));
-Vue.use(VueRouter);
-Vue.use(Vuex);
 Vue.use(require('vue-moment'), {
     moment
 });
 Vue.use(VueLazyload);
+Vue.use(VueNotification, {
+    timer: 20
+});
 
 window.Vue = Vue;
 window.axios = require('axios');
 
-// window.axios.defaults.headers.common = {
-// 	'X-Requested-With': 'XMLHttpRequest',
-// 	'X-CSRF-TOKEN': window.csrf_token
-// };
+require('./axios-interceptors');
 
 Vue.component('VueCtkDateTimePicker', () => import('vue-ctk-date-time-picker'/* webpackChunkName: "js/chunks/vue-ctk-date-time-picker" */));
 
@@ -37,37 +38,35 @@ Vue.component('VueCtkDateTimePicker', () => import('vue-ctk-date-time-picker'/* 
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-Vue.component('example', () => import('./components/ExampleComponent.vue'/* webpackChunkName: "js/chunks/example" */));
-Vue.component('examples', () => import('./components/ExampleComponents.vue'/* webpackChunkName: "js/chunks/examples" */));
+const App = () => import('./views/App.vue'/* webpackChunkName: "js/chunks/app" */);
 Vue.component('listings', () => import('./views/Listings.vue'/* webpackChunkName: "js/chunks/listings" */));
 Vue.component('listing', () => import('./views/ListingView.vue'/* webpackChunkName: "js/chunks/listings-view" */));
 Vue.component('listings-recent', () => import('./components/listings/ListingsRecent.vue'/* webpackChunkName: "js/chunks/listings-recent" */));
-Vue.component('listing-dates-input', () => import('./components/listings/ListingDatesInput.vue'/* webpackChunkName: "js/chunks/listing-dates-input" */));
-Vue.component('listing-image-input', () => import('./components/listings/ListingImageInput.vue'/* webpackChunkName: "js/chunks/listing-images-input" */));
-Vue.component('map-geocode', () => import('./components/Map/Geocode.vue'/* webpackChunkName: "js/chunks/map-geocode" */));
 Vue.component('search-box', () => import('./components/SearchBox/SearchBox.vue'/* webpackChunkName: "js/chunks/search-box" */));
 
-
-import App from './views/App';
-
-import router from './config/router';
+Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
+Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
+Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
-import store from './config/store/store';
-import {INITIALISE_STORE} from './config/store/mutations';
-
 new Vue({
     el: '#app',
     components: {App},
     store,
     router,
     beforeCreate() {
-        this.$store.commit(INITIALISE_STORE);
+        let storeDataObj;
+        let storeData = localStorage.getItem('store');
+
+        if (storeData) {
+            storeDataObj = JSON.parse(storeData);
+            store.commit(INITIALISE_STORE, storeDataObj);
+        }
+
     },
 }).$mount('#app');
 
