@@ -9,10 +9,23 @@ const Home = () => import('../views/Home' /* webpackChunkName: 'js/chunks/home' 
 const home = {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: {
+        title: 'Rummage City',
+        metaTags: [
+            {
+                name: 'description',
+                content: 'Rummage City is your all in one rummage sale finder that is available to you everywhere.'
+            },
+            {
+                property: 'og:description',
+                content: 'Rummage City is your all in one rummage sale finder that is available to you everywhere.'
+            }
+        ]
+    },
 };
 
-const routes = _.concat([], [home], ...dashboardRoutes, ...listingsRoutes, ...authRoutes, ...userRoutes);
+const routes = _.concat([home], ...dashboardRoutes, ...listingsRoutes, ...authRoutes, ...userRoutes);
 
 export const protectedRoutes = _.concat(
         ...protectedListingsRoutes,
