@@ -152,7 +152,7 @@ class ListingController extends Controller {
 //            $route = route('user.listing.new');
 //        }
 
-        return view('listings.edit', ['listing' => $listing, 'route' => $route]);
+        return view('listings.edit', ['listing' => $listing]);
 
     }
 
@@ -175,9 +175,7 @@ class ListingController extends Controller {
 
         $user->listing()->save($listing);
 
-        return response()->json([
-            'id' => $listing->id
-        ]);
+        return $this->update($request, $listing);
     }
 
     /**
@@ -185,7 +183,7 @@ class ListingController extends Controller {
      *
      * @param \Illuminate\Http\Request $request
      * @param Listing $listing
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      * @throws Exception
      */
     public function update(Request $request, Listing $listing) {
@@ -197,7 +195,6 @@ class ListingController extends Controller {
                 'status' => false,
                 'code' => 403,
             ]);
-//            return view('error.403');
         }
 
         $listing->fill($request->only($listing->fillable));

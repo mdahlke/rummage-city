@@ -21,7 +21,6 @@ export const listing_mixin = {
         save_listing(listing) {
             if (!isTrue(listing.isSaved)) {
                 if (this.$store.state.accessToken) {
-                    console.log({listing});
                     axios.post(listing.saveUrl).then(() => {
                         listing.isSaved = true;
                         this.$store.dispatch('update_listing', listing);
