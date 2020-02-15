@@ -6,10 +6,13 @@ use App\Listing;
 use App\Notifications\ListingCreated;
 use App\Notifications\ListingUpdated;
 use App\User;
+use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class ListingObserver {
+    use Queueable;
+
     public function retrieved(Listing $listing) {
         if (!Auth::guest()) {
             /** @var User $user */
@@ -24,16 +27,7 @@ class ListingObserver {
             ]));
 
             $listing->setIsSaved($user->hasSavedListing($listing->id));
-        } else {
-//            $listing->setSaveUrl(route('login.form'));
-//            $listing->setRemoveSavedUrl(route('login.form'));
         }
-
-//        $listing->setViewUrl(route('listings.view', [
-//            'address' => str_slug($listing->address),
-//            'listing' => $listing->id,
-//        ]));
-
     }
 
     /**

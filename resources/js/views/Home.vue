@@ -37,7 +37,6 @@
             SearchBox,
             ListingsRecent,
         },
-
     };
 
 </script>
