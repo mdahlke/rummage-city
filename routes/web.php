@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::match(['get', 'post'], 'graphql/{schema}', '\Rebing\GraphQL\GraphQLController@query');
 
+
 //Route::middleware(['web'])->group(function () {
 // catches all other routes and sends them to the Vue app
 Route::any('/{any}', 'SpaController@index')->where('any', '.*');
@@ -57,22 +58,23 @@ Route::any('/{any}', 'SpaController@index')->where('any', '.*');
 //    });
 //});
 //
-Route::middleware('web')->group(function () {
-    Route::get('/', function () {
-        return view('home.home');
-    })->name('home');
 
-    Route::prefix('listings')->group(function () {
-        Route::name('listings.')->group(function () {
-            Route::middleware(ListingGeocode::class)->group(function () {
-                Route::get('/{location?}', 'ListingController@index')->name('browse');
-            });
-            Route::get('geo', 'ListingController@geo')->name('geo');
-            Route::get('{address?}/{listing}/view', 'ListingController@view')->name('view');
-        });
-    });
-
-    Route::get('login-form', 'Auth\LoginController@showLoginForm')->name('login.form');
-
-
-});
+//Route::middleware('web')->group(function () {
+//    Route::get('/', function () {
+//        return view('home.home');
+//    })->name('home');
+//
+//    Route::prefix('listings')->group(function () {
+//        Route::name('listings.')->group(function () {
+//            Route::middleware(ListingGeocode::class)->group(function () {
+//                Route::get('/{location?}', 'ListingController@index')->name('browse');
+//            });
+//            Route::get('geo', 'ListingController@geo')->name('geo');
+//            Route::get('{address?}/{listing}/view', 'ListingController@view')->name('view');
+//        });
+//    });
+//
+//    Route::get('login-form', 'Auth\LoginController@showLoginForm')->name('login.form');
+//
+//
+//});

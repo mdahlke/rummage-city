@@ -6,7 +6,8 @@
                          @filterRemove="filterRemove"
         />
 
-        <form id="geocode-form"
+        <form @submit.prevent
+              id="geocode-form"
               class="search-form form-inline my-2 my-lg-0"
               action="/listings">
             <div class="input-group">
@@ -16,7 +17,7 @@
                        placeholder="Enter a city or keyword"
                        aria-label="Enter a city or keyword"
                        aria-describedby="search-button"
-                       v-model="q"
+                       v-model="term"
                        v-on:keyup="searchDebounce"
                 >
                 <div class="input-group-append">
@@ -42,6 +43,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import _ from 'lodash';
+    import slugify from 'slugify';
 
     const SearchBoxFilter = () => import('./SearchBoxFilter'/* webpackChunkName: "js/chunks/search-box-filter" */);
     const SearchBoxGeocodeResults = () => import('./SearchBoxGeocodeResults'/* webpackChunkName: "js/chunks/search-box-geocode-results" */);
@@ -54,7 +56,7 @@
         },
         data() {
             return {
-                q: '',
+                term: '',
                 place_id: '',
                 place_name: '',
                 matching_place_name: '',
@@ -80,8 +82,9 @@
             ])
         },
         mounted() {
-            if (this.query) {
-                this.q = this.query;
+            console.log(this.searchState.query);
+            if (this.searchState.query.term) {
+                this.term = this.searchState.query.term;
             }
             if (this.route) {
                 this.action = this.route;
@@ -97,7 +100,7 @@
             search() {
                 const baseUrl = 'https://api.mapbox.com/geocoding/v5';
                 const token = 'pk.eyJ1IjoibWRhaGxrZSIsImEiOiJjazI2bGgzNjUwZzlsM2dxaDd2OXgxZW9yIn0.kKYT-PvLDgQeFZWc2MMOAw';
-                const uri = '/mapbox.places/' + encodeURI(this.q) + '.json?access_token=' + token;
+                const uri = '/mapbox.places/' + encodeURI(this.term) + '.json?access_token=' + token;
                 const url = baseUrl + uri;
 
                 axios.get(url)
@@ -117,20 +120,46 @@
                 // we set all of this information to pass to
                 // our controller so we don't have to perform
                 // another geocode request and possibly
-                // end up with a diferent result
-                this.q = result.place_name;
+                // end up with a different result
+                this.term = result.place_name;
                 this.place_id = result.id;
                 this.place_name = result.place_name;
                 this.matching_place_name = result.matching_place_name;
-                this.bbox = JSON.stringify(result.bbox);
-                this.center = JSON.stringify(result.center);
-                this.geometry = JSON.stringify(result.geometry);
+
+                console.log({result});
+
+                this.$store.commit('SEARCH', {
+                    query: {
+                        term: result.place_name,
+                    }
+                });
+
+                this.$store.commit('MAP_STATE', {
+                    center: result.center,
+                    bbox: result.bbox,
+                    geometry: result.geometry,
+                    place_id: result.id,
+                    place_name: result.place_name,
+                    matching_place_name: result.matching_place_name,
+                });
+
+                // this.$store.commit('MAP_STATE', {
+                //     center: result.center,
+                // });
+
+                this.$router.push({
+                    name: 'listings.location',
+                    params: {
+                        location: slugify(this.place_name).toLowerCase(),
+                        query: result.place_name,
+                    }
+                });
 
                 /**
                  * @TODO figure out why I need a timeout for the correct result ot populate
                  */
                 setTimeout(function () {
-                    document.getElementById('geocode-form').submit();
+                    // document.getElementById('geocode-form').submit();
                 }, 100);
             },
         }

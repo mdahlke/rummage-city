@@ -25,12 +25,18 @@ const home = {
     },
 };
 
-const routes = _.concat([home], ...dashboardRoutes, ...listingsRoutes, ...authRoutes, ...userRoutes);
+const routes = _.concat(
+    [home],
+    ...dashboardRoutes,
+    ...listingsRoutes,
+    ...authRoutes,
+    ...userRoutes
+);
 
 export const protectedRoutes = _.concat(
-        ...protectedListingsRoutes,
-        ...dashboardRoutes,
-        ...userRoutes,
+    ...protectedListingsRoutes,
+    ...dashboardRoutes,
+    ...userRoutes,
 );
 
 export default routes;

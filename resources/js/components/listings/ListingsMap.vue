@@ -11,13 +11,13 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex';
+    import {mapState, mapGetters, mapActions} from 'vuex';
     import mapbox_config from './mapbox.config.js';
     import geolocation from '../../geolocation';
     import ListingMarkers from './ListingMarkers.vue';
     import MapMarker from './MapMarker.vue';
     import Popup from './Popup.vue';
-    import {SEARCH} from '../../config/store/mutations';
+    import {SEARCH, MAP_STATE} from '../../config/store/mutations';
 
     const mapboxgl = require('mapbox-gl');
 
@@ -47,33 +47,51 @@
             },
         },
         computed: {
-            ...mapState({
-                searchState: 'search'
+            ...mapGetters({
+                searchState: 'getSearch',
+                mapState: 'getMapState',
+                mapCenter: 'getMapCenter',
             })
         },
         watch: {
-            '$route.params.query.searchState': {
-                handler: function (searchState) {
-                    // this.update_map();
-                },
-                deep: true
-            }
+            searchState(newValue, oldValue) {
+                console.log({newValue});
+            },
+            // 'mapCenter': {
+            //     handler: function (newValue, oldValue) {
+            //         console.log('center changed', {newValue, oldValue}, this);
+            //         this.map.flyTo({center: this.$store.state.query.map.center, zoom: 9});
+            //     },
+            //     deep: true
+            // },
+            // mapCenter: {
+            //     handler: function (newValue, oldValue) {
+            //         console.log('center changed', {newValue, oldValue}, this);
+            //         this.map.flyTo({center: this.$store.state.query.map.center, zoom: 9});
+            //     },
+            //     deep: true
+            // },
+            mapCenter: function (newValue, oldValue) {
+                if (this.isMounted && typeof this.map !== 'undefined') {
+                    console.log('center changed', {newValue, oldValue}, this.map, typeof this.map);
+                    this.map.flyTo({center: newValue, zoom: 9});
+                }
+            },
+            // '$route.params.query.searchState': {
+            //     handler: function (searchState) {
+            //         this.update_map();
+            //     },
+            //     deep: true
+            // },
+            // '$store.query.map': {
+            //     handler: function (searchState) {
+            //         this.update_map();
+            //     },
+            //     deep: true
+            // }
         },
         created() {
             mapboxgl.accessToken = mapbox_config.accessToken;
-
-            if (this.mapAttributes.center && Object.keys(this.mapAttributes.center).length !== 0) {
-                this.center = this.mapAttributes.center;
-            }
-            if (this.mapAttributes.zoom) {
-                this.zoom = this.mapAttributes.zoom;
-            }
-            if (this.mapAttributes.pitch) {
-                this.pitch = this.mapAttributes.pitch;
-            }
-            if (this.mapAttributes.bearing) {
-                this.bearing = this.mapAttributes.bearing;
-            }
 
             geolocation.get().then((r) => {
                 // if (!this.listings.length && this.mapMarkers.length) {
@@ -88,14 +106,16 @@
             let config = {
                 container: 'mapbox',
                 style: mapbox_config.style,
-                center: this.center,
-                zoom: this.zoom,
-                pitch: this.pitch,
-                bearing: this.bearing,
+                center: this.searchState.query.map.center,
+                zoom: this.searchState.query.map.zoom,
+                pitch: this.searchState.query.map.pitch,
+                bearing: this.searchState.query.map.bearing,
                 // hash: true,
                 keyboard: false,
                 cluster: true,
             };
+
+            console.log({config});
 
             this.map = new mapboxgl.Map(config);
 
@@ -108,6 +128,12 @@
             this.isMounted = true;
         },
         methods: {
+            ...mapActions({
+                moveMap: 'moveMap',
+            }),
+            moveMap() {
+                console.log('move it move it');
+            },
             addLayer(layer) {
                 console.log({layer});
                 this.map.on('load', _ => {
@@ -119,15 +145,15 @@
 
                 this.$emit('set_fetching', true);
 
-                await this.$store.dispatch('getListingsInBounds', bounds);
-
                 this.searchState.query.map.center = this.map.getCenter();
                 this.searchState.query.map.zoom = this.map.getZoom();
                 this.searchState.query.map.pitch = this.map.getPitch();
                 this.searchState.query.map.bearing = this.map.getBearing();
                 this.searchState.query.map.bounds = this.map.getBounds();
 
-                this.$store.commit(SEARCH, this.searchState);
+                this.$store.commit(MAP_STATE, this.searchState.query.map);
+
+                await this.$store.dispatch('getListingsInBounds', bounds);
 
                 if (updateUrl) {
                     this.$emit('push_state');
@@ -155,8 +181,10 @@
                 this.map.setCenter([lat, lng]);
             },
             update_map() {
+                console.log('update map');
+                console.log(this.map);
                 this.map.setZoom(this.zoom);
-                this.map.setCenter(this.center);
+                this.map.setCenter(this.mapState.center);
                 this.map.setPitch(this.pitch);
                 this.map.setBearing(this.bearing);
 

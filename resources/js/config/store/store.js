@@ -10,6 +10,7 @@ import {
     SET_LISTING,
     LISTING,
     SEARCH,
+    MAP_STATE,
     USER,
     ACCESS_TOKEN,
     USER_LISTINGS,
@@ -49,11 +50,22 @@ const store = new Vuex.Store({
             query: {
                 filter: [],
                 listing: {},
-                map: {},
+                map: {
+                    center: [0, 0],
+                    zoom: 10,
+                    pitch: 0,
+                    bearing: 0,
+                    bbox: '',
+                    geometry: {},
+                    place_id: '',
+                    place_name: '',
+                    matching_place_name: ''
+                },
                 term: '',
             },
             url: ''
         },
+        mapState: {},
         user: {},
         accessToken: null,
         userListings: [],
@@ -117,7 +129,10 @@ const store = new Vuex.Store({
         getUserListing: state => id => {
             console.log({id}, state.userListings);
             return state.userListings.find(listing => listing.id === id);
-        }
+        },
+        getSearch: state => state.search,
+        getMapState: state => state.search.query.map,
+        getMapCenter: state => state.search.query.map.center,
     },
     mutations: {
         [INITIALISE_STORE](state, store) {
@@ -139,7 +154,11 @@ const store = new Vuex.Store({
             state.listing = listing;
         },
         [SEARCH](state, search) {
-            state.search = search;
+            state.search = _.merge(state.search, search);
+            console.log({search}, state.search);
+        },
+        [MAP_STATE](state, mapState) {
+            state.search.query.map = _.assign(state.search.query.map, mapState);
         },
         [USER](state, user) {
             state.user = user;
@@ -199,7 +218,7 @@ const store = new Vuex.Store({
                 params: {
                     query: `
 							query FetchListingsInBounds {
-							  listings(bounds: ` + query + `, limit: 150) {
+							  listings(bounds: ` + query + `, limit: 50) {
 							    data {
 							      id
 							      title
@@ -230,6 +249,7 @@ const store = new Vuex.Store({
                     // handle error
                 }
             }).then(results => {
+                console.log({results});
                 const listings = results.data.data.listings.data || false;
 
                 if (listings) {
@@ -284,7 +304,7 @@ const store = new Vuex.Store({
             axios.get('/api/user/listings/saved').then(res => {
                 commit(SAVED_LISTINGS, res.data);
             });
-        }
+        },
     }
 });
 

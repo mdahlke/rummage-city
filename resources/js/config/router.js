@@ -39,13 +39,32 @@ router.beforeEach((to, from, next) => {
     // const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
 
     // If a route with a title was found, set the document (page) title to that value.
-    if(nearestWithTitle) document.title = nearestWithTitle.meta.title;
+    if (nearestWithTitle) {
+        console.log(to);
+        let title = nearestWithTitle.meta.title;
+
+        // const regExp = /{{\ (.+)\ }}/;
+        // const matches = regExp.exec(nearestWithTitle.meta.title) || [];
+        // console.log({matches});
+        // let match = false;
+        // for (let i = 0; i < matches.length; i++) {
+        //     if (to.params[matches[i]] || false) {
+        //         match = to.params[matches[i]];
+        //         title = title.replace(/\{\{[\s\S]*?\}\}/g, match);
+        //     }
+        //     console.log(title);
+        // }
+        // console.log({title});
+        document.title = title;
+    }
 
     // Remove any stale meta tags from the document using the key attribute we set below.
     Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
 
     // Skip rendering meta tags if there are none.
-    if(!nearestWithMeta) return next();
+    if (!nearestWithMeta) {
+        return next();
+    }
 
     // Turn the meta tag definitions into actual elements in the head.
     nearestWithMeta.meta.metaTags.map(tagDef => {

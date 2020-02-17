@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +16,22 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('auth', 'UserController@auth');
+
+
+
+Route::middleware('api')->group(function () {
+    Route::get('listings/recent', 'ListingsRecentController@index');
+
+    Route::post('login', 'AuthController@login');
+    Route::post('signup', 'AuthController@signup');
+
+
+    Route::get('renew-csrf', function () {
+        return response()->json(csrf_token());
+    });
+
+
+});
 
 
 Route::middleware('auth:api')->group(function () {
@@ -44,20 +59,4 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('saved/:listing/save', 'SavedListingController@edit')->name('saveListing');
     Route::get('saved/:listing/remove', 'SavedListingController@edit')->name('removeSavedListing');
-});
-
-
-Route::middleware('api')->group(function () {
-
-    Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signup');
-
-
-    Route::get('renew-csrf', function () {
-        dump(csrf_token());
-        return response()->json(csrf_token());
-    });
-
-    Route::get('listings/recent', ListingsRecentController::class . '@index');
-
 });

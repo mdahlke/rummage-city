@@ -64,6 +64,8 @@ class ListingController extends Controller {
             ];
         }
 
+        dd($searchState);
+
         /** @var Builder $listings */
         $builder = Listing::query();
 

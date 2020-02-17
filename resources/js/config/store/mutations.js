@@ -8,6 +8,7 @@ export const LISTING = 'LISTING';
 
 // Search
 export const SEARCH = 'SEARCH';
+export const MAP_STATE = 'MAP_STATE';
 
 // Auth
 export const USER = 'USER';

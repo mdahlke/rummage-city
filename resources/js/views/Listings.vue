@@ -120,6 +120,11 @@
             }
         },
         methods: {
+            init(){
+                axios.get('/listings', {
+
+                })
+            },
             set_fetching(is = true) {
                 this.fetching = is;
             },
