@@ -55,7 +55,6 @@ class User extends Authenticatable {
     public function __toString() {
         return $this->name;
     }
-
     public function getGravatarAttribute() {
         return $this->gravatar;
     }

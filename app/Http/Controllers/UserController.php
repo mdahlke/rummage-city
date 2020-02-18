@@ -10,7 +10,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\UserEmailChange;
+use App\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
 
 class UserController {
@@ -51,5 +54,35 @@ class UserController {
             'listing_id' => $listing->id,
         ]);
     }
+
+
+    public function update(\Illuminate\Http\Request $request, User $user) {
+        $updatingEmail = false;
+        $oldEmail = false;
+        $user->name = $request->input('name');
+
+        if ($user->email !== $request->input('email')) {
+            $email = filter_var($request->input('email'), FILTER_VALIDATE_EMAIL);
+
+            if ($email) {
+                $user->email = $email;
+                $updatingEmail = true;
+                $oldEmail = $request->input('email');
+            }
+        }
+
+        if ($updatingEmail && $oldEmail) {
+            $user->notify(new UserEmailChange($user, $oldEmail));
+//            Mail::to($oldEmail)->send(new UserEmailChange($user, $oldEmail));
+        }
+
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Account updated.'
+        ]);
+    }
+
 
 }

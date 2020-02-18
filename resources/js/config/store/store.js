@@ -119,6 +119,7 @@ const store = new Vuex.Store({
         },
         searchFilters: state => state.search.query.filter,
         searchState: state => state.search,
+        getUser: state => state.user,
         userName: state => {
             if (state.accessToken) {
                 return state.user.name;

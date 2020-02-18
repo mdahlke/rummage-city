@@ -1,8 +1,9 @@
 <?php
 
+
 namespace App\Notifications;
 
-use App\Listing;
+
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,20 +11,23 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class ListingUpdated extends Notification implements ShouldQueue {
+class UserEmailChange extends Notification implements ShouldQueue {
     use Queueable;
 
-    /** @var Listing */
-    protected $listing;
+    /** @var User */
+    protected $user;
+    /** @var string */
+    protected $oldEmail;
 
     /**
      * Create a new notification instance.
      *
-     * @param Listing $listing
+     * @param User $user
+     * @param null $oldEmail
      */
-    public function __construct(Listing $listing) {
-        //
-        $this->listing = $listing;
+    public function __construct(User $user, $oldEmail = null) {
+        $this->user = $user;
+        $this->oldEmail = $oldEmail;
     }
 
     /**
@@ -33,21 +37,21 @@ class ListingUpdated extends Notification implements ShouldQueue {
      * @return array
      */
     public function via($notifiable) {
-        return ['mail', 'slack'];
+        return ['mail'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
      * @param mixed $notifiable
-     * @param Listing $listing
+     * @param User $user
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable) {
         return (new MailMessage)
-            ->line('Your listing updates are live!')
-            ->action('View Listing', route('listings.view', ['address' => $this->listing->address, 'listing' => $this->listing->id]))
-            ->line('Good luck with your sale!');
+            ->line('Your email address has been changed!')
+//            ->line('')
+            ->line('If you did not make this change, let us know!');
     }
 
     /**
@@ -58,13 +62,14 @@ class ListingUpdated extends Notification implements ShouldQueue {
      */
     public function toArray(User $notifiable) {
         return [
-            'title' => $this->listing->title,
+            'title' => $this->user->name,
             'user' => $notifiable->name
         ];
     }
 
     public function toSlack($notifiable) {
-        return (new SlackMessage)
-            ->content('A listing was created: <' . route('listings.view', ['address' => $this->listing->address, 'listing' => $this->listing->id]) . '|View the listing>');
+//        return (new SlackMessage)
+//            ->content('A user was created: <' . route('users.view', ['address' => $this->user->address, 'user' => $this->user->id]) . '|View the user>');
     }
+
 }
