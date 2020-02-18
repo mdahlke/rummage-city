@@ -74,7 +74,10 @@
             mapCenter: function (newValue, oldValue) {
                 if (this.isMounted && typeof this.map !== 'undefined') {
                     console.log('center changed', {newValue, oldValue}, this.map, typeof this.map);
-                    this.map.flyTo({center: newValue, zoom: 9});
+                    this.map.flyTo({
+                        center: newValue,
+                        zoom: 12
+                    });
                 }
             },
             // '$route.params.query.searchState': {
@@ -99,6 +102,7 @@
                 // }
             });
 
+
             geolocation.watch((r) => {
             });
         },
@@ -115,9 +119,12 @@
                 cluster: true,
             };
 
-            console.log({config});
+            console.log(this.searchState.query.map.geometry);
+
 
             this.map = new mapboxgl.Map(config);
+            this.$store.dispatch('getListingsInBounds', this.map.getBounds());
+            console.log({config});
 
             // Add zoom and rotation controls to the map.
             this.map.addControl(new mapboxgl.NavigationControl());
@@ -152,6 +159,8 @@
                 this.searchState.query.map.bounds = this.map.getBounds();
 
                 this.$store.commit(MAP_STATE, this.searchState.query.map);
+
+                console.log({bounds});
 
                 await this.$store.dispatch('getListingsInBounds', bounds);
 

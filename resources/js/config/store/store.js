@@ -55,7 +55,7 @@ const store = new Vuex.Store({
                     zoom: 10,
                     pitch: 0,
                     bearing: 0,
-                    bbox: '',
+                    bbox: [],
                     geometry: {},
                     place_id: '',
                     place_name: '',
