@@ -76,3 +76,13 @@ function sql_with_bindings(\Illuminate\Database\Eloquent\Builder $builder) {
         return (is_string($item) && !($item instanceof \Carbon\Factory)) ? '"' . $item . '"' : $item;
     }, $builder->getBindings()), $builder->toSql());
 }
+
+/**
+ * Alias for @see sql_with_bindings()
+ *
+ * @param \Illuminate\Database\Eloquent\Builder $builder
+ * @return string
+ */
+function query_with_bindings(\Illuminate\Database\Eloquent\Builder $builder){
+    return sql_with_bindings($builder);
+}
