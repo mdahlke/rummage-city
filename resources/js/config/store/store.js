@@ -173,7 +173,7 @@ const store = new Vuex.Store({
         [ACCESS_TOKEN](state, token) {
             localStorage.setItem('accessToken', token);
             state.accessToken = token;
-        }
+        },
     },
     actions: {
         renewCSRF: () => {

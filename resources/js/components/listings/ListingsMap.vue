@@ -7,6 +7,13 @@
                 :map="map"
                 @addLayer="addLayer"
         />
+
+        <section id="locate-me">
+            <button @click="locateMe"
+                    id="locate-me__button">
+                <i class="fa fa-crosshairs"></i> <span>Locate Me</span>
+            </button>
+        </section>
     </section>
 </template>
 
@@ -51,60 +58,23 @@
                 searchState: 'getSearch',
                 mapState: 'getMapState',
                 mapCenter: 'getMapCenter',
-            })
+            }),
         },
         watch: {
             searchState(newValue, oldValue) {
                 console.log({newValue});
             },
-            // 'mapCenter': {
-            //     handler: function (newValue, oldValue) {
-            //         console.log('center changed', {newValue, oldValue}, this);
-            //         this.map.flyTo({center: this.$store.state.query.map.center, zoom: 9});
-            //     },
-            //     deep: true
-            // },
-            // mapCenter: {
-            //     handler: function (newValue, oldValue) {
-            //         console.log('center changed', {newValue, oldValue}, this);
-            //         this.map.flyTo({center: this.$store.state.query.map.center, zoom: 9});
-            //     },
-            //     deep: true
-            // },
             mapCenter: function (newValue, oldValue) {
                 if (this.isMounted && typeof this.map !== 'undefined') {
-                    console.log('center changed', {newValue, oldValue}, this.map, typeof this.map);
                     this.map.flyTo({
                         center: newValue,
-                        zoom: 12
                     });
                 }
             },
-            // '$route.params.query.searchState': {
-            //     handler: function (searchState) {
-            //         this.update_map();
-            //     },
-            //     deep: true
-            // },
-            // '$store.query.map': {
-            //     handler: function (searchState) {
-            //         this.update_map();
-            //     },
-            //     deep: true
-            // }
         },
         created() {
             mapboxgl.accessToken = mapbox_config.accessToken;
-
-            geolocation.get().then((r) => {
-                // if (!this.listings.length && this.mapMarkers.length) {
-                //     this.center_map_on(r.lat, r.lng);
-                // }
-            });
-
-
-            geolocation.watch((r) => {
-            });
+            document.getElementById('footer').style.display = 'none';
         },
         mounted() {
             let config = {
@@ -114,17 +84,17 @@
                 zoom: this.searchState.query.map.zoom,
                 pitch: this.searchState.query.map.pitch,
                 bearing: this.searchState.query.map.bearing,
-                // hash: true,
                 keyboard: false,
                 cluster: true,
             };
 
-            console.log(this.searchState.query.map.geometry);
-
+            // if this is their first time here, default them to Fond du Lac, WI
+            if (config.center[0] === 0 && config.center[0] === 0) {
+                config.center = [this.center.lng, this.center.lat];
+            }
 
             this.map = new mapboxgl.Map(config);
             this.$store.dispatch('getListingsInBounds', this.map.getBounds());
-            console.log({config});
 
             // Add zoom and rotation controls to the map.
             this.map.addControl(new mapboxgl.NavigationControl());
@@ -133,6 +103,9 @@
             this.map.on('zoomend', this.updateMapListings);
 
             this.isMounted = true;
+        },
+        destroyed() {
+            document.getElementById('footer').style.display = 'block';
         },
         methods: {
             ...mapActions({
@@ -159,8 +132,6 @@
                 this.searchState.query.map.bounds = this.map.getBounds();
 
                 this.$store.commit(MAP_STATE, this.searchState.query.map);
-
-                console.log({bounds});
 
                 await this.$store.dispatch('getListingsInBounds', bounds);
 
@@ -221,6 +192,17 @@
                     }
                 });
             },
+            locateMe() {
+                geolocation.get()
+                    .then(r => {
+                        this.map.flyTo({
+                            center: [r.coords.longitude, r.coords.latitude]
+                        });
+                    })
+                    .catch(e => {
+                        console.log('error', {e});
+                    });
+            },
         }
     };
 
@@ -233,6 +215,7 @@
 
 
     #listings__map {
+        position: relative;
 
         .mapbox {
             height: 100%;
@@ -264,6 +247,23 @@
         .mapboxgl-canvas-container,
         .mapboxgl-canvas {
             height: 100% !important;
+        }
+
+        #locate-me {
+            position: absolute;
+            bottom: 40px;
+            right: 0;
+            z-index: 1;
+
+            #locate-me__button {
+                padding: 10px 25px;
+                background: white;
+                box-shadow: -5px 0px 10px -5px #36495d;
+                border-right: 0;
+                border-radius: 20px;
+                border-bottom-right-radius: 0;
+                border-top-right-radius: 0;
+            }
         }
     }
 

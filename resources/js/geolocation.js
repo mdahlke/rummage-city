@@ -1,29 +1,30 @@
 class GeoLocation {
-	constructor() {
+    constructor() {
+        console.log('instantiated');
+    }
 
-	}
+    requestPermission() {
 
-	requestPermission() {
-	}
+    }
 
-	get() {
-		return new Promise(function (resolve) {
-			navigator.geolocation.getCurrentPosition(function (r) {
-				resolve(r);
-			});
-		});
-	}
+    get() {
+        return new Promise(function (resolve, reject) {
+            navigator.geolocation.getCurrentPosition(function (r) {
+                resolve(r);
+            }, reject);
+        });
+    }
 
-	poll(){
+    poll() {
 
-	}
+    }
 
-	watch(success, err = function(){}) {
-		navigator.geolocation.watchPosition(success, err);
-	}
+    watch(success, err = function () {
+    }) {
+        navigator.geolocation.watchPosition(success, err);
+    }
 }
 
 const g = new GeoLocation();
-g.requestPermission();
 
 export default g;
